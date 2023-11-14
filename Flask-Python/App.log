@@ -1,0 +1,190 @@
+2023-11-14 17:27:06 - werkzeug - WARNING -  * Debugger is active!
+2023-11-14 17:27:06 - werkzeug - INFO -  * Debugger PIN: 589-814-652
+2023-11-14 17:27:07 - my_logger - INFO - 1.2
+2023-11-14 17:27:07 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:07] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:07 - my_logger - INFO - web_rtsp execute...
+2023-11-14 17:27:07 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:07] "GET /web_rtsp HTTP/1.1" 200 -
+2023-11-14 17:27:07 - my_logger - INFO - video_feed execute...
+2023-11-14 17:27:07 - my_logger - INFO - generate_frames execute...
+2023-11-14 17:27:07 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:07] "GET /video_feed HTTP/1.1" 200 -
+2023-11-14 17:27:08 - my_logger - INFO - 7.6
+2023-11-14 17:27:08 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:08] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:09 - my_logger - INFO - 8.0
+2023-11-14 17:27:09 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:09] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:11 - my_logger - INFO - 6.8
+2023-11-14 17:27:11 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:11] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:12 - my_logger - INFO - 7.1
+2023-11-14 17:27:12 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:12] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:13 - my_logger - INFO - 7.3
+2023-11-14 17:27:13 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:13] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:14 - my_logger - INFO - 4.5
+2023-11-14 17:27:14 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:14] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:15 - my_logger - INFO - 3.7
+2023-11-14 17:27:15 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:15] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:16 - my_logger - INFO - 7.0
+2023-11-14 17:27:16 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:16] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:17 - my_logger - INFO - 3.8
+2023-11-14 17:27:17 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:17] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:18 - my_logger - INFO - 2.6
+2023-11-14 17:27:18 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:18] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:19 - my_logger - INFO - 3.6
+2023-11-14 17:27:19 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:19] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:20 - my_logger - INFO - 3.0
+2023-11-14 17:27:20 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:20] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:21 - my_logger - INFO - 3.7
+2023-11-14 17:27:21 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:21] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:22 - my_logger - INFO - 5.0
+2023-11-14 17:27:22 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:22] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:23 - my_logger - INFO - 4.8
+2023-11-14 17:27:23 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:23] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:24 - my_logger - INFO - 4.3
+2023-11-14 17:27:24 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:24] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:25 - my_logger - INFO - 5.1
+2023-11-14 17:27:25 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:25] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:26 - my_logger - INFO - 4.3
+2023-11-14 17:27:26 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:26] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:27 - my_logger - INFO - 4.2
+2023-11-14 17:27:27 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:27] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:28 - my_logger - INFO - 4.4
+2023-11-14 17:27:28 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:28] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:27:29 - my_logger - INFO - 6.4
+2023-11-14 17:27:29 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:27:29] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:06 - my_logger - INFO - web_rtsp execute...
+2023-11-14 17:28:06 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:06] "GET /web_rtsp HTTP/1.1" 200 -
+2023-11-14 17:28:06 - my_logger - INFO - video_feed execute...
+2023-11-14 17:28:06 - my_logger - INFO - generate_frames execute...
+2023-11-14 17:28:06 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:06] "GET /video_feed HTTP/1.1" 200 -
+2023-11-14 17:28:08 - my_logger - INFO - 7.5
+2023-11-14 17:28:08 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:08] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:09 - my_logger - INFO - 7.1
+2023-11-14 17:28:09 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:09] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:10 - my_logger - INFO - 7.6
+2023-11-14 17:28:10 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:10] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:11 - my_logger - INFO - 9.1
+2023-11-14 17:28:11 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:11] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:12 - my_logger - INFO - 9.7
+2023-11-14 17:28:12 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:12] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:13 - my_logger - INFO - 9.1
+2023-11-14 17:28:13 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:13] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:14 - my_logger - INFO - 8.8
+2023-11-14 17:28:14 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:14] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:15 - my_logger - INFO - 9.4
+2023-11-14 17:28:15 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:15] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:16 - my_logger - INFO - 8.7
+2023-11-14 17:28:16 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:16] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:17 - my_logger - INFO - 8.2
+2023-11-14 17:28:17 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:17] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:18 - my_logger - INFO - 7.4
+2023-11-14 17:28:18 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:18] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:19 - my_logger - INFO - 7.5
+2023-11-14 17:28:19 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:19] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:20 - my_logger - INFO - 7.2
+2023-11-14 17:28:20 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:20] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:21 - my_logger - INFO - 7.4
+2023-11-14 17:28:21 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:21] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:22 - my_logger - INFO - 7.5
+2023-11-14 17:28:22 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:22] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:23 - my_logger - INFO - 7.2
+2023-11-14 17:28:23 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:23] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:24 - my_logger - INFO - 7.3
+2023-11-14 17:28:24 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:24] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:25 - my_logger - INFO - 7.0
+2023-11-14 17:28:25 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:25] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:26 - my_logger - INFO - 7.6
+2023-11-14 17:28:26 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:26] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:27 - my_logger - INFO - 7.5
+2023-11-14 17:28:27 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:27] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:28 - my_logger - INFO - 7.6
+2023-11-14 17:28:28 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:28] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:29 - my_logger - INFO - 7.1
+2023-11-14 17:28:29 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:29] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:30 - my_logger - INFO - 6.8
+2023-11-14 17:28:30 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:30] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:31 - my_logger - INFO - 7.7
+2023-11-14 17:28:31 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:31] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:32 - my_logger - INFO - 7.3
+2023-11-14 17:28:32 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:32] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:33 - my_logger - INFO - 6.9
+2023-11-14 17:28:33 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:33] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:34 - my_logger - INFO - 8.1
+2023-11-14 17:28:34 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:34] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:35 - my_logger - INFO - 7.8
+2023-11-14 17:28:35 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:35] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:36 - my_logger - INFO - 7.5
+2023-11-14 17:28:36 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:36] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:37 - my_logger - INFO - 7.8
+2023-11-14 17:28:37 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:37] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:38 - my_logger - INFO - 7.6
+2023-11-14 17:28:38 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:38] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:39 - my_logger - INFO - 7.3
+2023-11-14 17:28:39 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:39] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:40 - my_logger - INFO - 8.3
+2023-11-14 17:28:40 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:40] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:41 - my_logger - INFO - 8.0
+2023-11-14 17:28:41 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:41] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:42 - my_logger - INFO - 7.4
+2023-11-14 17:28:42 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:42] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:43 - my_logger - INFO - 7.7
+2023-11-14 17:28:43 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:43] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:44 - my_logger - INFO - 7.5
+2023-11-14 17:28:44 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:44] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:45 - my_logger - INFO - 7.7
+2023-11-14 17:28:45 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:45] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:46 - my_logger - INFO - 7.7
+2023-11-14 17:28:46 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:46] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:47 - my_logger - INFO - 8.0
+2023-11-14 17:28:47 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:47] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:48 - my_logger - INFO - 7.5
+2023-11-14 17:28:48 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:48] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:49 - my_logger - INFO - 8.1
+2023-11-14 17:28:49 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:49] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:50 - my_logger - INFO - 7.5
+2023-11-14 17:28:50 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:50] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:51 - my_logger - INFO - 7.8
+2023-11-14 17:28:51 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:51] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:52 - my_logger - INFO - 7.1
+2023-11-14 17:28:52 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:52] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:53 - my_logger - INFO - 7.6
+2023-11-14 17:28:53 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:53] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:54 - my_logger - INFO - 7.5
+2023-11-14 17:28:54 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:54] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:55 - my_logger - INFO - 8.3
+2023-11-14 17:28:55 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:55] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:56 - my_logger - INFO - 7.2
+2023-11-14 17:28:56 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:56] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:57 - my_logger - INFO - 7.1
+2023-11-14 17:28:57 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:57] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:58 - my_logger - INFO - 7.5
+2023-11-14 17:28:58 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:58] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:28:59 - my_logger - INFO - 7.9
+2023-11-14 17:28:59 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:28:59] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:29:00 - my_logger - INFO - 7.4
+2023-11-14 17:29:00 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:29:00] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:29:01 - my_logger - INFO - 7.3
+2023-11-14 17:29:01 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:29:01] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:29:02 - my_logger - INFO - 7.4
+2023-11-14 17:29:02 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:29:02] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:29:03 - my_logger - INFO - 7.4
+2023-11-14 17:29:03 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:29:03] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:29:04 - my_logger - INFO - 7.4
+2023-11-14 17:29:04 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:29:04] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:29:05 - my_logger - INFO - 7.8
+2023-11-14 17:29:05 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:29:05] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:29:06 - my_logger - INFO - 7.7
+2023-11-14 17:29:06 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:29:06] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:29:07 - my_logger - INFO - 7.8
+2023-11-14 17:29:07 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:29:07] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:29:08 - my_logger - INFO - 7.6
+2023-11-14 17:29:08 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:29:08] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:29:09 - my_logger - INFO - 7.5
+2023-11-14 17:29:09 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:29:09] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:29:10 - my_logger - INFO - 7.3
+2023-11-14 17:29:10 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:29:10] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:29:12 - my_logger - INFO - 7.5
+2023-11-14 17:29:12 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:29:12] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:29:13 - my_logger - INFO - 7.7
+2023-11-14 17:29:13 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:29:13] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:29:14 - my_logger - INFO - 6.9
+2023-11-14 17:29:14 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:29:14] "GET /get_cpu_usage HTTP/1.1" 200 -
+2023-11-14 17:29:15 - my_logger - INFO - 6.8
+2023-11-14 17:29:15 - werkzeug - INFO - 127.0.0.1 - - [14/Nov/2023 17:29:15] "GET /get_cpu_usage HTTP/1.1" 200 -

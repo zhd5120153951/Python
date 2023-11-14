@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTSP Stream & 实时显示CPU使用率</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<body>
+    <h1>RTSP Stream</h1>
+    <img src="{{ url_for('video_feed') }}" width="640" height="480" />
+
+    <h2>实时显示CPU使用率</h2>
+    <p id="cpu-usage">CPU使用率:</p>
+
+    <script>
+        //定期获取 CPU 使用率并更新页面
+        function updateCpuUsage() {
+            $.get('/get_cpu_usage', function (data) {
+                $('#cpu_usage').text('CPU使用率:' + data.cpu_usage + '%');
+            });
+        }
+        // 定时器，每秒1000ms更新一次 CPU 使用率
+        setInterval(updateCpuUsage, 1000);
+    </script>
+</body>
+
+</html>
