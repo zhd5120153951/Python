@@ -19,7 +19,8 @@ logging.basicConfig(
 logger = logging.getLogger('my_logger')
 
 # 创建网页应用对象
-app = Flask(__name__)
+app = Flask(__name__)  # 这里是默认html文件的目录是：templates
+# app = Flask(__name__, 'html_dir')
 
 # 使用OpenCV捕获RTSP流
 rtsp_url = "rtsp://admin:jiankong123@192.168.23.10:554/Streaming/Channels/101"
