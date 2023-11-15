@@ -1,10 +1,25 @@
+'''
+@FileName   :app.py
+@Description:这个是python写的后端代码--处理的是前端的响应--整个框架使用flask
+@Date       :2023/11/15 10:29:58
+@Author     :daito
+@Website    :Https://github.com/zhd5120153951
+@Copyright  :daito
+@License    :None
+@version    :1.0
+@Email      :2462491568@qq.com
+'''
 from calendar import c
+# from crypt import methods  # 这个crypt包不支持Windows
 from flask import Flask, redirect, render_template, Response, request, url_for, jsonify
+from werkzeug.security import generate_password_hash, check_password_hash
+# from django.shortcuts import render,redirect #django是复杂的部署前后端框架---flask是轻量型的,快速部署的框架
 import logging
 import pkgutil
 import time
 import cv2
 import psutil
+import sqlite3
 
 # 配置基本日志设置
 logging.basicConfig(
@@ -21,6 +36,8 @@ logger = logging.getLogger('my_logger')
 # 创建网页应用对象
 app = Flask(__name__)  # 这里是默认html文件的目录是：templates
 # app = Flask(__name__, 'html_dir')
+# 配置数据库文件路径
+DATABASE = 'user_database.db'
 
 # 使用OpenCV捕获RTSP流
 rtsp_url = "rtsp://admin:jiankong123@192.168.23.10:554/Streaming/Channels/101"
@@ -29,43 +46,111 @@ cap = cv2.VideoCapture(rtsp_url)
 users = {'admin': 'password'}
 
 
-# 首页--静态页面
+# 创建数据库表
+def create_table():
+    with sqlite3.connect(DATABASE) as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL,
+            password TEXT NOT NULL
+            );
+        ''')
+
+
+# 首页--静态页面--5000页面
+
+
 @app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template('index.html')
 
 
-# 获取CPU使用率
+# 注册
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        hashed_password = generate_password_hash(password, method='sha256')
+
+        with sqlite3.connect(DATABASE) as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                'INSERT INTO users (username,password) VALUES (?, ?)', (username, hashed_password))
+            conn.commit()
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
+# 登陆
 
 
-def get_cpu_usage():
-    return psutil.cpu_percent(interval=1)  # 1秒获取一次
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':  # 用户发起求登录请求
+        username = request.form['username']
+        password = request.form['password']
+
+        with sqlite3.connect(DATABASE) as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                'SELECT * FROM users WHERE username = ?', (username, ))
+            user = cursor.fetchone()
+
+        if user and check_password_hash(user[2], password):
+            # return '登陆成功'  # 这个应该就跳转到成功后界面
+            # return render_template('homepage.html')
+            return redirect(url_for('homepage'))
+        # else:
+            # return '登陆失败,请检查用户名和密码'
+    return render_template('login.html')
+
+
+# 主页
+
+@app.route('/homepage')
+def homepage():
+    return render_template("homepage.html")  # 返回的是一个html页面,其实还可以返回文字等信息
+
 
 # 路由：获取 CPU 使用率的 API
 
 
-@app.route('/get_cpu_usage')
+@app.route('/get_resources')
 def get_cpu_usage_api():
-    cpu_usage = get_cpu_usage()
+    cpu_usage = psutil.cpu_percent(interval=1)
+    memory_info = psutil.virtual_memory().percent
+    disk_info = psutil.disk_usage('/').percent
+    gpu_info = "Not Implemented"  # 这个可能需要其他的包来获取GPU信息
     logger.info(cpu_usage)
-    print(cpu_usage)
-    return jsonify({'cpu_usage': cpu_usage})
+
+    data = {
+        'cpu': cpu_usage,
+        'memory': memory_info,
+        'disk': disk_info,
+        'gpu': gpu_info
+    }
+
+    print(data)
+    return jsonify(data)
 
 
 # 登陆页面--需要和后端交互的--['GET','POST']
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
+@app.route('/login_1', methods=['GET', 'POST'])
+def login_1():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
         if username in users and users[username] == password:
             # 登陆成功,重定向到首页
-            return redirect(url_for('index'))
+            return redirect(url_for('homepage'))
+
     # 渲染信息页面
-    return render_template('login.html')
+    return render_template('login_1.html')
 
 
 # 设备信息页面
@@ -116,4 +201,8 @@ def video_feed():
 
 
 if __name__ == "__main__":
+
+    create_table()
+    # 配置密钥,用于加密session数据
+    app.config['SECREAT_KEY'] = 'daito_yolov5_flask'
     app.run(host="0.0.0.0", debug=True)

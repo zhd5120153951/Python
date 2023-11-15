@@ -6,12 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>关于</title>
+
+    <!-- 引入样式表--url_for()保证正确引用样式表 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
     <h1>关于</h1>
     <p>这是关于页面</p>
-    <p><a href="{{ url_for('index') }}">返回首页</a></p>
+    <p><a href="{{ url_for('homepage') }}">返回首页</a></p>
 </body>
 
 </html>
