@@ -5,17 +5,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <!-- 引入样式表--url_for()保证正确引用样式表 -->
+    <link rel="stylesheet" href="css/login.css">
 </head>
 
-<body>
-    <h1>Login</h1>
-    <form method="post" action="{{ url_for('login') }}">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br>
-        <input type="submit" value="Login">
-    </form>
+<body background="images/bgd.jpg">
+    <div>
+        <p style="text-align: center;font-size: 60px;color: black;font-family: 宋体;padding-top: 25px;">视频分析管理平台</p>
+    </div>
+    <div class="main">
+        <div class="title">
+            <span class="font1">登陆页面</span>
+        </div>
+        <div class="title-msg">
+            <span class="font2">请输入用户名和密码</span>
+        </div>
+        <form action="homepage.html" method="get">
+            <!--输入框-->
+            <div class="input-content">
+                <!--autofocus-->
+                <div>
+                    <input type="text" id="username" autocomplete="off" placeholder="用户名" name="username" required />
+                </div>
+                <div style="margin-top: 16px">
+                    <input type="password" id="password" autocomplete="off" placeholder="登陆密码" name="password"
+                        maxlength="32" required />
+                </div>
+            </div>
+            <!--登入按钮-->
+            <div style="text-align: center">
+                <button type="submit" class="enter-btn">登陆</button>
+            </div>
+            <div class="foor">
+                <div class="left">
+                    <a href="#"><span>找回密码</span></a>
+                </div>
+
+                <div class="right">
+                    <a href="{{ url_for('register') }}"><span>注册账户</span></a>
+                </div>
+            </div>
+        </form>
+    </div>
 </body>
 
 </html>

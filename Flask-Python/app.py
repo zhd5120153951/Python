@@ -15,8 +15,6 @@ from flask import Flask, redirect, render_template, Response, request, url_for, 
 from werkzeug.security import generate_password_hash, check_password_hash
 # from django.shortcuts import render,redirect #django是复杂的部署前后端框架---flask是轻量型的,快速部署的框架
 import logging
-import pkgutil
-import time
 import cv2
 import psutil
 import sqlite3
@@ -60,11 +58,12 @@ def create_table():
 
 
 # 首页--静态页面--5000页面
+# 直接展示登陆界面--登陆成功跳转管理页面homepage,否则提示账号没有注册(或者注册了提示密码出错)
 
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def index_login():
+    return render_template('login.html')
 
 
 # 注册

@@ -1,7 +1,7 @@
 /* static/style.css */
 
 body {
-    background-image: url('/static/bgd.jpg');
+    background-image: url('../images/bgd.jpg');
     /*背景图路径*/
     background-size: cover;
     /*覆盖屏幕*/
