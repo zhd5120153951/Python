@@ -18,6 +18,7 @@ import logging
 import cv2
 import psutil
 import sqlite3
+import functions
 
 # 配置基本日志设置
 logging.basicConfig(
@@ -57,16 +58,17 @@ def create_table():
         ''')
 
 
-# 首页--静态页面--5000页面
-# 直接展示登陆界面--登陆成功跳转管理页面homepage,否则提示账号没有注册(或者注册了提示密码出错)
+# 首页--默认login
 
 
 @app.route('/')
-def index_login():
-    return render_template('login.html')
+def default_page():
+    return redirect('/login')
 
 
 # 注册
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -82,28 +84,38 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html')
 
-# 登陆
 
+# 登陆接口--登陆成功跳转管理页面homepage,否则提示账号没有注册(或者注册了提示密码出错)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':  # 用户发起求登录请求
-        username = request.form['username']
-        password = request.form['password']
+    if request.method == "GET":
+        return render_template('login.html')
+    if request.method == "POST":
+        res = functions.login()
+        if res == 1:
+            return redirect('/index')
+        else:
+            return res
+    # if request.method == 'POST':  # 用户发起求登录请求
+    #     username = request.form['username']
+    #     password = request.form['password']
+    #     logger.info(username)
+    #     logger.info(password)
+    #     with sqlite3.connect(DATABASE) as conn:
+    #         cursor = conn.cursor()
+    #         cursor.execute(
+    #             'SELECT * FROM users WHERE username = ?', (username, ))
+    #         user = cursor.fetchone()
 
-        with sqlite3.connect(DATABASE) as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                'SELECT * FROM users WHERE username = ?', (username, ))
-            user = cursor.fetchone()
-
-        if user and check_password_hash(user[2], password):
-            # return '登陆成功'  # 这个应该就跳转到成功后界面
-            # return render_template('homepage.html')
-            return redirect(url_for('homepage'))
-        # else:
-            # return '登陆失败,请检查用户名和密码'
-    return render_template('login.html')
+    #     if user and check_password_hash(user[2], password):
+    #         logger.info("success")
+    #         # return '登陆成功'  # 这个应该就跳转到成功后界面
+    #         # return render_template('homepage.html')
+    #         return redirect(url_for('homepage'))
+    #     # else:
+    #         # return '登陆失败,请检查用户名和密码'
+    # return render_template('login.html')
 
 
 # 主页

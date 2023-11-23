@@ -1,5 +1,0 @@
-2023-11-21 13:07:28 - werkzeug - WARNING -  * Debugger is active!
-2023-11-21 13:07:28 - werkzeug - INFO -  * Debugger PIN: 589-814-652
-2023-11-21 13:07:32 - werkzeug - INFO - 192.168.22.31 - - [21/Nov/2023 13:07:32] "GET / HTTP/1.1" 200 -
-2023-11-21 13:07:32 - werkzeug - INFO - 192.168.22.31 - - [21/Nov/2023 13:07:32] "[33mGET /css/login.css HTTP/1.1[0m" 404 -
-2023-11-21 13:07:32 - werkzeug - INFO - 192.168.22.31 - - [21/Nov/2023 13:07:32] "[33mGET /images/bgd.jpg HTTP/1.1[0m" 404 -

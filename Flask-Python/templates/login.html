@@ -6,30 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <!-- 引入样式表--url_for()保证正确引用样式表 -->
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/login.css') }}">
 </head>
 
-<body background="images/bgd.jpg">
+<body>
     <div>
         <p style="text-align: center;font-size: 60px;color: black;font-family: 宋体;padding-top: 25px;">视频分析管理平台</p>
     </div>
     <div class="main">
-        <div class="title">
-            <span class="font1">登陆页面</span>
-        </div>
-        <div class="title-msg">
-            <span class="font2">请输入用户名和密码</span>
-        </div>
-        <form action="homepage.html" method="get">
+        <form action="{{ url_for('homepage') }}" method="get">
             <!--输入框-->
             <div class="input-content">
                 <!--autofocus-->
                 <div>
-                    <input type="text" id="username" autocomplete="off" placeholder="用户名" name="username" required />
+                    <input type="text" id="username" autocomplete="off" placeholder="用户名" name="username" required>
                 </div>
                 <div style="margin-top: 16px">
                     <input type="password" id="password" autocomplete="off" placeholder="登陆密码" name="password"
-                        maxlength="32" required />
+                        maxlength="32" required>
                 </div>
             </div>
             <!--登入按钮-->

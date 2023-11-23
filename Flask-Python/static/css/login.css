@@ -1,5 +1,5 @@
 body {
-    background-image: url(../images/bgd.jpg);
+    background-image: url('../../images/bgd.jpg');
     /*设置背景图片*/
     background-repeat: no-repeat;
     /*图片适应窗口大小，这里设置的是不进行平铺*/
