@@ -1,46 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <!-- 引入样式表--url_for()保证正确引用样式表 -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='./css/login.css') }}">
+    <title>登录</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/login.css">
+
 </head>
 
-<body>
+<body background="../static/images/bgd.jpg">
+
     <div>
-        <p style="text-align: center;font-size: 60px;color: black;font-family: 宋体;padding-top: 25px;">视频分析管理平台</p>
+        <p style="text-align: center;font-size: 60px; color: gold;font-family: 宋体;padding-top: 25px;">智能视频分析平台</p>
     </div>
     <div class="main">
-        <form action="{{ url_for('homepage') }}" method="get">
+        <div class="title">
+            <span class="font1">登录页面</span>
+        </div>
+
+        <div class="title-msg">
+            <span class="font2">请输入用户名和密码</span>
+        </div>
+
+        <div class="title-loginMsg">
+            <span class="font3">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li style="color: {% if 'error' in message %}red{% else %}green{% endif %}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+            </span>
+        </div>
+
+        <form method="post" action="/login">
             <!--输入框-->
             <div class="input-content">
-                <!--autofocus-->
+                <!--autoFocus-->
                 <div>
-                    <input type="text" id="username" autocomplete="off" placeholder="用户名" name="username" required>
+                    <input type="text" id="username" autocomplete="off" placeholder="用户名" name="username" required />
                 </div>
                 <div style="margin-top: 16px">
-                    <input type="password" id="password" autocomplete="off" placeholder="登陆密码" name="password"
-                        maxlength="32" required>
+                    <input type="password" id="password" autocomplete="off" placeholder="登录密码" name="password"
+                        maxlength="32" required />
                 </div>
             </div>
+
             <!--登入按钮-->
             <div style="text-align: center">
-                <button type="submit" class="enter-btn">登陆</button>
+                <a href="/homepage">
+                    <button type="submit" class="enter-btn">登录</button>
+                </a>
             </div>
+
             <div class="foor">
                 <div class="left">
-                    <a href="#"><span>找回密码</span></a>
+                    <a href="#">
+                        <span>Don't have an account?</span>
+                    </a>
                 </div>
 
                 <div class="right">
-                    <a href="{{ url_for('register') }}"><span>注册账户</span></a>
+                    <a href="/register">
+                        <span>注册账户</span>
+                    </a>
                 </div>
             </div>
         </form>
+
     </div>
 </body>
-
-</html>
