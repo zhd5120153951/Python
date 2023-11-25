@@ -1,2 +1,43 @@
-2023-11-24 17:00:11 - werkzeug - WARNING -  * Debugger is active!
-2023-11-24 17:00:11 - werkzeug - INFO -  * Debugger PIN: 589-814-652
+2023-11-24 17:27:28 - werkzeug - WARNING -  * Debugger is active!
+2023-11-24 17:27:28 - werkzeug - INFO -  * Debugger PIN: 589-814-652
+2023-11-24 17:27:29 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:29] "GET /homepage HTTP/1.1" 200 -
+2023-11-24 17:27:29 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:29] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2023-11-24 17:27:29 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:29] "[36mGET /static/images/bgd.jpg HTTP/1.1[0m" 304 -
+2023-11-24 17:27:29 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:29] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2023-11-24 17:27:31 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:31] "[33mGET /static/style.css HTTP/1.1[0m" 404 -
+2023-11-24 17:27:31 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:31] "GET /video_feed HTTP/1.1" 200 -
+2023-11-24 17:27:32 - my_logger - INFO - 5.7
+2023-11-24 17:27:32 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:32] "GET /get_resources HTTP/1.1" 200 -
+2023-11-24 17:27:32 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:32] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2023-11-24 17:27:32 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:32] "[36mGET /static/images/bgd.jpg HTTP/1.1[0m" 304 -
+2023-11-24 17:27:34 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:34] "GET / HTTP/1.1" 200 -
+2023-11-24 17:27:34 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:34] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2023-11-24 17:27:36 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:36] "GET /homepage HTTP/1.1" 200 -
+2023-11-24 17:27:36 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:36] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2023-11-24 17:27:37 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:37] "GET /video_feed HTTP/1.1" 200 -
+2023-11-24 17:27:38 - my_logger - INFO - 8.8
+2023-11-24 17:27:38 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:38] "GET /get_resources HTTP/1.1" 200 -
+2023-11-24 17:27:40 - my_logger - INFO - 8.7
+2023-11-24 17:27:40 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:40] "GET /get_resources HTTP/1.1" 200 -
+2023-11-24 17:27:42 - my_logger - INFO - 7.8
+2023-11-24 17:27:42 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:42] "GET /get_resources HTTP/1.1" 200 -
+2023-11-24 17:27:44 - my_logger - INFO - 8.1
+2023-11-24 17:27:44 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:44] "GET /get_resources HTTP/1.1" 200 -
+2023-11-24 17:27:47 - my_logger - INFO - 6.0
+2023-11-24 17:27:47 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:47] "GET /get_resources HTTP/1.1" 200 -
+2023-11-24 17:27:50 - my_logger - INFO - 6.2
+2023-11-24 17:27:50 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:50] "GET /get_resources HTTP/1.1" 200 -
+2023-11-24 17:27:53 - my_logger - INFO - 6.4
+2023-11-24 17:27:53 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:53] "GET /get_resources HTTP/1.1" 200 -
+2023-11-24 17:27:56 - my_logger - INFO - 6.4
+2023-11-24 17:27:56 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:56] "GET /get_resources HTTP/1.1" 200 -
+2023-11-24 17:27:59 - my_logger - INFO - 6.3
+2023-11-24 17:27:59 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:27:59] "GET /get_resources HTTP/1.1" 200 -
+2023-11-24 17:28:02 - my_logger - INFO - 6.5
+2023-11-24 17:28:02 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:28:02] "GET /get_resources HTTP/1.1" 200 -
+2023-11-24 17:28:05 - my_logger - INFO - 2.7
+2023-11-24 17:28:05 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:28:05] "GET /get_resources HTTP/1.1" 200 -
+2023-11-24 17:28:08 - my_logger - INFO - 5.1
+2023-11-24 17:28:08 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:28:08] "GET /get_resources HTTP/1.1" 200 -
+2023-11-24 17:28:10 - my_logger - INFO - 4.2
+2023-11-24 17:28:10 - werkzeug - INFO - 127.0.0.1 - - [24/Nov/2023 17:28:10] "GET /get_resources HTTP/1.1" 200 -
