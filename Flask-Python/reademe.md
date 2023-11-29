@@ -1,6 +1,7 @@
 # Flask框架部署前后端--前端(html,css,jquery,javascript)--后端(Python)
 
 *what is new*
+
 **2023.11.15**
 
 # Django和Flask都是用于构建Web应用程序的Python web框架
