@@ -47,7 +47,7 @@ def create_table():
 
 @app.route('/')
 def home():
-    init_db()
+    # init_db()
     return render_template('login.html')
 
 # 路由--login page
@@ -105,7 +105,7 @@ def homepage():
     return render_template('homepage.html')
 
 
-# 获取视频每帧--3
+# 获取视频每帧
 
 
 def generate_frames():
