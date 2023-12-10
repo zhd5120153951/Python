@@ -48,7 +48,7 @@ def create_table():
 @app.route('/')
 def home():
     # init_db()
-    return render_template('login.html')
+    return render_template("login.html")
 
 # 路由--login page
 
@@ -65,7 +65,7 @@ def login():
         isExistUser = cursor.fetchone()
 
     if isExistUser and check_password_hash(isExistUser[2], password):
-        # flash('Login successful', 'success')
+        flash('Login successful', 'message')
         return redirect(url_for('homepage'))  # redirect()是某个页面的路由函数
 
     # if isExistUser:
@@ -75,7 +75,7 @@ def login():
     # else:
     #     flash('Invalid username or password', 'error')
     #     return redirect(url_for('home'))
-    # flash('Invalid username or password', 'error')
+    flash('Invalid username or password', 'info')
     return redirect(url_for('home'))
 # Route for the registration page
 
@@ -85,8 +85,9 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        hashed_password = generate_password_hash(password, method='sha256')
-
+        print(password)
+        hashed_password = generate_password_hash(password)
+        print(hashed_password)
         with sqlite3.connect("users.db") as conn:
             cursor = conn.cursor()
             cursor.execute(
@@ -94,9 +95,9 @@ def register():
                     username, hashed_password)
             )
             conn.commit()
-        # flash('Registration successful. You can now log in.', 'success')
+        flash('Registration successful. You can now log in.', 'message')
         return redirect(url_for('home'))
-
+    flash('Registration failure. try again.', 'info')
     return render_template('register.html')
 
 
@@ -108,16 +109,18 @@ def homepage():
 # 获取视频每帧
 
 
-def generate_frames():
-    while True:
-        success, frame = cap.read()
-        if not success:
-            break
-        else:
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+def generate_frames(isVideo):
+    if isVideo:
+        while True:
+            success, frame = cap.read()
+            if not success:
+                break
+            else:
+                ret, buffer = cv2.imencode('.jpg', frame)
+                frame = buffer.tobytes()
+                yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
 # 路由--跳转web_rtsp
 
 
@@ -130,9 +133,10 @@ def web_rtsp():
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    isVideo = True
+    return Response(generate_frames(isVideo), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-# 路由：获取 CPU 使用率的 API
+# 路由：获取 CPU 使用率的 API--由jquery发起
 
 
 @app.route('/get_resources')
@@ -187,7 +191,9 @@ if __name__ == '__main__':
 
     create_table()
     # 配置密钥,用于加密session数据
-    app.config['SECREAT_KEY'] = "daito_yolov5_flask"
+    # app.config['SECREAT_KEY'] = "daito_yolov5_flask"
+    app.secret_key = "daito_yolov5_flask"
+    # app.secret_key = 'kdjklfjkd87384hjdhjh'
 
     app.run(host="0.0.0.0", debug=True)
     # app.run(host="0.0.0.0", debug=True)
