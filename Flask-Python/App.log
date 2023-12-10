@@ -1,8 +1,47 @@
-2023-12-09 18:12:25 - werkzeug - WARNING -  * Debugger is active!
-2023-12-09 18:12:25 - werkzeug - INFO -  * Debugger PIN: 589-814-652
-2023-12-09 18:12:27 - werkzeug - INFO - 127.0.0.1 - - [09/Dec/2023 18:12:27] "GET / HTTP/1.1" 200 -
-2023-12-09 18:12:27 - werkzeug - INFO - 127.0.0.1 - - [09/Dec/2023 18:12:27] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
-2023-12-09 18:12:27 - werkzeug - INFO - 127.0.0.1 - - [09/Dec/2023 18:12:27] "[36mGET /static/images/bgd.jpg HTTP/1.1[0m" 304 -
-2023-12-09 18:12:34 - werkzeug - INFO - 127.0.0.1 - - [09/Dec/2023 18:12:34] "[32mPOST /login HTTP/1.1[0m" 302 -
-2023-12-09 18:12:34 - werkzeug - INFO - 127.0.0.1 - - [09/Dec/2023 18:12:34] "GET /homepage HTTP/1.1" 200 -
-2023-12-09 18:12:34 - werkzeug - INFO - 127.0.0.1 - - [09/Dec/2023 18:12:34] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2023-12-10 19:27:09 - werkzeug - WARNING -  * Debugger is active!
+2023-12-10 19:27:09 - werkzeug - INFO -  * Debugger PIN: 589-814-652
+2023-12-10 19:27:13 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:13] "GET / HTTP/1.1" 200 -
+2023-12-10 19:27:13 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:13] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2023-12-10 19:27:13 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:13] "[36mGET /static/images/bgd.jpg HTTP/1.1[0m" 304 -
+2023-12-10 19:27:22 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:22] "[32mPOST /login HTTP/1.1[0m" 302 -
+2023-12-10 19:27:22 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:22] "GET /homepage HTTP/1.1" 200 -
+2023-12-10 19:27:22 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:22] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2023-12-10 19:27:22 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:22] "[36mGET /static/images/bgd.jpg HTTP/1.1[0m" 304 -
+2023-12-10 19:27:24 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:24] "GET /ip_config HTTP/1.1" 200 -
+2023-12-10 19:27:24 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:24] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2023-12-10 19:27:28 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:28] "GET /portip HTTP/1.1" 200 -
+2023-12-10 19:27:31 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:31] "GET / HTTP/1.1" 200 -
+2023-12-10 19:27:31 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:31] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2023-12-10 19:27:31 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:31] "[36mGET /static/images/bgd.jpg HTTP/1.1[0m" 304 -
+2023-12-10 19:27:37 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:37] "GET /ip_config HTTP/1.1" 200 -
+2023-12-10 19:27:37 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:37] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2023-12-10 19:27:37 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:37] "[36mGET /static/images/bgd.jpg HTTP/1.1[0m" 304 -
+2023-12-10 19:27:41 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:41] "GET /ip_config HTTP/1.1" 200 -
+2023-12-10 19:27:41 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:41] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2023-12-10 19:27:44 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:44] "GET /ip_config HTTP/1.1" 200 -
+2023-12-10 19:27:44 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:44] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2023-12-10 19:27:46 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:46] "GET /ip_config HTTP/1.1" 200 -
+2023-12-10 19:27:46 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:46] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2023-12-10 19:27:49 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:49] "GET / HTTP/1.1" 200 -
+2023-12-10 19:27:49 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:49] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2023-12-10 19:27:49 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:49] "[36mGET /static/images/bgd.jpg HTTP/1.1[0m" 304 -
+2023-12-10 19:27:53 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:53] "GET / HTTP/1.1" 200 -
+2023-12-10 19:27:53 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:53] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2023-12-10 19:27:53 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:27:53] "[36mGET /static/images/bgd.jpg HTTP/1.1[0m" 304 -
+2023-12-10 19:28:00 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:28:00] "GET /ip_config HTTP/1.1" 200 -
+2023-12-10 19:28:00 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:28:00] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2023-12-10 19:28:00 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:28:00] "[36mGET /static/images/bgd.jpg HTTP/1.1[0m" 304 -
+2023-12-10 19:28:42 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:28:42] "GET / HTTP/1.1" 200 -
+2023-12-10 19:28:42 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:28:42] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2023-12-10 19:28:42 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:28:42] "[36mGET /static/images/bgd.jpg HTTP/1.1[0m" 304 -
+2023-12-10 19:28:46 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:28:46] "GET /homepage HTTP/1.1" 200 -
+2023-12-10 19:28:46 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:28:46] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2023-12-10 19:28:46 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:28:46] "[36mGET /static/images/bgd.jpg HTTP/1.1[0m" 304 -
+2023-12-10 19:28:50 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:28:50] "GET /ip_config HTTP/1.1" 200 -
+2023-12-10 19:28:50 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:28:50] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2023-12-10 19:28:59 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:28:59] "GET / HTTP/1.1" 200 -
+2023-12-10 19:28:59 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:28:59] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+2023-12-10 19:28:59 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:28:59] "[36mGET /static/images/bgd.jpg HTTP/1.1[0m" 304 -
+2023-12-10 19:29:04 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:29:04] "GET /homepage HTTP/1.1" 200 -
+2023-12-10 19:29:04 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:29:04] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2023-12-10 19:29:04 - werkzeug - INFO - 127.0.0.1 - - [10/Dec/2023 19:29:04] "[36mGET /static/images/bgd.jpg HTTP/1.1[0m" 304 -

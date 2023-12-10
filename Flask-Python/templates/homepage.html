@@ -5,83 +5,81 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Home-安全生产管控平台</title>
 
     <!-- 引入样式表--url_for()保证正确引用样式表 -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
     <style>
-        header {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
 
+        header {
+            /* background-color: #00f3cf; */
+            color: #fff;
+            /* padding: 0.25em; */
+            text-align: center;
+            font-size: larger;
         }
 
         nav {
-            width: 200px;
-            background-color: #f4f4f4;
-            float: left;
+            background-color: #959292;
+            color: #fff;
+            padding: 0.5em;
+            text-align: center;
+        }
+
+        section {
             padding: 20px;
-            box-sizing: border-box;
         }
 
-        nav a {
-            display: block;
-            margin-bottom: 10px;
-            text-decoration: none;
-            color: #333;
-            padding: 8px;
-            border-radius: 5px;
-            background-color: #ddd;
-            transition: background-color 0.3s;
-        }
-
-        nav a:hover {
-            background-color: #bbb;
-        }
-
-        .sub-menu {
-            display: none;
-            margin-left: 10px;
-        }
-
-        nav .has-submenu:hover .sub-menu {
-            display: block;
-        }
-
-        article {
-            margin-left: 220px;
-            padding: 20px;
-            box-sizing: border-box;
+        footer {
+            /* background-color: #333; */
+            color: #fff;
+            padding: 0.5em;
+            text-align: center;
+            position: fixed;
+            /* bottom: 0; */
+            bottom: 0cm;
+            width: 100%;
         }
     </style>
-
 
 </head>
 
 <body>
     <header>
-        <h1>欢迎访问首页</h1>
+        <h1>安全生产管理平台</h1>
     </header>
 
     <nav>
-        <a href="#">功能1</a>
-        <a href="#" class="has-submenu">功能2
-            <div class="sub-menu">
-                <a href="#">子功能1</a>
-                <a href="#">子功能2</a>
-            </div>
-        </a>
-        <a href="#">功能3</a>
-
+        <!-- <a href="#">首页</a> |
+        <a href="#">报告</a> |
+        <a href="#">统计</a> |
+        <a href="#">设置</a> -->
+        <a href="{{ url_for('ip_config') }}">IP配置</a> |
+        <a href="{{ url_for('rtsp_config') }}">RTSP配置</a> |
+        <a href="{{ url_for('system_resource') }}">系统资源</a> |
+        <a href="{{ url_for('ai_setting') }}">AI设置</a>
     </nav>
 
-    <article>
-        <h2>欢迎来到首页 </h2>
-        <p>这是首页内容显示区,可以显示所有功能的详细信息</p>
-    </article>
+    <section>
+        <h2>欢迎使用安全生产管理平台</h2>
+        <p>在这里，您可以管理安全生产数据、生成报告并查看统计信息。</p>
+    </section>
+
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2023 安全生产管理平台</p>
+    </footer>
 
     <!-- 添加一个按钮,点击后跳转到新页面-->
     <button onclick="window.location.href='{{ url_for('portip') }}'">portip</button>

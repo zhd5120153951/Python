@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, Response, jsonify
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
 from matplotlib.backend_bases import cursors
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
@@ -10,7 +11,15 @@ from sympy import threaded, true
 # 创建网页应用对象
 app = Flask(__name__)
 # app.config["secret_key"] = 'daito_yolov5_flask'
-# Function to connect to the SQLite database
+
+# 配置密钥,用于加密session数据
+# app.config['SECREAT_KEY'] = "daito_yolov5_flask"
+app.secret_key = "daito_yolov5_flask"
+# app.secret_key = 'kdjklfjkd87384hjdhjh'
+
+# 初始化 Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 
 def get_db_connection():
@@ -55,6 +64,8 @@ def home():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    user = User(id='123')  # 举例，创建一个用户
+    login_user(user)  # 通过 Flask-Login 登录用户
     username = request.form['username']
     password = request.form['password']
 
@@ -76,6 +87,13 @@ def login():
     #     flash('Invalid username or password', 'error')
     #     return redirect(url_for('home'))
     flash('Invalid username or password', 'info')
+    return redirect(url_for('home'))
+# 注销用户
+
+
+@app.route('/logout')
+def logout():
+    logout_user()  # 通过 Flask-Login 注销用户
     return redirect(url_for('home'))
 # Route for the registration page
 
@@ -102,6 +120,7 @@ def register():
 
 
 @app.route('/homepage', methods=['GET', 'POST'])
+@login_required  # 应用到受保护的页面
 def homepage():
     return render_template('homepage.html')
 
@@ -125,6 +144,7 @@ def generate_frames(isVideo):
 
 
 @app.route('/web_rtsp', methods=['GET', 'POST'])
+@login_required  # 应用到受保护的页面
 def web_rtsp():
     return render_template('web_rtsp.html')
 
@@ -132,6 +152,7 @@ def web_rtsp():
 
 
 @app.route('/video_feed')
+@login_required  # 应用到受保护的页面
 def video_feed():
     isVideo = True
     return Response(generate_frames(isVideo), mimetype='multipart/x-mixed-replace; boundary=frame')
@@ -140,6 +161,7 @@ def video_feed():
 
 
 @app.route('/get_resources')
+@login_required  # 应用到受保护的页面
 def get_cpu_usage_api():
     cpu_usage = psutil.cpu_percent(interval=1)
     memory_info = psutil.virtual_memory().percent
@@ -160,6 +182,7 @@ def get_cpu_usage_api():
 
 
 @app.route('/portip', methods=['GET', 'POST'])
+@login_required  # 应用到受保护的页面
 def portip():
     return render_template('portip.html')
 
@@ -167,8 +190,51 @@ def portip():
 
 
 @app.route('/set_ip')
+@login_required  # 应用到受保护的页面
 def set_ip():
     pass
+
+# 路由--ip_config
+
+
+@app.route('/ip_config')
+@login_required  # 应用到受保护的页面
+def ip_config():
+    return render_template("ip_config.html")
+# 路由--rtsp_config
+
+
+@app.route('/rtsp_config')
+def rtsp_config():
+    pass
+# 路由--system_resource
+
+
+@app.route('/system_resource')
+def system_resource():
+    pass
+
+# 路由--rtsp_config
+
+
+@app.route('/ai_setting')
+def ai_setting():
+    pass
+
+
+# 哑用户类
+
+
+class User(UserMixin):
+    def __init__(self, id):
+        self.id = id
+
+# 用户加载函数，传入用户 ID，返回用户对象
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id)
 
 
 if __name__ == '__main__':
@@ -189,11 +255,11 @@ if __name__ == '__main__':
     rtsp_url = 0
     cap = cv2.VideoCapture(rtsp_url)
 
+    # Flask-Login 需要一个自定义的消息和重定向端点
+    login_manager.login_message = "You must be logged in to access this page."
+    login_manager.login_view = "login"
+
     create_table()
-    # 配置密钥,用于加密session数据
-    # app.config['SECREAT_KEY'] = "daito_yolov5_flask"
-    app.secret_key = "daito_yolov5_flask"
-    # app.secret_key = 'kdjklfjkd87384hjdhjh'
 
     app.run(host="0.0.0.0", debug=True)
     # app.run(host="0.0.0.0", debug=True)
