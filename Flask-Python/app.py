@@ -1,11 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, Response, jsonify
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import DataRequired
 from matplotlib.backend_bases import cursors
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import logging
 import cv2
 import psutil
+from ipaddress import ip_address, AddressValueError
+import netifaces
+import socket
 from sympy import threaded, true
 
 # 创建网页应用对象
@@ -16,10 +22,6 @@ app = Flask(__name__)
 # app.config['SECREAT_KEY'] = "daito_yolov5_flask"
 app.secret_key = "daito_yolov5_flask"
 # app.secret_key = 'kdjklfjkd87384hjdhjh'
-
-# 初始化 Flask-Login
-login_manager = LoginManager()
-login_manager.init_app(app)
 
 
 def get_db_connection():
@@ -64,30 +66,24 @@ def home():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    user = User(id='123')  # 举例，创建一个用户
-    login_user(user)  # 通过 Flask-Login 登录用户
-    username = request.form['username']
-    password = request.form['password']
+    if request.method == "POST":
+        username = request.form['username']
+        password = request.form['password']
 
-    with sqlite3.connect("users.db") as conn:
-        cursor = conn.cursor()
-        cursor.execute(
-            'SELECT * FROM users WHERE username = ?', (username, ))
-        isExistUser = cursor.fetchone()
+        with sqlite3.connect("users.db") as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                'SELECT * FROM users WHERE username = ?', (username, ))
+            isExistUser = cursor.fetchone()
 
-    if isExistUser and check_password_hash(isExistUser[2], password):
-        flash('Login successful', 'message')
-        return redirect(url_for('homepage'))  # redirect()是某个页面的路由函数
+        if isExistUser and check_password_hash(isExistUser[2], password):
+            flash('Login successful', 'success')
+            return redirect(url_for('homepage'))  # redirect()是某个页面的路由函数
 
-    # if isExistUser:
-    #     flash('Login successful', 'success')
-    #     return redirect(url_for('homepage'))  # redirect()是某个页面的路由函数
-
-    # else:
-    #     flash('Invalid username or password', 'error')
-    #     return redirect(url_for('home'))
-    flash('Invalid username or password', 'info')
-    return redirect(url_for('home'))
+        flash('Invalid username or password', 'info')
+        return redirect(url_for('/'))
+    else:
+        return render_template("login.html")
 # 注销用户
 
 
@@ -120,7 +116,6 @@ def register():
 
 
 @app.route('/homepage', methods=['GET', 'POST'])
-@login_required  # 应用到受保护的页面
 def homepage():
     return render_template('homepage.html')
 
@@ -144,7 +139,6 @@ def generate_frames(isVideo):
 
 
 @app.route('/web_rtsp', methods=['GET', 'POST'])
-@login_required  # 应用到受保护的页面
 def web_rtsp():
     return render_template('web_rtsp.html')
 
@@ -152,7 +146,6 @@ def web_rtsp():
 
 
 @app.route('/video_feed')
-@login_required  # 应用到受保护的页面
 def video_feed():
     isVideo = True
     return Response(generate_frames(isVideo), mimetype='multipart/x-mixed-replace; boundary=frame')
@@ -161,7 +154,6 @@ def video_feed():
 
 
 @app.route('/get_resources')
-@login_required  # 应用到受保护的页面
 def get_cpu_usage_api():
     cpu_usage = psutil.cpu_percent(interval=1)
     memory_info = psutil.virtual_memory().percent
@@ -178,63 +170,107 @@ def get_cpu_usage_api():
 
     print(data)
     return jsonify(data)
-# 路由--跳转到portip
+
+# 获取IP
 
 
-@app.route('/portip', methods=['GET', 'POST'])
-@login_required  # 应用到受保护的页面
-def portip():
-    return render_template('portip.html')
+def get_ip_addr():
+    ip_addr = {"local_ip": "", "wifi_ip": ""}
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    print(s)
+    # 尝试连接非存在地址，来激活网络接口的 IP
+    try:
+        # 这里的地址不需要真实存在
+        s.connect(("10.255.255.255", 1))
+        ip_addr['local_ip'] = s.getsockname()[0]
+
+        print(ip_addr['local_ip'])
+        print(s.getsockname()[1])
+
+    except:
+        ip_addr['local_ip'] = 'N/A'
+    # 获取 WiFi IP 地址（这种方式较为复杂，可能需要根据具体操作系统及网络配置而定）
+    # 这里我们假装已经得到了 WiFi IP 地址
+    ip_addr['wifi_ip'] = '192.168.0.10'
+    s.close()
+    return ip_addr
+# 路由--ip_config
+
+
+@app.route('/ip_config', methods=['GET', 'POST'])
+def ip_config():
+    ip_addr = get_ip_addr()
+    return render_template("ip_config.html", ip_addr=ip_addr)
+    # # 显示当前的端口或者WiFi ip地址
+    # try:
+    #     # 获取本地网络接口列表
+    #     interfaces = [ip_address(i) for i in netifaces.interfaces()]
+    #     # 获取本地ip
+    #     local_ip = interfaces[0].ip
+    #     # 获取WiFi IP地址
+    #     wifi_ip = None
+    #     for i in interfaces:
+    #         if i.is_wireless:
+    #             wifi_ip = i.ip
+    #             break
+    #     # 渲染模板
+    #     return render_template("ip_config.html", local_ip, wifi_ip)
+
+    # except AddressValueError as e:
+    #     return f"Error:{e}"
+
+
+# 设置IP--Port(WiFi一般都是自动分配IP,不需要设置)
+def set_ip_addr(interface="eth0", new_ip=None):
+    if new_ip:
+        try:
+            netifaces.ifaddresses(interface)[
+                netifaces.AF_INET][0]['addr'] = new_ip
+            return True
+        except KeyError:
+            return False
+    else:
+        return False
 
 # 路由--改ip
 
 
-@app.route('/set_ip')
-@login_required  # 应用到受保护的页面
+@app.route('/set_ip', methods=['GET', 'POST'])
 def set_ip():
-    pass
-
-# 路由--ip_config
-
-
-@app.route('/ip_config')
-@login_required  # 应用到受保护的页面
-def ip_config():
-    return render_template("ip_config.html")
+    if request.method == "POST":
+        new_ip = request.form.get('new_ip')
+        interface = "eth0"
+        print(new_ip)
+        if set_ip_addr(interface, new_ip):
+            return redirect(url_for("ip_config"))
+        else:
+            return "IP设置失败"
 # 路由--rtsp_config
 
 
 @app.route('/rtsp_config')
 def rtsp_config():
-    pass
+    # 获取当前的摄像头rtsp
+    return render_template("rtsp_config.html")
+
+
+@app.route('/set_rtsp')
+def set_rtsp():
+    return "rtsp设置成功"
+
 # 路由--system_resource
 
 
 @app.route('/system_resource')
 def system_resource():
-    pass
+    return "system_resource 成功"
 
 # 路由--rtsp_config
 
 
 @app.route('/ai_setting')
 def ai_setting():
-    pass
-
-
-# 哑用户类
-
-
-class User(UserMixin):
-    def __init__(self, id):
-        self.id = id
-
-# 用户加载函数，传入用户 ID，返回用户对象
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User(user_id)
+    return "AI设置成功"
 
 
 if __name__ == '__main__':
@@ -254,10 +290,6 @@ if __name__ == '__main__':
     # rtsp_url = "rtsp://admin:jiankong123@192.168.23.10:554/Streaming/Channels/101"
     rtsp_url = 0
     cap = cv2.VideoCapture(rtsp_url)
-
-    # Flask-Login 需要一个自定义的消息和重定向端点
-    login_manager.login_message = "You must be logged in to access this page."
-    login_manager.login_view = "login"
 
     create_table()
 

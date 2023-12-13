@@ -28,7 +28,8 @@
                 {% if messages %}
                 <ul>
                     {% for message in messages %}
-                    <li style="color: {% if 'error' in message %}red{% else %}green{% endif %}">{{ message }}</li>
+                    <li style="color: {% if 'error' in message %}red{% else %}green{% endif %}">{{ message }}
+                    </li>
                     {% endfor %}
                 </ul>
                 {% endif %}
@@ -36,7 +37,11 @@
             </span>
         </div>
 
+        <!-- <p id="message"></p> -->
+
+        <!-- <form id="loginForm" method="post" action="/login"> -->
         <form method="post" action="/login">
+
             <!--输入框-->
             <div class="input-content">
                 <!--autoFocus-->
@@ -72,5 +77,6 @@
             </div>
         </form>
 
+        <!-- <script src="../static/js/login.js"></script> -->
     </div>
 </body>

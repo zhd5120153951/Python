@@ -67,10 +67,10 @@
         <a href="{{ url_for('ai_setting') }}">AI设置</a>
     </nav>
 
-    <section>
+    <!-- <section>
         <h2>欢迎使用安全生产管理平台</h2>
         <p>在这里，您可以管理安全生产数据、生成报告并查看统计信息。</p>
-    </section>
+    </section> -->
 
     <div id="content">
         {% block content %}
@@ -78,12 +78,22 @@
     </div>
 
     <footer>
-        <p>&copy; 2023 安全生产管理平台</p>
+        <p id="year"></p>
+
+        <!-- <p id="year">&copy; 安全生产管理平台</p> -->
+        <script>
+            // 获取当前年份
+            const currentYear = new Date().getFullYear();
+
+            // 将年份显示在页面底部
+            document.getElementById("year").innerText = "版权所有 ©" + currentYear + " 安全生产管理平台";
+        </script>
+
     </footer>
 
     <!-- 添加一个按钮,点击后跳转到新页面-->
-    <button onclick="window.location.href='{{ url_for('portip') }}'">portip</button>
-    <button onclick="window.location.href='{{ url_for('web_rtsp') }}'">rtsp</buttonb>
+    <!-- <button onclick="window.location.href='{{ url_for('ip_config') }}'">portip</button> -->
+    <!-- <button onclick="window.location.href='{{ url_for('web_rtsp') }}'">rtsp</buttonb> -->
 </body>
 
 </html>
