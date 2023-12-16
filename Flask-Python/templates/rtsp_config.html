@@ -3,14 +3,27 @@
 {% block content %}
 <div class="container">
 
-
-
-    <form action="{{ url_for('set_ip') }}" method="post">
-        <label class="ip" for="new_ip">请输入IP:</label>
-        <input class="ip" type="text" id="new_ip" name="new_ip" required>
+    <form action="{{ url_for('set_rtsp_1') }}" method="post">
+        <!-- <form method="post"> -->
+        <label class="rtsp" for="new_rtsp_1">请输入RTSP:</label>
+        <!-- required表示form表单不能为空 -->
+        <input class="rtsp" type="text" id="new_rtsp_1" name="new_rtsp_1" placeholder="RTSP地址...">
         <!-- <input class="ip" type="submit" value="确定"> -->
-        <button class="ip" type="submit">确定</button>
+
+        <button class="rtsp" type="submit" name="button" value="btn_1">确定</button>
+        <button class="rtsp" type="submit" name="button" value="prev_1">预览</button>
+
+        <br>
+
+        <label class="rtsp" for="new_rtsp_2">请输入RTSP:</label>
+        <input class="rtsp" type="text" id="new_rtsp_2" name="new_rtsp_2" placeholder="RTSP地址...">
+        <!-- <input class="ip" type="submit" value="确定"> -->
+
+        <button class="rtsp" type="submit" name="button" value="btn_2">确定</button>
+        <button class="rtsp" type="submit" name="button" value="prev_2">预览</button>
+
     </form>
+
 
 </div>
 
@@ -26,7 +39,7 @@
         font-family: 'Courier New', Courier, monospace;
     }
 
-    .ip {
+    .rtsp {
         font-family: 'Courier New', Courier, monospace;
         font-size: 1em;
         height: auto;

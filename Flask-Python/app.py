@@ -1,3 +1,4 @@
+from email import message
 from flask import Flask, render_template, request, redirect, url_for, flash, Response, jsonify
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
@@ -12,7 +13,7 @@ import psutil
 from ipaddress import ip_address, AddressValueError
 import netifaces
 import socket
-from sympy import threaded, true
+import json
 
 # 创建网页应用对象
 app = Flask(__name__)
@@ -76,6 +77,9 @@ def login():
                 'SELECT * FROM users WHERE username = ?', (username, ))
             isExistUser = cursor.fetchone()
 
+            conn.commit()
+            conn.close()
+
         if isExistUser and check_password_hash(isExistUser[2], password):
             flash('Login successful', 'success')
             return redirect(url_for('homepage'))  # redirect()是某个页面的路由函数
@@ -109,6 +113,7 @@ def register():
                     username, hashed_password)
             )
             conn.commit()
+            conn.close()
         flash('Registration successful. You can now log in.', 'message')
         return redirect(url_for('home'))
     flash('Registration failure. try again.', 'info')
@@ -254,10 +259,100 @@ def rtsp_config():
     return render_template("rtsp_config.html")
 
 
-@app.route('/set_rtsp')
-def set_rtsp():
-    return "rtsp设置成功"
+@app.route('/set_rtsp_1', methods=['GET', 'POST'])
+def set_rtsp_1():
+    if request.method == "POST":
+        btn_value = request.form.get("button")
+        print(btn_value)
+        form_data_1 = request.form.get("new_rtsp_1")
+        print(form_data_1)
+        form_data_2 = request.form.get("new_rtsp_2")
+        print(form_data_2)
 
+        global rtsp_dict
+
+        # 通过路由到其他函数处理
+        # if btn_value == "btn_1":
+        #     return redirect(url_for("rtsp_1"))
+
+        # 把rtsp保存到json中存起来,AI设置中的参数,开关也是如此,后面把模型加载时从json中读取
+        if btn_value == "btn_1":
+            # 打开json文件
+            with open("rtsp_urls.json", "w") as file:
+                #  将RTSP地址保存到JSON文件
+                rtsp_dict['key_rtsp_1'] = form_data_1
+                # json.dump(data_1,  file)
+                json.dump(rtsp_dict, file)
+                file.close()
+
+        if btn_value == "btn_2":
+            # 打开json文件
+            with open("rtsp_urls.json", "w") as file:
+                rtsp_dict['key_rtsp_2'] = form_data_2
+                # json.dump(data_2,  file)
+                json.dump(rtsp_dict, file)
+                file.close()
+
+        if btn_value == "prev_1":  # 用多线程预览--后面在改进
+            # 从json文件中读取rtsp地址
+            with open("rtsp_urls.json", "r") as file:
+                rtsp_url = json.load(file)["key_rtsp_1"]
+                # 使用OpenCV打开视频流
+                cap_1 = cv2.VideoCapture(int(rtsp_url))
+                # 创建一个窗口来显示视频流
+                cv2.namedWindow("preview_1", cv2.WINDOW_NORMAL)
+                while True:
+                    # 读取视频帧
+                    ret, frame = cap_1.read()
+
+                    if not ret:
+                        break
+                    # 实时显示视频帧
+                    cv2.imshow("preview_1", frame)
+                    # 按下esc键退出预览
+                    if cv2.waitKey(1) == 27:
+                        break
+                # 释放视频流和关闭窗口
+                cap_1.release()
+                cv2.destroyAllWindows()
+                file.close()
+
+        if btn_value == "prev_2":  # 用多线程预览--后面在改进--而且这里必须要用多线程或者多进程
+            # 从json文件中读取rtsp地址
+            with open("rtsp_urls.json", "r") as file:
+                rtsp_url = json.load(file)["key_rtsp_2"]
+                # 使用OpenCV打开视频流
+                cap_1 = cv2.VideoCapture(int(rtsp_url))
+                # 创建一个窗口来显示视频流
+                cv2.namedWindow("preview_2", cv2.WINDOW_NORMAL)
+                while True:
+                    # 读取视频帧
+                    ret, frame = cap_1.read()
+
+                    if not ret:
+                        break
+                    # 实时显示视频帧
+                    cv2.imshow("preview_2", frame)
+                    # 按下esc键退出预览
+                    if cv2.waitKey(1) == 27:
+                        break
+                # 释放视频流和关闭窗口
+                cap_1.release()
+                cv2.destroyAllWindows()
+                file.close()
+
+    return render_template("popup.html", message="rtsp设置成功")
+
+
+@app.route('/popup', methods=['GET', 'POST'])
+def popup():
+    message = '这是一个提示信息'  # 这里可以替换为你想要显示的内容
+    return render_template('popup.html', message=message)
+
+
+@app.route('/rtsp_1', methods=['GET', 'POST'])
+def rtsp_1():
+    return "preview_1"
 # 路由--system_resource
 
 
@@ -290,6 +385,8 @@ if __name__ == '__main__':
     # rtsp_url = "rtsp://admin:jiankong123@192.168.23.10:554/Streaming/Channels/101"
     rtsp_url = 0
     cap = cv2.VideoCapture(rtsp_url)
+
+    rtsp_dict = {"key_rtsp_1": None, "key_rtsp_2": None}  # rtsp地址
 
     create_table()
 

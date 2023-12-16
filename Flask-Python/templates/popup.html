@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>提示小窗口</title>
+</head>
+
+<body>
+    <div id="popup" style="display: block;">
+        <h1>提示信息</h1>
+        <p>{{ message }}</p>
+        <button onclick="closePopup()">关闭</button>
+    </div>
+    <script>
+        function closePopup() {
+            document.getElementById("popup").style.display = "关闭成功";
+        }
+    </script>
+</body>
+
+</html>
