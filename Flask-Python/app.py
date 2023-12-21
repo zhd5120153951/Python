@@ -1,4 +1,4 @@
-from email import message
+import queue
 from flask import Flask, render_template, request, redirect, url_for, flash, Response, jsonify
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
@@ -14,7 +14,10 @@ from ipaddress import ip_address, AddressValueError
 import netifaces
 import socket
 import json
-
+import multiprocessing as mp  # 推理时用多进程
+import threading  # 预览时用多线程
+import time
+import subprocess
 # 创建网页应用对象
 app = Flask(__name__)
 # app.config["secret_key"] = 'daito_yolov5_flask'
@@ -78,7 +81,6 @@ def login():
             isExistUser = cursor.fetchone()
 
             conn.commit()
-            conn.close()
 
         if isExistUser and check_password_hash(isExistUser[2], password):
             flash('Login successful', 'success')
@@ -113,7 +115,6 @@ def register():
                     username, hashed_password)
             )
             conn.commit()
-            conn.close()
         flash('Registration successful. You can now log in.', 'message')
         return redirect(url_for('home'))
     flash('Registration failure. try again.', 'info')
@@ -162,15 +163,23 @@ def video_feed():
 def get_cpu_usage_api():
     cpu_usage = psutil.cpu_percent(interval=1)
     memory_info = psutil.virtual_memory().percent
-    disk_info = psutil.disk_usage('/').percent
-    gpu_info = "Not Implemented"  # 这个可能需要其他的包来获取GPU信息
+    # disk_info = psutil.disk_usage('/').percent#Linux下
+    disk_info_e = psutil.disk_usage('E:/').percent  # Linux下
+    disk_info_c = psutil.disk_usage('C:/').percent  # Linux下
+    disk_info_d = psutil.disk_usage('D:/').percent  # Linux下
+    disk_info = (disk_info_c+disk_info_e+disk_info_d)/3.0
+
+    # output = subprocess.check_output(["nvidia-smi", "-q", "gpu"])
+    # lines = output.decode("utf-8").split("\n")
+    # gpu_info = float(lines[-1].split(":")[1].split("%")[0])
+
     logger.info(cpu_usage)
 
     data = {
         'cpu': cpu_usage,
         'memory': memory_info,
-        'disk': disk_info,
-        'gpu': gpu_info
+        'disk': disk_info
+        # 'gpu': gpu_info
     }
 
     print(data)
@@ -258,16 +267,61 @@ def rtsp_config():
     # 获取当前的摄像头rtsp
     return render_template("rtsp_config.html")
 
+# 拉流--获取每帧图像
 
-@app.route('/set_rtsp_1', methods=['GET', 'POST'])
-def set_rtsp_1():
+
+def ReadFrame(rtsp_url, cap, is_Proc):
+    global q
+    print("start Reveive")
+    pass
+
+# 处理
+
+
+def ProcFrame():
+    print("start display")
+    pass
+
+# 预览
+
+
+def Preview(rtsp_url, index):
+    # 使用OpenCV打开视频流
+    cap = cv2.VideoCapture(int(rtsp_url))
+    winname = "preview_" + index
+    # 创建一个窗口来显示视频流
+    cv2.namedWindow(winname, cv2.WINDOW_NORMAL)
+    while True:
+        # 读取视频帧
+        ret, frame = cap.read()
+
+        if not ret:
+            break
+        # 实时显示视频帧
+        cv2.imshow(winname, frame)
+        # 按下esc键退出预览
+        # if cv2.waitKey(1) == 27:
+        #     break
+
+        # 点击窗口X按钮退出预览
+        cv2.waitKey(1)
+        if cv2.getWindowProperty(winname, cv2.WND_PROP_VISIBLE) < 1:
+            break
+    # 释放视频流和关闭窗口
+    cap.release()
+    cv2.destroyAllWindows()
+
+
+@app.route('/set_rtsp', methods=['GET', 'POST'])
+def set_rtsp():
     if request.method == "POST":
+        # btn_value = request.form.get("button","")
         btn_value = request.form.get("button")
-        print(btn_value)
+        # print(btn_value)
         form_data_1 = request.form.get("new_rtsp_1")
-        print(form_data_1)
+        # print(form_data_1)
         form_data_2 = request.form.get("new_rtsp_2")
-        print(form_data_2)
+        # print(form_data_2)
 
         global rtsp_dict
 
@@ -284,6 +338,7 @@ def set_rtsp_1():
                 # json.dump(data_1,  file)
                 json.dump(rtsp_dict, file)
                 file.close()
+                flash("rtsp_1设置成功")
 
         if btn_value == "btn_2":
             # 打开json文件
@@ -292,73 +347,63 @@ def set_rtsp_1():
                 # json.dump(data_2,  file)
                 json.dump(rtsp_dict, file)
                 file.close()
+                flash("rtsp_2设置成功")
 
         if btn_value == "prev_1":  # 用多线程预览--后面在改进
             # 从json文件中读取rtsp地址
             with open("rtsp_urls.json", "r") as file:
                 rtsp_url = json.load(file)["key_rtsp_1"]
-                # 使用OpenCV打开视频流
-                cap_1 = cv2.VideoCapture(int(rtsp_url))
-                # 创建一个窗口来显示视频流
-                cv2.namedWindow("preview_1", cv2.WINDOW_NORMAL)
-                while True:
-                    # 读取视频帧
-                    ret, frame = cap_1.read()
 
-                    if not ret:
-                        break
-                    # 实时显示视频帧
-                    cv2.imshow("preview_1", frame)
-                    # 按下esc键退出预览
-                    if cv2.waitKey(1) == 27:
-                        break
-                # 释放视频流和关闭窗口
-                cap_1.release()
-                cv2.destroyAllWindows()
+                # 预览不用开读和取两个线程
+                # th_read = threading.Thread(
+                #     target=ReadFrame, args=(rtsp_url, cap_1))
+                # th_prev = threading.Thread(target=PrevFrame)
+
+                # th_read.start()
+                # th_prev.start()
+
+                th_prev = threading.Thread(
+                    target=Preview, args=(rtsp_url, "1"))
+                th_prev.start()
+
                 file.close()
 
         if btn_value == "prev_2":  # 用多线程预览--后面在改进--而且这里必须要用多线程或者多进程
             # 从json文件中读取rtsp地址
             with open("rtsp_urls.json", "r") as file:
                 rtsp_url = json.load(file)["key_rtsp_2"]
-                # 使用OpenCV打开视频流
-                cap_1 = cv2.VideoCapture(int(rtsp_url))
-                # 创建一个窗口来显示视频流
-                cv2.namedWindow("preview_2", cv2.WINDOW_NORMAL)
-                while True:
-                    # 读取视频帧
-                    ret, frame = cap_1.read()
 
-                    if not ret:
-                        break
-                    # 实时显示视频帧
-                    cv2.imshow("preview_2", frame)
-                    # 按下esc键退出预览
-                    if cv2.waitKey(1) == 27:
-                        break
-                # 释放视频流和关闭窗口
-                cap_1.release()
-                cv2.destroyAllWindows()
+                th_prev = threading.Thread(
+                    target=Preview, args=(rtsp_url, "2"))
+                th_prev.start()
+
                 file.close()
+    else:
+        # 首次请求或者GET请求时，渲染表单并传入上次输入的值
+        form_data_1 = request.args.get('new_rtsp_1', '')
+        form_data_2 = request.args.get('new_rtsp_2', '')
 
-    return render_template("popup.html", message="rtsp设置成功")
+    return render_template("rtsp_config.html", new_rtsp_1=form_data_1, new_rtsp_2=form_data_2)
 
-
-@app.route('/popup', methods=['GET', 'POST'])
-def popup():
-    message = '这是一个提示信息'  # 这里可以替换为你想要显示的内容
-    return render_template('popup.html', message=message)
-
-
-@app.route('/rtsp_1', methods=['GET', 'POST'])
-def rtsp_1():
-    return "preview_1"
 # 路由--system_resource
 
 
 @app.route('/system_resource')
 def system_resource():
-    return "system_resource 成功"
+    return render_template("system_resource.html")
+
+
+@app.route('/data')
+def get_data():
+    cpu_percent = psutil.cpu_percent()
+    memory_percent = psutil.virtual_memory().percent
+    disk_percent = psutil.disk_usage('/').percent
+    current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    resource_data = {
+        'cpu': cpu_percent, 'memory': memory_percent, 'disk': disk_percent, 'time': current_time
+    }
+    return resource_data
+
 
 # 路由--rtsp_config
 
@@ -387,7 +432,7 @@ if __name__ == '__main__':
     cap = cv2.VideoCapture(rtsp_url)
 
     rtsp_dict = {"key_rtsp_1": None, "key_rtsp_2": None}  # rtsp地址
-
+    # q = queue.Queue(maxsize=10)
     create_table()
 
     app.run(host="0.0.0.0", debug=True)
