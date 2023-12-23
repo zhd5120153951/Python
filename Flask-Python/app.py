@@ -1,7 +1,9 @@
 import queue
+from sys import argv
 from flask import Flask, render_template, request, redirect, url_for, flash, Response, jsonify
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
+from sympy import true
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -15,7 +17,7 @@ import socket
 import json
 import multiprocessing as mp  # 推理时用多进程
 import threading  # 预览时用多线程
-import time
+import datetime
 
 
 # 创建网页应用对象
@@ -155,7 +157,10 @@ def video_feed():
 
 @app.route('/get_resources')
 def get_system_usage():
+
     cpu_usage = psutil.cpu_percent(interval=1)
+    cpu_cap = psutil.cpu_freq().current/1000
+    # print(cpu_cap)
     memory_info = psutil.virtual_memory().percent
     # Linux系统
     # disk_info = psutil.disk_usage('/').percent
@@ -166,17 +171,24 @@ def get_system_usage():
     disk_info_d = psutil.disk_usage('D:/').percent  # Linux下
     disk_info = round((disk_info_c+disk_info_e+disk_info_d)/3, 2)
 
-    # output = subprocess.check_output(["nvidia-smi", "-q", "gpu"])
-    # lines = output.decode("utf-8").split("\n")
-    # gpu_info = float(lines[-1].split(":")[1].split("%")[0])
+    # 获取总内存和总磁盘空间
+    memory_cap = round(psutil.virtual_memory().total / (1024 ** 3), 2)  # 转换为GB
+    # disk_cap = psutil.disk_usage('/').total / (1024 ** 3)  # 转换为GB
+    disk_cap_c = psutil.disk_usage('C:/').total / (1024 ** 3)  # 转换为GB
+    disk_cap_d = psutil.disk_usage('D:/').total / (1024 ** 3)  # 转换为GB
+    disk_cap_e = psutil.disk_usage('E:/').total / (1024 ** 3)  # 转换为GB
+    disk_cap = round((disk_cap_c+disk_cap_d+disk_cap_e)/3, 2)
 
     logger.info(cpu_usage)
 
     data = {
+        # 'sys': sys_maintain,
         'cpu': cpu_usage,
         'memory': memory_info,
-        'disk': disk_info
-        # 'gpu': gpu_info
+        'disk': disk_info,
+        'cpu_cap': cpu_cap,
+        'memory_cap': memory_cap,
+        'disk_cap': disk_cap,
     }
 
     print(data)
