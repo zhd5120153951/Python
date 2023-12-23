@@ -4,7 +4,6 @@ from flask_login import LoginManager, UserMixin, login_required, login_user, log
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
-from matplotlib.backend_bases import cursors
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import logging
@@ -17,7 +16,8 @@ import json
 import multiprocessing as mp  # 推理时用多进程
 import threading  # 预览时用多线程
 import time
-import subprocess
+
+
 # 创建网页应用对象
 app = Flask(__name__)
 # app.config["secret_key"] = 'daito_yolov5_flask'
@@ -87,7 +87,7 @@ def login():
             return redirect(url_for('homepage'))  # redirect()是某个页面的路由函数
 
         flash('Invalid username or password', 'info')
-        return redirect(url_for('/'))
+        return redirect(url_for('home'))
     else:
         return render_template("login.html")
 # 注销用户
@@ -141,14 +141,8 @@ def generate_frames(isVideo):
                 yield (b'--frame\r\n'
                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-# 路由--跳转web_rtsp
 
-
-@app.route('/web_rtsp', methods=['GET', 'POST'])
-def web_rtsp():
-    return render_template('web_rtsp.html')
-
-# 路由--获取rtsp视频
+# 路由--获取rtsp视频--暂时不用这个
 
 
 @app.route('/video_feed')
@@ -160,14 +154,17 @@ def video_feed():
 
 
 @app.route('/get_resources')
-def get_cpu_usage_api():
+def get_system_usage():
     cpu_usage = psutil.cpu_percent(interval=1)
     memory_info = psutil.virtual_memory().percent
-    # disk_info = psutil.disk_usage('/').percent#Linux下
+    # Linux系统
+    # disk_info = psutil.disk_usage('/').percent
+
+    # windows系统
     disk_info_e = psutil.disk_usage('E:/').percent  # Linux下
     disk_info_c = psutil.disk_usage('C:/').percent  # Linux下
     disk_info_d = psutil.disk_usage('D:/').percent  # Linux下
-    disk_info = (disk_info_c+disk_info_e+disk_info_d)/3.0
+    disk_info = round((disk_info_c+disk_info_e+disk_info_d)/3, 2)
 
     # output = subprocess.check_output(["nvidia-smi", "-q", "gpu"])
     # lines = output.decode("utf-8").split("\n")
@@ -393,18 +390,6 @@ def system_resource():
     return render_template("system_resource.html")
 
 
-@app.route('/data')
-def get_data():
-    cpu_percent = psutil.cpu_percent()
-    memory_percent = psutil.virtual_memory().percent
-    disk_percent = psutil.disk_usage('/').percent
-    current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-    resource_data = {
-        'cpu': cpu_percent, 'memory': memory_percent, 'disk': disk_percent, 'time': current_time
-    }
-    return resource_data
-
-
 # 路由--rtsp_config
 
 
@@ -433,6 +418,8 @@ if __name__ == '__main__':
 
     rtsp_dict = {"key_rtsp_1": None, "key_rtsp_2": None}  # rtsp地址
     # q = queue.Queue(maxsize=10)
+    # 初始化全局变量
+
     create_table()
 
     app.run(host="0.0.0.0", debug=True)

@@ -2,105 +2,48 @@
 
 {% block content %}
 
-<!-- <script src="https://cdn.jsdeliver.net/npm/chart.js"></script> -->
 <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
 
-<div>
-    <canvas id="chart" width="400" height="200"></canvas>
-</div>
-<div>
-    <table>
-        <thead>
-            <tr>
-                <th>CPU使用率</th>
-                <th>内存使用率</th>
-                <th>磁盘使用率</th>
-            </tr>
-        </thead>
-        <tbody id="text-data"></tbody>
-    </table>
 
-    <h2>设备资源监控</h2>
-    <p>实时显示设备资源信息:</p>
-    <div id="resource-display">
-        <p>CPU使用率:<span id="cpu-usage"></span>%</p>
-        <p>内存使用率:<span id="memory-suage"></span>%</p>
-        <p>硬盘使用率:<span id="disk-usage"></span>%</p>
-        <p>GPU使用率:<span id="GPU-usage">Not Implemented</span></p>
+<div>
+    <!-- <h1>RTSP Stream</h1> -->
+    <!-- <img src="{{ url_for('video_feed') }}" width="640" height="480" /> -->
+
+    <div class="container" id="resource-display">
+        <h2>设备资源监控</h2>
+        <p style="color: red;">CPU使用率:<span id="cpu-usage">0.00</span>%</p>
+        <p style="color: greenyellow;">内存使用率:<span id="memory-suage">0.00</span>%</p>
+        <p style="color: burlywood;">硬盘使用率:<span id="disk-usage">0.00</span>%</p>
+        <!-- <p>GPU使用率:<span id="GPU-usage">Not Implemented</span></p> -->
     </div>
+
+    <script>
+        // 使用 jQuery 发起 Ajax 请求，实时更新设备资源信息
+        function updateResources() {
+            $.ajax({
+                url: '/get_resources',
+                menthod: 'GET',//前端是获取--GET
+                success: function (data) {
+                    //更新页面上的设备资源信息
+                    $('#cpu-usage').text(data.cpu);
+                    $('#memory-suage').text(data.memory);
+                    $('#disk-usage').text(data.disk);
+                    // $('#gpu-usage').text(data.gpu);
+
+                    //继续实时更新
+                    setTimeout(updateResources, 1000);//1000ms更新一次
+                }
+            });
+        }
+        //页面加载完成后开始更新设备资源信息
+        $(document).ready(function () {
+            updateResources();
+        });
+
+    </script>
+
 </div>
 
-<script>
-    var chart = new Chart(document.getElementById('chart').getContext('2d'),
-        {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [
-                    { label: "CPU使用率", data: [], backgroudColor: 'rgba(75,192,192,0.2)', borderColor: 'rgba(75,192,192,1)', borderWidth: 1 },
-                    { label: '内存使用率', data: [], backgroudColor: 'rgba(255,99,132,0.2)', borderColor: 'rgba(255,99,132,1)', borderWidth: 1 },
-                    { label: '磁盘使用率', data: [], backgroudColor: 'rgba(54,162,235,0.2)', borderColor: 'rgba(54,162,235,1)', borderWidth: 1 }
-                ]
-            },
-            options: { responsive: true, scales: { y: { beginAtZero: true, max: 100 } } }
-        });
-
-    function updateChart() {
-        fetch('/data').then(response => response.json()).then(data => {
-            chart.data.labes.push(data.time);
-            chart.data.datasets[0].data.push(data.cpu);
-            chart.data.datasets[1].data.push(data.memory);
-            chart.data.datasets[2].data.push(data.disk);
-            chart.update();
-            setTimeout(updateChart, 1000);
-        });
-    }
-
-    function updateTextData() {
-        fetch('/data').then(response => response.json()).then(data => {
-            var row = document.createElement("tr");
-            var cpuCell = document.createElement("td");
-            cpuCell.innerHTML = data.cpu;
-            var memoryCell = document.createElement("td");
-            memoryCell.innerHTML = data.memory;
-            var diskCell = document.createComment("td");
-            diskCell.innerHTML = data.disk;
-            row.appendChild(cpuCell);
-            row.appendChild(memoryCell);
-            row.appendChild(diskCell);
-            document.getElementById("text-data").appendChild(row);
-            setTimeout(updateTextData, 1000);
-
-        });
-    }
-    updateChart();
-    updateTextData();
-</script>
-
-<script>
-    // 使用 jQuery 发起 Ajax 请求，实时更新设备资源信息
-    function updateResources() {
-        $.ajax({
-            url: '/get_resources',
-            menthod: 'GET',//前端是获取--GET
-            success: function (data) {
-                //更新页面上的设备资源信息
-                $('#cpu-usage').text(data.cpu);
-                $('#memory-suage').text(data.memory);
-                $('#disk-usage').text(data.disk);
-                $('#gpu-usage').text(data.gpu);
-
-                //继续实时更新
-                setTimeout(updateResources, 1000);//1000ms更新一次
-            }
-        });
-    }
-    //页面加载完成后开始更新设备资源信息
-    $(document).ready(function () {
-        updateResources();
-    });
-
-</script>
 
 <!-- grid布局 -->
 <style>
@@ -119,116 +62,6 @@
         font-size: 1em;
         height: auto;
         width: auto;
-    }
-
-    .chart-container {
-        display: flex;
-        flex-wrap: wrap;
-        flex: 1 0 33%;
-    }
-
-    .row {
-        margin-right: -15px;
-        margin-left: 0px;
-    }
-
-    .col-md-4,
-    .col-sm-6,
-    .col-xs-12 {
-        position: relative;
-        min-height: 1px;
-        padding-right: 15px;
-        padding-left: 15px;
-
-    }
-
-    .col-md-4 {
-        float: left;
-        width: 33.33333333%;
-
-    }
-
-    .col-sm-6 {
-        float: left;
-        width: 50%;
-
-    }
-
-    .col-xs-12 {
-        float: left;
-        width: 100%;
-    }
-
-    .nav-sm .container .body .right_col {
-        padding: 10px 20px;
-        margin-left: 70px;
-        z-index: 2
-    }
-
-    .container.body .right_col {
-        background: #F7F7F7
-    }
-
-    .nav_title {
-        width: 230px;
-        float: left;
-        background: #2A3F54;
-        border-radius: 0;
-        height: 57px
-    }
-
-    .x_panel {
-        position: relative;
-        width: 100%;
-        margin-bottom: 10px;
-        padding: 10px 17px;
-        display: inline-block;
-        background: #fff;
-        border: 1px solid #E6E9ED;
-        -webkit-column-break-inside: avoid;
-        -moz-column-break-inside: avoid;
-        column-break-inside: avoid;
-        opacity: 1;
-        transition: all .2s ease
-    }
-
-    .x_title {
-        border-bottom: 2px solid #E6E9ED;
-        padding: 1px 5px 6px;
-        margin-bottom: 10px
-    }
-
-    .clearfix:after,
-    form:after {
-        content: ".";
-        display: block;
-        height: 0;
-        clear: both;
-        visibility: hidden
-    }
-
-    .x_content {
-        padding: 0 5px 6px;
-        position: relative;
-        width: 100%;
-        float: left;
-        clear: both;
-        margin-top: 5px
-    }
-
-    .table {
-        width: 100%;
-        max-width: 100%;
-        margin-bottom: 20px;
-        background-color: #fff;
-    }
-
-    .table>tbody+tbody {
-        border-top: 2px solid #ddd;
-    }
-
-    .table-hover>tbody>tr:hover {
-        background-color: #f5f5f5;
     }
 </style>
 
