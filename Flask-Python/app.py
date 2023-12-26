@@ -85,7 +85,6 @@ def login():
             conn.commit()
 
         if isExistUser and check_password_hash(isExistUser[2], password):
-            flash('Login successful', 'success')
             return redirect(url_for('homepage'))  # redirect()是某个页面的路由函数
 
         flash('Invalid username or password', 'info')
@@ -407,7 +406,40 @@ def system_resource():
 
 @app.route('/ai_setting')
 def ai_setting():
-    return "AI设置成功"
+    return render_template("ai_setting.html")
+
+
+@app.route('/set_ai', methods=["GET", "POST"])
+def set_ai():
+    if request.method == "POST":
+        # btn_value = request.form.get("button","")
+        btn_value = request.form.get("button")
+        # print(btn_value)
+        gap_det = request.form.get("gap_det")
+        # print(form_data_1)
+
+        global ai_dict
+
+        # 通过路由到其他函数处理
+        # if btn_value == "btn_1":
+        #     return redirect(url_for("rtsp_1"))
+
+        # 把rtsp保存到json中存起来,AI设置中的参数,开关也是如此,后面把模型加载时从json中读取
+        if btn_value == "btn_ok":
+            # 打开json文件
+            with open("ai_config.json", "w") as file:
+                #  将RTSP地址保存到JSON文件
+                ai_dict['gap_det'] = gap_det
+                # json.dump(data_1,  file)
+                json.dump(ai_dict, file)
+                file.close()
+                flash("ai配置设置成功")
+
+    else:
+        # 首次请求或者GET请求时，渲染表单并传入上次输入的值
+        gap_det = request.args.get('gap_det', '')
+
+    return render_template("ai_setting.html", gap_det=gap_det)
 
 
 if __name__ == '__main__':
@@ -429,6 +461,7 @@ if __name__ == '__main__':
     cap = cv2.VideoCapture(rtsp_url)
 
     rtsp_dict = {"key_rtsp_1": None, "key_rtsp_2": None}  # rtsp地址
+    ai_dict = {"gap_det": None}  # Ai配置字典
     # q = queue.Queue(maxsize=10)
     # 初始化全局变量
 

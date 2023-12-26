@@ -14,24 +14,16 @@
         <p style="text-align: center;font-size: 60px; color: gold;font-family: 宋体;padding-top: 25px;">视频分析平台</p>
     </div>
     <div class="login-page">
-        <div class="title">
-            <span class="font1">登录页面</span>
-        </div>
-
-        <div class="title-msg">
-            <span class="font2">请输入用户名和密码</span>
-        </div>
-
         <div class="title-loginMsg">
             <span class="font3">
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
                 <ul>
                     {% for message in messages %}
-                    <li style="color: {% if 'error' in message %}red{% else %}green{% endif %}">{{ message }}
-                    </li>
+                    <li>{{ message }}</li>
                     {% endfor %}
                 </ul>
+                <!-- <p class="rtsp">{{ message }}</p> -->
                 {% endif %}
                 {% endwith %}
             </span>
