@@ -1,9 +1,11 @@
+from multiprocessing import process
 import queue
 from sys import argv
 from flask import Flask, render_template, request, redirect, url_for, flash, Response, jsonify
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
-from sympy import true
+from sqlalchemy import exists
+from sympy import false, true
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -18,6 +20,8 @@ import json
 import multiprocessing as mp  # 推理时用多进程
 import threading  # 预览时用多线程
 import datetime
+
+from detect_plate import *
 
 
 # 创建网页应用对象
@@ -128,19 +132,17 @@ def homepage():
 
 
 # 获取视频每帧
-
-
-def generate_frames(isVideo):
-    if isVideo:
-        while True:
-            success, frame = cap.read()
-            if not success:
-                break
-            else:
-                ret, buffer = cv2.imencode('.jpg', frame)
-                frame = buffer.tobytes()
-                yield (b'--frame\r\n'
-                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+# def generate_frames(isVideo):
+#     if isVideo:
+#         while True:
+#             success, frame = cap.read()
+#             if not success:
+#                 break
+#             else:
+#                 ret, buffer = cv2.imencode('.jpg', frame)
+#                 frame = buffer.tobytes()
+#                 yield (b'--frame\r\n'
+#                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 
 # 路由--获取rtsp视频--暂时不用这个
@@ -411,6 +413,7 @@ def ai_setting():
 
 @app.route('/set_ai', methods=["GET", "POST"])
 def set_ai():
+    global is_ai_config
     if request.method == "POST":
         # btn_value = request.form.get("button","")
         btn_value = request.form.get("button")
@@ -434,12 +437,59 @@ def set_ai():
                 json.dump(ai_dict, file)
                 file.close()
                 flash("ai配置设置成功")
+            is_ai_config = True  # 通知子进程ai设置已更新,可以读取新的设置参数推理
 
     else:
         # 首次请求或者GET请求时，渲染表单并传入上次输入的值
         gap_det = request.args.get('gap_det', '')
 
     return render_template("ai_setting.html", gap_det=gap_det)
+
+# 获取图像函数--有两路摄像头就开两个进程
+
+
+def get_frame(q_img):
+    global is_ai_config, is_rtsp_config
+    # 读取上一次保存的配置
+    with open("rtsp_urls.json", "r") as file:
+        rtsp_url_1 = json.load(file)["key_rtsp_1"]
+        rtsp_url_2 = json.load(file)["key_rtsp_2"]
+        file.close()
+    with open("ai_config.json", mode="r") as file:
+        det_gap = json.load(file)["gap_det"]
+        file.close()
+    # 配置文件中的流地址
+    cap_1 = cv2.VideoCapture(rtsp_url_1)
+    cap_2 = cv2.VideoCapture(rtsp_url_2)
+    while True:
+        if is_ai_config:  # 读取ai配置--标志位:在ai配置页面确定后置为真
+            with open("ai_config.json", mode="r") as file:
+                det_gap = json.load(file)["gap_det"]
+                file.close()
+            is_ai_config = False
+
+        if is_rtsp_config:  # 读取rtsp配置
+            cap_1.release()
+            cap_2.release()
+            with open("rtsp_urls.json", "r") as file:
+                rtsp_url_1 = json.load(file)["key_rtsp_1"]
+                rtsp_url_2 = json.load(file)["key_rtsp_2"]
+                file.close()
+            cap_1 = cv2.VideoCapture(rtsp_url_1)
+            cap_2 = cv2.VideoCapture(rtsp_url_2)
+            is_rtsp_config = False
+        # 读取流
+        ret_1, frame_1 = cap_1.read()
+        q_img.put(frame_1)
+        if q_img.qsize() > 10:
+            q_img.get()
+
+
+# 车牌检测,识别
+
+
+def det_rec_model(q_img):
+    pass
 
 
 if __name__ == '__main__':
@@ -455,14 +505,43 @@ if __name__ == '__main__':
     # 创建一个日志记录器
     logger = logging.getLogger('my_logger')
 
-    # 使用OpenCV捕获RTSP流
-    # rtsp_url = "rtsp://admin:jiankong123@192.168.23.10:554/Streaming/Channels/101"
-    rtsp_url = 0
-    cap = cv2.VideoCapture(rtsp_url)
+    # 模型相关
+    opt = get_parser()
+    if not os.path.exists(opt.output):
+        os.mkdir(opt.output)
+    # 检测
+    det_model = load_model(opt.detect_model, opt.device)
+    # 识别
+    rec_model = init_model(opt.device, opt.rec_model, opt.is_color)
+    # 算参数量
+    total_det = sum(p.numel() for p in det_model.parameters())
+    total_rec = sum(p.numel() for p in rec_model.parameters())
+    print("detect model params: %.2fM,rec model params: %.2fM" %
+          (total_det / 1e6, total_rec / 1e6))
+    logger.info("detect model params: %.2fM,rec model params: %.2fM" %
+                (total_det / 1e6, total_rec / 1e6))
+    q_img = queue.Queue(maxsize=10)  # 装图像的队列--目前只要一个摄像头
+
+    # 需要一个标志位判断是否配置rtsp和ai设置
+    is_rtsp_config = False
+    is_ai_config = False
+    # init
+    mp.set_start_method('spawn')
+
+    # mp.Process(target=detect_Recognition_plate)要重写检测和识别函数--传参不一样
+    proc_get = mp.Process(target=get_frame, args=(q_img))
+    proc_infer = mp.Process(target=det_rec_model, args=(q_img))
+
+    proc_get.daemon = True
+    proc_infer.daemon = True
+
+    proc_get.start()
+    proc_infer.start()
+
+    # join()是阻塞:表示让主进程等待子进程结束之后，再执行主进程。
 
     rtsp_dict = {"key_rtsp_1": None, "key_rtsp_2": None}  # rtsp地址
     ai_dict = {"gap_det": None}  # Ai配置字典
-    # q = queue.Queue(maxsize=10)
     # 初始化全局变量
 
     create_table()
