@@ -154,8 +154,9 @@ def detect_Recognition_plate(model, orgimg, device, plate_rec_model, img_size, i
         interp = cv2.INTER_AREA if r < 1 else cv2.INTER_LINEAR
         img0 = cv2.resize(img0, (int(w0 * r), int(h0 * r)),
                           interpolation=interp)
-
+    # print(model.stride.max())#等于0---问题点
     imgsz = check_img_size(img_size, s=model.stride.max())  # check img_size
+    # imgsz = check_img_size(img_size)  # check img_size
 
     img = letterbox(img0, new_shape=imgsz)[0]  # 检测前处理，图片长宽变为32倍数，比如变为640X640
     # img =process_data(img0)
@@ -269,15 +270,17 @@ def get_second(capture):
         duration = FrameNumber / rate  # 帧速率/视频总帧数 是时间，除以60之后单位是分钟
         return int(rate), int(FrameNumber), int(duration)
 
+# 2023.12.20新加的参数设置函数
+
 
 def get_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--detect_model',
                         nargs='+',
                         type=str,
-                        default='weights/plate_detect.pt',
+                        default='weights/pt/plate_detect.pt',
                         help='model.pt path(s)')  # 检测模型
-    parser.add_argument('--rec_model', type=str, default='weights/plate_rec_color.pth',
+    parser.add_argument('--rec_model', type=str, default='weights/pt/plate_rec_color.pth',
                         help='model.pt path(s)')  # 车牌识别+颜色识别模型
     parser.add_argument('--is_color', type=bool,
                         default=True, help='plate color')  # 是否识别颜色
@@ -289,16 +292,12 @@ def get_parser():
                         default='result', help='source')  # 图片结果保存的位置
     parser.add_argument('--video', type=str, default='',
                         help='source')  # 视频的路径
-    device = torch.device("cuda" if torch.cuda.is_available()
-                          else "cpu")  # 使用gpu还是cpu进行识别
-    # device =torch.device("cpu")
-    parser.add_argument('--device', type=str,
-                        default=device, help='cpu or gpu')
     opt = parser.parse_args()
     return opt
 
 
 if __name__ == '__main__':
+    print("this is detect_plate.py process")
     parser = argparse.ArgumentParser()
     parser.add_argument('--detect_model',
                         nargs='+',

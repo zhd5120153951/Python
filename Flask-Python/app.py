@@ -1,11 +1,11 @@
-from multiprocessing import process
-import queue
-from sys import argv
+import base64
+import requests
+from multiprocessing import process, Value, Array, Lock
 from flask import Flask, render_template, request, redirect, url_for, flash, Response, jsonify
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
 from sqlalchemy import exists
-from sympy import false, true
+import torch
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -20,8 +20,9 @@ import json
 import multiprocessing as mp  # 推理时用多进程
 import threading  # 预览时用多线程
 import datetime
-
-from detect_plate import *
+import os
+import time
+from detect_plate import get_parser, load_model, init_model, detect_Recognition_plate, draw_result
 
 
 # 创建网页应用对象
@@ -277,20 +278,6 @@ def rtsp_config():
     # 获取当前的摄像头rtsp
     return render_template("rtsp_config.html")
 
-# 拉流--获取每帧图像
-
-
-def ReadFrame(rtsp_url, cap, is_Proc):
-    global q
-    print("start Reveive")
-    pass
-
-# 处理
-
-
-def ProcFrame():
-    print("start display")
-    pass
 
 # 预览
 
@@ -335,10 +322,6 @@ def set_rtsp():
 
         global rtsp_dict
 
-        # 通过路由到其他函数处理
-        # if btn_value == "btn_1":
-        #     return redirect(url_for("rtsp_1"))
-
         # 把rtsp保存到json中存起来,AI设置中的参数,开关也是如此,后面把模型加载时从json中读取
         if btn_value == "btn_1":
             # 打开json文件
@@ -349,6 +332,8 @@ def set_rtsp():
                 json.dump(rtsp_dict, file)
                 file.close()
                 flash("rtsp_1设置成功")
+            with lock:
+                shared_arr[0] = True
 
         if btn_value == "btn_2":
             # 打开json文件
@@ -358,6 +343,8 @@ def set_rtsp():
                 json.dump(rtsp_dict, file)
                 file.close()
                 flash("rtsp_2设置成功")
+            with lock:
+                shared_arr[0] = True
 
         if btn_value == "prev_1":  # 用多线程预览--后面在改进
             # 从json文件中读取rtsp地址
@@ -413,7 +400,7 @@ def ai_setting():
 
 @app.route('/set_ai', methods=["GET", "POST"])
 def set_ai():
-    global is_ai_config
+    global shared_arr, lock
     if request.method == "POST":
         # btn_value = request.form.get("button","")
         btn_value = request.form.get("button")
@@ -437,7 +424,11 @@ def set_ai():
                 json.dump(ai_dict, file)
                 file.close()
                 flash("ai配置设置成功")
-            is_ai_config = True  # 通知子进程ai设置已更新,可以读取新的设置参数推理
+            # 通知子进程ai设置已更新,可以读取新的设置参数推理
+            with lock:
+                # 加锁，主进程改变共享数组的值:index-0-rtsp;index-1-ai
+                shared_arr[1] = True
+                # print("主进程改变共享数组的值为:", list(shared_arr))
 
     else:
         # 首次请求或者GET请求时，渲染表单并传入上次输入的值
@@ -448,51 +439,127 @@ def set_ai():
 # 获取图像函数--有两路摄像头就开两个进程
 
 
-def get_frame(q_img):
-    global is_ai_config, is_rtsp_config
+def get_frame(q_img, logger, shared_arr):
     # 读取上一次保存的配置
-    with open("rtsp_urls.json", "r") as file:
-        rtsp_url_1 = json.load(file)["key_rtsp_1"]
-        rtsp_url_2 = json.load(file)["key_rtsp_2"]
-        file.close()
-    with open("ai_config.json", mode="r") as file:
-        det_gap = json.load(file)["gap_det"]
-        file.close()
+    with open("rtsp_urls.json", "r") as f_rtsp:
+        rtsp_url = json.load(f_rtsp)  # 不可以连续load
+        rtsp_url_1 = rtsp_url["key_rtsp_1"]
+        # rtsp_url_2 = rtsp_url["key_rtsp_2"]
+        f_rtsp.close()
+    with open("ai_config.json", mode="r") as f_ai:
+        det_gap = json.load(f_ai)["gap_det"]
+        f_ai.close()
     # 配置文件中的流地址
-    cap_1 = cv2.VideoCapture(rtsp_url_1)
-    cap_2 = cv2.VideoCapture(rtsp_url_2)
+    logger.info(rtsp_url_1)
+    cap_1 = cv2.VideoCapture(0+cv2.CAP_DSHOW)  # 交付时要改回str
+    # cap_2 = cv2.VideoCapture(int(rtsp_url_2))
     while True:
-        if is_ai_config:  # 读取ai配置--标志位:在ai配置页面确定后置为真
-            with open("ai_config.json", mode="r") as file:
-                det_gap = json.load(file)["gap_det"]
-                file.close()
-            is_ai_config = False
+        if shared_arr[1]:  # 读取ai配置--标志位:在ai配置页面确定后置为真
+            with open("ai_config.json", mode="r") as f_ai:
+                det_gap = json.load(f_ai)["gap_det"]
+                f_ai.close()
 
-        if is_rtsp_config:  # 读取rtsp配置
+        if shared_arr[0]:  # 读取rtsp配置
             cap_1.release()
-            cap_2.release()
-            with open("rtsp_urls.json", "r") as file:
-                rtsp_url_1 = json.load(file)["key_rtsp_1"]
-                rtsp_url_2 = json.load(file)["key_rtsp_2"]
-                file.close()
-            cap_1 = cv2.VideoCapture(rtsp_url_1)
-            cap_2 = cv2.VideoCapture(rtsp_url_2)
-            is_rtsp_config = False
-        # 读取流
+            # cap_2.release()
+            with open("rtsp_urls.json", "r") as f_rtsp:
+                rtsp_url = json.load(f_rtsp)  # 不可以连续load
+                rtsp_url_1 = rtsp_url["key_rtsp_1"]
+                # rtsp_url_2 = rtsp_url["key_rtsp_2"]
+                f_rtsp.close()
+
+            cap_1 = cv2.VideoCapture(int(rtsp_url_1))
+            # cap_2 = cv2.VideoCapture(int(rtsp_url_2))
+        # 读取流--时间间隔加上
+        time.sleep(float(det_gap))
         ret_1, frame_1 = cap_1.read()
+        if not ret_1:
+            continue
+
         q_img.put(frame_1)
         if q_img.qsize() > 10:
+            logger.info("queue over 10")
             q_img.get()
 
 
-# 车牌检测,识别
+# image转base64编码
 
 
-def det_rec_model(q_img):
-    pass
+def img2base64(img):
+    encode_img = base64.b64encode(img)
+    return encode_img.decode("utf-8")  # 把byte转换为字符串
+
+
+# 车牌检测,识别----推理速度要快于取流速度(让队列趋向于0,如果趋向于10的话丢弃的帧会累计越多)
+
+
+# def det_rec_model(det_model, q_img, device, rec_model, img_size, is_color):
+def det_rec_model(q_img, logger):
+    print("this is 子进程的推理")
+    # 参数
+    opt = get_parser()
+    logger.info(opt)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # 可以暂时不要--因为会上传到服务端
+    if not os.path.exists(opt.output):
+        os.mkdir(opt.output)
+    # 检测模型加载
+    det_model = load_model(opt.detect_model, device)
+    # 识别模型加载
+    rec_model = init_model(device, opt.rec_model, opt.is_color)
+    # 参数量计算
+    total_det = sum(p.numel() for p in det_model.parameters())
+    total_rec = sum(p.numel() for p in rec_model.parameters())
+    logger.info("detect model params: %.2fM,rec model params: %.2fM" %
+                (total_det / 1e6, total_rec / 1e6))
+
+    # 隔几秒检测一次,但是这里只推理,隔几秒的图由读图子进程控制
+    while True:
+        if q_img.qsize() == 0:
+            time.sleep(0.5)  # 等待抓图进程取流
+            continue
+        else:
+            frame = q_img.get()
+            t1 = cv2.getTickCount()  # 推理前时钟频率
+            dict_list = detect_Recognition_plate(
+                det_model, frame, device, rec_model, opt.img_size, is_color=opt.is_color)
+            t2 = cv2.getTickCount()  # 推理后时钟频率
+
+            if len(dict_list) == 0:  # 没检测到车牌--跳过
+                logger.info("no plate detected...")
+                continue
+
+            ori_img = draw_result(frame, dict_list)
+            infer_time = (t2 - t1) / cv2.getTickFrequency()
+            fps = 1.0 / infer_time
+            str_fps = f'fps:{fps:.4f}'
+
+            cv2.putText(ori_img, str_fps, (20, 20),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            # 发送post请求给服务端
+            #  获取当前时间
+            now_time = datetime.datetime.now()
+
+            #  格式化时间
+            formatted_time = now_time.strftime("%Y-%m-%d  %H:%M:%S")
+            encode_img = img2base64(ori_img)
+            data = {
+                "date": formatted_time,
+                "encode_img": encode_img
+            }
+            header = {
+                "Content-Type": "application/json;charset=utf-8"
+            }
+            try:
+                ret = requests.post(
+                    "http://47.108.165.167/prod-api/system/kaoqin", json.dumps(data), headers=header)
+                logger.info(ret)
+            except Exception as e:
+                logger.error(e)
 
 
 if __name__ == '__main__':
+
     # 配置基本日志设置
     logging.basicConfig(
         level=logging.DEBUG,  # 设置日志级别，可以选择DEBUG, INFO, WARNING, ERROR, CRITICAL
@@ -505,32 +572,18 @@ if __name__ == '__main__':
     # 创建一个日志记录器
     logger = logging.getLogger('my_logger')
 
-    # 模型相关
-    opt = get_parser()
-    if not os.path.exists(opt.output):
-        os.mkdir(opt.output)
-    # 检测
-    det_model = load_model(opt.detect_model, opt.device)
-    # 识别
-    rec_model = init_model(opt.device, opt.rec_model, opt.is_color)
-    # 算参数量
-    total_det = sum(p.numel() for p in det_model.parameters())
-    total_rec = sum(p.numel() for p in rec_model.parameters())
-    print("detect model params: %.2fM,rec model params: %.2fM" %
-          (total_det / 1e6, total_rec / 1e6))
-    logger.info("detect model params: %.2fM,rec model params: %.2fM" %
-                (total_det / 1e6, total_rec / 1e6))
-    q_img = queue.Queue(maxsize=10)  # 装图像的队列--目前只要一个摄像头
-
-    # 需要一个标志位判断是否配置rtsp和ai设置
-    is_rtsp_config = False
-    is_ai_config = False
+    q_img = mp.Queue(maxsize=10)  # 装图像的队列--目前只要一个摄像头
+    # 共享数组Array--is_rtsp_config,is_ai_config
+    shared_arr = Array('b', [False, False])
+    lock = Lock()
     # init
-    mp.set_start_method('spawn')
+    mp.set_start_method('spawn', force=True)
 
-    # mp.Process(target=detect_Recognition_plate)要重写检测和识别函数--传参不一样
-    proc_get = mp.Process(target=get_frame, args=(q_img))
-    proc_infer = mp.Process(target=det_rec_model, args=(q_img))
+    # 开启两个子进程--读流和推理
+    proc_get = mp.Process(target=get_frame, args=(
+        q_img, logger, shared_arr))
+    # 参数可以传递进子进程,但是模型需要在里面加载
+    proc_infer = mp.Process(target=det_rec_model, args=(q_img, logger))
 
     proc_get.daemon = True
     proc_infer.daemon = True
@@ -538,13 +591,16 @@ if __name__ == '__main__':
     proc_get.start()
     proc_infer.start()
 
-    # join()是阻塞:表示让主进程等待子进程结束之后，再执行主进程。
-
+    # 设备管理界面的相关参数*******************
     rtsp_dict = {"key_rtsp_1": None, "key_rtsp_2": None}  # rtsp地址
     ai_dict = {"gap_det": None}  # Ai配置字典
-    # 初始化全局变量
 
+    # 初始化全局变量
     create_table()
 
-    app.run(host="0.0.0.0", debug=True)
+    # join()是阻塞:表示让主进程等待子进程结束之后，再执行主进程。
+
+    # debug=True表示代码右边动会自动重启子进程
+    app.run(host="0.0.0.0", debug=True, use_reloader=False)
+    # app.run()默认启用Werkzeug，生成一个子进程，作用是当代码有变动的时候自动重启--所以会有两个推理进程和取图进程
     # app.run(host="0.0.0.0", debug=True)
