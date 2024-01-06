@@ -52,3 +52,9 @@
         2. json.loads()：将一个内存中json对象(str)转化为相对应的python对象
         3. json.dump()：将python的对象转化为对应的json对象(str),并存放在文件中
         4. json.dumps()：将python的对象转化为对应的json对象(str),并存在内存中
+
+# logging日志记录
+
+## 多进程日志和线程日志
+    1.logging模块不跨进程--单进程或者多线程使用
+    2.multiprocess-logging记录日志--需要安装此包,且多进程使用时,不可以进程间传logger,只能全局使用(在if之前)

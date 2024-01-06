@@ -5,7 +5,7 @@
 
     <form action="{{ url_for('set_ai') }}" method="post">
         <!-- <form method="post"> -->
-        <label class="rtsp" for="gap_det">检测间隔(单位:s)</label>
+        <label class="rtsp" for="gap_det">检测间隔(单位:ms)</label>
         <!-- required表示form表单不能为空 -->
         <input class="rtsp" type="text" id="gap_det" name="gap_det" placeholder="检测间隔..." value="{{ gap_det }}">
         <button class="responsive-btn" type="submit" name="button" value="btn_ok">确定</button>

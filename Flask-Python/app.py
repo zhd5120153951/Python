@@ -1,6 +1,7 @@
 import base64
+from email import message
 import requests
-from multiprocessing import process, Value, Array, Lock
+from multiprocessing import Array, Lock, Manager
 from flask import Flask, render_template, request, redirect, url_for, flash, Response, jsonify
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
@@ -11,6 +12,7 @@ from wtforms.validators import DataRequired
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import logging
+import multiprocessing_logging
 import cv2
 import psutil
 from ipaddress import ip_address, AddressValueError
@@ -23,6 +25,34 @@ import datetime
 import os
 import time
 from detect_plate import get_parser, load_model, init_model, detect_Recognition_plate, draw_result
+
+# logging模块不跨进程--单进程或者多线程使用
+# 配置基本日志设置
+# logging.basicConfig(
+#     level=logging.DEBUG,  # 设置日志级别，可以选择DEBUG, INFO, WARNING, ERROR, CRITICAL
+#     # 设置日志消息的格式
+#     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+#     datefmt='%Y-%m-%d %H:%M:%S',  # 设置日期时间格式
+#     filename='./App.log',  # 指定日志输出到文件
+#     filemode='w'  # 指定文件写入模式(a表示追加，w表示覆盖)
+# )
+# 创建一个日志记录器
+# logger = logging.getLogger('my_logger')
+
+# multiprocessing_logging多进程日志--不可以传参,全局使用
+# 1.创建日志器
+logger = logging.getLogger('my_logger')
+logger.setLevel(logging.DEBUG)
+# 2.创建文件处理器
+file_handler = logging.FileHandler('./log.txt')
+file_handler.setLevel(logging.DEBUG)
+
+# 3.设置日志输出格式
+formatter = logging.Formatter(
+    '%(asctime)s - %(processName)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+# 4.把文件处理器添加到根日志器
+logger.addHandler(file_handler)
 
 
 # 创建网页应用对象
@@ -419,7 +449,7 @@ def set_ai():
             # 打开json文件
             with open("ai_config.json", "w") as file:
                 #  将RTSP地址保存到JSON文件
-                ai_dict['gap_det'] = gap_det
+                ai_dict['gap_det'] = int(gap_det)
                 # json.dump(data_1,  file)
                 json.dump(ai_dict, file)
                 file.close()
@@ -437,9 +467,13 @@ def set_ai():
     return render_template("ai_setting.html", gap_det=gap_det)
 
 # 获取图像函数--有两路摄像头就开两个进程
+# 区域入侵用的是队列--向两个进程传图
+# 这次用Manager
 
 
-def get_frame(q_img, logger, shared_arr):
+def get_frame(q_img, shared_arr):
+    # print("get_frame process pid:%s" % os.getpid())
+    logger.info("get_frame process pid:%s" % os.getpid())
     # 读取上一次保存的配置
     with open("rtsp_urls.json", "r") as f_rtsp:
         rtsp_url = json.load(f_rtsp)  # 不可以连续load
@@ -448,18 +482,23 @@ def get_frame(q_img, logger, shared_arr):
         f_rtsp.close()
     with open("ai_config.json", mode="r") as f_ai:
         det_gap = json.load(f_ai)["gap_det"]
+        # print(type(det_gap))
         f_ai.close()
     # 配置文件中的流地址
     logger.info(rtsp_url_1)
-    cap_1 = cv2.VideoCapture(0+cv2.CAP_DSHOW)  # 交付时要改回str
+    # cap_1 = cv2.VideoCapture(0+cv2.CAP_DSHOW)  # 交付时要改回str
+    cap_1 = cv2.VideoCapture(rtsp_url_1)
     # cap_2 = cv2.VideoCapture(int(rtsp_url_2))
     while True:
         if shared_arr[1]:  # 读取ai配置--标志位:在ai配置页面确定后置为真
+            logger.info("读取修改后的ai配置")
             with open("ai_config.json", mode="r") as f_ai:
                 det_gap = json.load(f_ai)["gap_det"]
                 f_ai.close()
+            shared_arr[1] = False
 
         if shared_arr[0]:  # 读取rtsp配置
+            print("读取修改后的rtsp配置")
             cap_1.release()
             # cap_2.release()
             with open("rtsp_urls.json", "r") as f_rtsp:
@@ -467,19 +506,25 @@ def get_frame(q_img, logger, shared_arr):
                 rtsp_url_1 = rtsp_url["key_rtsp_1"]
                 # rtsp_url_2 = rtsp_url["key_rtsp_2"]
                 f_rtsp.close()
-
-            cap_1 = cv2.VideoCapture(int(rtsp_url_1))
+            shared_arr[0] = False
+            cap_1 = cv2.VideoCapture(rtsp_url_1)
             # cap_2 = cv2.VideoCapture(int(rtsp_url_2))
-        # 读取流--时间间隔加上
-        time.sleep(float(det_gap))
-        ret_1, frame_1 = cap_1.read()
-        if not ret_1:
-            continue
-
-        q_img.put(frame_1)
-        if q_img.qsize() > 10:
-            logger.info("queue over 10")
-            q_img.get()
+        if cap_1.isOpened():
+            ret_1, frame_1 = cap_1.read()
+            if not ret_1:
+                logger.error("cap_1取流的帧出错")
+                continue
+            q_img.put(frame_1)
+            if q_img.qsize() > 10:
+                logger.info("queue over 10 frames")
+                q_img.get()
+            # 读取流--时间间隔加上
+            else:
+                time.sleep(det_gap/1000)
+                # cv2.waitKey(det_gap)
+        else:
+            cap_1.release()
+            cap_1 = cv2.VideoCapture(rtsp_url_1)
 
 
 # image转base64编码
@@ -494,8 +539,8 @@ def img2base64(img):
 
 
 # def det_rec_model(det_model, q_img, device, rec_model, img_size, is_color):
-def det_rec_model(q_img, logger):
-    print("this is 子进程的推理")
+def det_rec_model(q_img):
+    logger.info("det_rec_model process pid:%s" % os.getpid())
     # 参数
     opt = get_parser()
     logger.info(opt)
@@ -516,7 +561,8 @@ def det_rec_model(q_img, logger):
     # 隔几秒检测一次,但是这里只推理,隔几秒的图由读图子进程控制
     while True:
         if q_img.qsize() == 0:
-            time.sleep(0.5)  # 等待抓图进程取流
+            time.sleep(0.04)  # 等待抓图进程取流
+            # cv2.waitKey(500)
             continue
         else:
             frame = q_img.get()
@@ -526,7 +572,7 @@ def det_rec_model(q_img, logger):
             t2 = cv2.getTickCount()  # 推理后时钟频率
 
             if len(dict_list) == 0:  # 没检测到车牌--跳过
-                logger.info("no plate detected...")
+                # logger.info("no plate detected...")
                 continue
 
             ori_img = draw_result(frame, dict_list)
@@ -536,42 +582,39 @@ def det_rec_model(q_img, logger):
 
             cv2.putText(ori_img, str_fps, (20, 20),
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-            # 发送post请求给服务端
-            #  获取当前时间
-            now_time = datetime.datetime.now()
 
-            #  格式化时间
-            formatted_time = now_time.strftime("%Y-%m-%d  %H:%M:%S")
-            encode_img = img2base64(ori_img)
-            data = {
-                "date": formatted_time,
-                "encode_img": encode_img
-            }
-            header = {
-                "Content-Type": "application/json;charset=utf-8"
-            }
-            try:
-                ret = requests.post(
-                    "http://47.108.165.167/prod-api/system/kaoqin", json.dumps(data), headers=header)
-                logger.info(ret)
-            except Exception as e:
-                logger.error(e)
+            if True:
+                cv2.imwrite(
+                    f"E:\\Source\\Github\\Python\\Flask-Python\\1.jpg", ori_img)
+
+            else:
+                # 发送post请求给服务端
+                #  获取当前时间
+                now_time = datetime.datetime.now()
+
+                #  格式化时间
+                formatted_time = now_time.strftime("%Y-%m-%d  %H:%M:%S")
+                encode_img = img2base64(ori_img)
+                data = {
+                    "date": formatted_time,
+                    "encode_img": encode_img
+                }
+                header = {
+                    "Content-Type": "application/json;charset=utf-8"
+                }
+                try:
+                    ret = requests.post(
+                        "http://47.108.165.167/prod-api/system/kaoqin", json.dumps(data), headers=header)
+                    logger.info(ret)
+                except Exception as e:
+                    logger.error(e)
 
 
 if __name__ == '__main__':
+    # 5.启用多进程日志记录
+    multiprocessing_logging.install_mp_handler()
 
-    # 配置基本日志设置
-    logging.basicConfig(
-        level=logging.DEBUG,  # 设置日志级别，可以选择DEBUG, INFO, WARNING, ERROR, CRITICAL
-        # 设置日志消息的格式
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S',  # 设置日期时间格式
-        filename='./App.log',  # 指定日志输出到文件
-        filemode='w'  # 指定文件写入模式（a表示追加，w表示覆盖）
-    )
-    # 创建一个日志记录器
-    logger = logging.getLogger('my_logger')
-
+    # 多进程
     q_img = mp.Queue(maxsize=10)  # 装图像的队列--目前只要一个摄像头
     # 共享数组Array--is_rtsp_config,is_ai_config
     shared_arr = Array('b', [False, False])
@@ -581,11 +624,11 @@ if __name__ == '__main__':
 
     # 开启两个子进程--读流和推理
     proc_get = mp.Process(target=get_frame, args=(
-        q_img, logger, shared_arr))
+        q_img, shared_arr))
     # 参数可以传递进子进程,但是模型需要在里面加载
-    proc_infer = mp.Process(target=det_rec_model, args=(q_img, logger))
+    proc_infer = mp.Process(target=det_rec_model, args=(q_img,))
 
-    proc_get.daemon = True
+    proc_get.daemon = True  # 设为主进程的守护进程,主进程结束,这两个也结束
     proc_infer.daemon = True
 
     proc_get.start()
