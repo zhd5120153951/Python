@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        /* css样式语法 */
+    </style>
+
 </head>
 
 <body>
@@ -12,14 +16,21 @@
 
     <button onclick="alert('点我了')">点我</button>
     <a href="javascript:alert('hello world')">hello</a>
-    <!-- 内嵌式--要么放在head,要么放在body最后 -->
+
+    <!-- 内嵌式--次选  要么放在head,要么放在body最后 -->
     <script>
         // alert("hello,world")
-        document.write("hello,world")
-        console.log("阿萨打完")
+        document.write("hello,world")//几乎不用
+        console.log("阿萨打完")//用的最多--调试代码
     </script>
 
-    <script src="./js/hello.js"></script>
+    <!-- 外联式 首选-->
+    <script src="js/hello.js">
+        // 导入js后这里不要再写代码了
+    </script>
+
+    <script src="js/variable.js"></script>
 </body>
+<!-- script建议写在body后 -->
 
 </html>

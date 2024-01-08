@@ -1,0 +1,138 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/reset.css">
+
+    <style>
+        #box {
+            width: 500px;
+            height: 1000px;
+            background-color: orange;
+            margin: 0 auto;
+        }
+
+        #head {
+            width: 100%;
+            height: 200px;
+            background-color: green;
+            font-size: 50px;
+            color: white;
+            text-align: center;
+            line-height: 200px;
+
+        }
+
+        #content {
+            width: 100%;
+            height: 600px;
+        }
+
+        /* 表示在content下的nav样式--层层往下 */
+        #content .nav {
+            width: 100%;
+            height: 40px;
+            background-color: black;
+        }
+
+        #content .nav li {
+            float: left;
+            color: white;
+            width: 100px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+        }
+
+        #content .nav li:hover {
+            background-color: gray;
+            color: blue;
+        }
+
+        #content .list {
+            width: 100%;
+            height: 80px;
+            background-color: blue;
+        }
+
+        #content .list li {
+            float: left;
+            width: 78px;
+            height: 58px;
+            padding: 5px;
+            border: 1px solid gray;
+            margin: 5px;
+        }
+
+        #content .list li img {
+            width: 100%;
+            height: 100%;
+
+        }
+
+        /* id对应#;class对应. */
+        #foot {
+            width: 100%;
+            height: 200px;
+            background-color: green;
+            font-size: 50px;
+            color: white;
+            text-align: center;
+            line-height: 200px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="box">
+        <div id="head">head</div>
+        <div id="content">
+            <div class="nav">
+                <ul>
+                    <li>首页</li>
+                    <li>商品</li>
+                    <li>关于</li>
+                    <li>我的</li>
+                    <li>设置</li>
+                </ul>
+            </div>
+            <div class="list">
+                <ul>
+                    <li>
+                        <a href="#">
+                            <img src="images/jiudian2.png">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="images/jiudian2.png">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="images/jiudian2.png">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="images/jiudian2.png">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="images/jiudian2.png">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="foot">foot</div>
+
+    </div>
+</body>
+
+</html>

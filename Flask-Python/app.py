@@ -163,17 +163,17 @@ def homepage():
 
 
 # 获取视频每帧
-# def generate_frames(isVideo):
-#     if isVideo:
-#         while True:
-#             success, frame = cap.read()
-#             if not success:
-#                 break
-#             else:
-#                 ret, buffer = cv2.imencode('.jpg', frame)
-#                 frame = buffer.tobytes()
-#                 yield (b'--frame\r\n'
-#                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+def generate_frames(isVideo):
+    if isVideo:
+        while True:
+            success, frame = cap.read()
+            if not success:
+                break
+            else:
+                ret, buffer = cv2.imencode('.jpg', frame)
+                frame = buffer.tobytes()
+                yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 
 # 路由--获取rtsp视频--暂时不用这个
@@ -636,7 +636,7 @@ if __name__ == '__main__':
 
     # 设备管理界面的相关参数*******************
     rtsp_dict = {"key_rtsp_1": None, "key_rtsp_2": None}  # rtsp地址
-    ai_dict = {"gap_det": None}  # Ai配置字典
+    ai_dict = {"gap_det": None}  # Ai配置字典--还有scoreThreshold,nmsThreshold
 
     # 初始化全局变量
     create_table()
