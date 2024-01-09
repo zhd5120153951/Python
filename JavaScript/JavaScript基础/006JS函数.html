@@ -1,0 +1,119 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+
+<script>
+
+    // 1.声明和定义(可以分开,声明后就可以调用)
+    function funx() {
+        document.write("helllo");
+        document.write("<br>");
+    }
+    function func2(a, b, c = 34) {
+        document.write(a);
+        document.write("<br>");
+
+        document.write(b);
+
+        document.write("<br>");
+        document.write(c);
+        document.write("<br>");
+
+        return a + b + c;
+
+    }
+    // 2.调用
+    funx();
+
+    document.write(func2(12, 323));
+
+    // 3/返回值--可有可没有
+
+
+    // ****lambda函数--lambda函数--匿名函数
+    function func3() {
+        document.write("daito");
+
+    }
+    func3();
+    //把函数名去掉;用一个var变量来接受:如下
+    var fn = function () {
+        document.write("daito--匿名");
+    }
+    //类比C++中的函数指针
+    fn();//且匿名函数不能提前声明
+
+    // 函数嵌套(函数名既可以做函数功能,也可以做变量功能)
+    function A() {
+        document.write("<br>A");
+        function B() {
+            document.write("<br>B");
+        }
+        return B;
+    }
+    // A()();和后面的一样
+    var b = A();
+    b();
+
+
+    // 匿名函数
+    var f1 = function (n) {
+        return Math.pow(4, n);
+    }
+    // 箭头函数
+    var f2 = n => n + 1;//一个参数可以不加括号,两个及其以上必须要加括号
+    document.write("<br>", f1(2));
+    document.write("<br>", f2(2));
+
+    // 两个及其以上必须要加括号
+    var f3 = (a, b) => Math.max(a, b);
+    document.write("<br>", f3(55, 67));
+    //语句体有多行--必须要加{}
+    var f4 = (a, b, c) => {
+        var sum = a + b + c;
+        document.write("<br>" + a + "<br>" + b + "<br>" + c + "<br>" + sum);
+    }
+    f4(100, 200, 300);
+    // 返回字典时--返回值必须要加()
+    var f5 = (name, age) => {
+        document.write("<br>", name);
+        document.write("<br>", age);
+        return ({ "name": name, "age": age });
+
+    }
+    var dict = f5("daito", 28);
+    document.write("<br>", dict["name"], dict["age"]);
+
+    //回调函数--把函数名做参数传入
+
+    function F(f) {
+        f();
+    }
+    function f() {
+        document.write("匿名函数");
+    }
+    F(f);
+
+    //自运行函数==(匿名函数)+(参数)
+    var f6 = (function (a) {
+        document.write("<br>a=", a);
+        return function (params) {
+            document.write("<br>params=", params);
+
+        }
+    })(10);//加了()后自动运行,且10--a
+    f6(100);//等价于f6(10)(100);
+
+    //注意作用域{}的范围
+</script>
+
+</html>

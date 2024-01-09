@@ -1,0 +1,52 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+<script>
+
+    // 1.顺序结构
+
+    // 2.分支结构
+    if (10) {
+        console.log("分支结构");
+    }
+    // prompt():弹窗且带着输入框
+    var age = prompt("请输入你的年龄:");
+    if (age >= 18) {
+        console.log("成年了");
+    }
+    else {
+        console.log("未成年");
+    }
+    // JS中有switch---python中没有
+    // 3.循环结构
+    // while,do-while,for,for-in,for-of,foreach
+
+    var sum = 0;
+    var i = 1;
+    while (i <= 100) {
+        sum += i;
+        i++;
+    }
+    console.log("sum=", sum);
+
+    // 少用for-in,用for
+    var sum2 = 0;
+    for (var i = 1; i <= 100; i++) {
+        sum2 += i;
+    }
+    console.log("sum2=", sum2);
+
+
+
+</script>
+
+</html>
