@@ -1,0 +1,64 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .foo {
+            width: 300px;
+            height: 300px;
+            color: orange;
+
+        }
+    </style>
+</head>
+
+<body>
+    <button id="btn">魔法开始</button>
+    <div id="box" class="foo" style="font-size: 16px;">看我72变</div>
+</body>
+
+<script>
+    btn.onclick = function () {
+        var box = document.querySelector("#box");//固定查找id为box的元素节点
+        // 文字初始大小
+        var count = 0;
+        var change = 4;
+
+        //开启定时器
+        setInterval(function () {
+            count++;
+            //修改文字颜色
+            box.style.color = randomRGBColor();
+            //修改背景颜色
+            box.style.backgroundColor = randomHexColor();
+
+            //修改文字大小
+            box.style.fontSize = parseInt(box.style.fontSize) + change;
+            if (count % 6 == 0) {
+                change *= -1;
+            }
+
+        }, 1000);
+    }
+    //随机颜色
+    function randomRGBColor() {
+        var r = parseInt(Math.random() * 256);
+        var g = parseInt(Math.random() * 256);
+        var b = parseInt(Math.random() * 256);
+        return `rgb(${r},${g},${b})`;
+    }
+    //随机颜色--16进制
+    function randomHexColor() {
+        var hex = "0123456789ABCDEF";
+        var color = "#";
+        for (var i = 0; i < 6; i++) {
+            color += hex[parseInt(Math.random() * hex.length)];
+        }
+        return color;
+    }
+</script>
+
+</html>

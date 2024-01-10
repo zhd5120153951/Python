@@ -1,0 +1,51 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+<script>
+    // BOM的核心是window对象--window可以省略不写
+
+    // console.log(window);
+    // console.log(document);//等价于window.document
+    // console.log(location);//location对象
+    // console.log(history);//history对象
+    // console.log(navigator);//导航对象
+
+
+    // window对象的常用方法
+    // 1.警告窗口
+    // window.alert(10);//等价于 alert()
+    // 2.定时器--异步执行
+    // window.setInterval()
+    // 3.确认框
+    // var ret = confirm("are you kiss me?");
+    // document.write(ret);
+    // 4.带输入的对话框
+    // var ret = prompt("1+1=?");
+    // document.write(ret);
+
+
+    // 5.页面跳转(document>body)
+    document.onclick = function () {
+        // window.open("https://baidu.com");//open()--在新窗口打开--子标签
+        open("https://www.baidu.com", target = "_parent");//在当前标签中打开--及父窗口
+    }
+
+    // 6.location对象
+    // location.href = "https://www.baidu.com";//直接跳转到该页面
+
+    // 7.刷新页面
+    // location.reload();//不清空缓存刷新
+    location.reload(true);//清空缓存后刷新--数据会清空
+
+</script>
+
+</html>

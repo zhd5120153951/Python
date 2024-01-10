@@ -1,0 +1,46 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="box">boxxx</div>
+    <button>按钮1</button>
+    <button>按钮2</button>
+    <button>按钮3</button>
+    <button>按钮4</button>
+
+</body>
+
+<script>
+    // JS中的this关键字
+    // 1.任何函数中都有this
+    // 2.在类中使用this--后面学
+    // 3.this在JS事件中的使用
+
+    // function fn() {
+    //     console.log(this);//这里this==window对象
+    // }
+    // window.fn();
+
+    //事件中:this就是触发事件的元素节点对象
+    box.onclick = function () {
+        console.log(box);
+        console.log(this);
+        console.log(this == box);//这里this==box代表的div节点对象
+    }
+    //通过for循环添加事件,this使用
+    var btns = document.getElementsByTagName('button');
+    //添加点击事件和处理函数--不会立刻执行,需要触发后才会
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].onclick = function () {
+            console.log(this);
+        }
+    }
+
+</script>
+
+</html>

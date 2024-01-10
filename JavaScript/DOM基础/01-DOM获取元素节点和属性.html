@@ -1,0 +1,48 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 页面内容 -->
+    <!-- 元素节点1 -->
+    <div id="box1" class="foo1" name="div1">daito啊</div>
+    <!-- 元素节点2 -->
+    <div id="box2" class="foo1" name="div2">Lucy啊</div>
+
+</body>
+
+<script>
+    // 1.通过id获取页面元素节点
+    var box11 = document.getElementById("box1");
+    document.write(box11);
+    document.write("<br>", typeof box11);
+    //元素节点内容
+    document.write("<br>", box11.innerHTML);
+    document.write("<br>", box11.innerText);
+
+    // 2.通过标签名获取div
+    var divs = document.getElementsByTagName('div');
+    document.write("<br>", divs);
+    document.write("<br>", divs.length);
+
+    // 3.通过class
+    var divs1 = document.getElementsByClassName('foo1');
+    document.write("<br>", divs1);
+    console.log(divs1);
+
+    // 4.通过name--不推荐
+
+    // 5.通过css选择器--id
+    var divs2 = document.querySelector("#box2");
+    console.log(divs2);//返回一个对象
+
+    //class
+    var divs3 = document.querySelectorAll(".fool1");//返回一个数组
+
+</script>
+
+</html>

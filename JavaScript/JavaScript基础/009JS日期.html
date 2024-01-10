@@ -1,0 +1,40 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+<script>
+    var d = new Date();//获取当前时间
+    document.write("当前时间:", d);
+
+    var d = new Date("2030/02/03 11:34:23");
+    document.write("<br>设置时间1:", d);
+
+    var d = new Date(2030, 2, 3, 11, 34, 23);
+    document.write("<br>设置时间2:", d);
+
+    // d.setMonth(12)//大于12会自动进位
+    // d.getFullYear()年
+    // d.getMonth()月
+    // d.getDate()日
+    // d.getHours()时
+    // d.getMinutes()分
+    // d.getSeconds()秒
+    // d.getMilliseconds()毫秒
+
+    // 时间戳
+    var t = d.getTime();
+    document.write("<br>时间戳:", t);
+
+
+
+</script>
+
+</html>

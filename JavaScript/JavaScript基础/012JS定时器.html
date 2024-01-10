@@ -1,0 +1,54 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    // 1.开启定时器
+    // setInterval(function () {
+    //     console.log("daito");
+    // }, 3000);//每隔3秒执行一次
+
+    // 2.停止定时器
+    // var n = 1;
+    // var timer = setInterval(function () {
+    //     console.log(n++);
+    //     if (n > 5) {
+    //         clearInterval(timer);
+    //     }
+    // }, 2000);
+
+    //定时器都是异步执行的
+
+    // 3.延时器
+    // var interval = 3000;
+    // setTimeout(() => {
+    //     console.log("我会在3秒后执行...");
+
+    // }, interval);
+
+    // 4.用延时器实现定时器功能--递归调用延时
+    var n = 1;
+    function myInterval() {
+        setTimeout(function () {
+            console.log("我执行的第", n++, "次");
+            if (n < 6) {
+                //继续递归调用
+                myInterval();
+            }
+        }, 2000);
+    }
+
+    myInterval();
+    //function不是函数名--是关键字
+
+
+</script>
+
+</html>

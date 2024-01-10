@@ -1,0 +1,53 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>秒表</h2>
+    <hr>
+    <div>
+        <!-- span是间隔符 -->
+        <span id="hour">00</span>时
+        <span id="min">00</span>分
+        <span id="second">00</span>秒
+
+        <button id="btn">点我开始即使</button>
+        <button id="stop2">停止</button>
+
+
+    </div>
+</body>
+
+<script>
+    //实现秒表功能
+    var n = 0;
+    var timer = null;
+    // 开启事件
+    btn.onclick = function () {
+        if (!timer) {
+            timer = setInterval(function () {
+                n++;
+                var h = parseInt(n / (60 * 60));
+                var m = parseInt(n / 60) % 60;
+                var s = parseInt(n % 60);
+                //需要用到DOM--Document Object Model
+                hour.innerText = h < 10 ? '0' + h : h;
+                min.innerText = m < 10 ? '0' + m : min;
+                second.innerText = s < 10 ? '0' + s : s;
+
+            }, 1000);
+        }
+
+    }
+    //停止事件
+    stop2.onclick = function () {
+        clearInterval(timer);
+        timer = null;
+    }
+</script>
+
+</html>

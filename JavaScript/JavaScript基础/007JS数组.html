@@ -14,22 +14,40 @@
     var arr = [10, 34, 45, 33, 55, 78];
     // 数组索引
     document.write(arr[0]);
-    document.write("<br>",arr[1]);
-    document.write("<br>",arr[2]);//下标越界会有未定义,没有倒序-1
-    document.write("<br>数组长度:",arr.length);
-    
-    // 1.数组遍历
+    document.write("<br>", arr[1]);
+    document.write("<br>", arr[2]);//下标越界会有未定义,没有倒序-1
+    document.write("<br>数组长度:", arr.length);
 
-    
+    // 1.数组遍历
+    for (var i = 0; i < arr.length; i++) {
+        document.write(arr[i]);
+        document.write("<br>");
+    }
+
     // 2.数组方法
-    // 2.1push()
-    // 2.2pop()
-    // 2.3sort()
-    // 2.4reverse()
-    // 2.5slice()
-    // 2.6splice()
-    // 2.7indexOf()
-    // 2.8join()
+    // 2.1push()--头部插入
+    arr.push(100);
+    document.write(arr[6]);
+    document.write("<br>");
+    // 2.2pop()--尾部弹出
+    arr.pop(100);
+    document.write(arr.length);
+    // 2.3sort()--升序
+    arr.sort();
+    document.write("<br>");
+    document.write(arr);
+
+    // 2.4reverse()--逆序
+
+    // 2.5slice()--切片:slice(3)==[3,N)--类比Python
+
+    // 2.6splice()----插入splice(2,3,666):从下标2开始的3个数,改为666
+
+    // 2.7indexOf()--获取indexOf(n)的下标
+
+    // 2.8join()--合并数组
+
+    //使用的时候再去了解:JS的数组方法汇总
 
 </script>
 

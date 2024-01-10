@@ -1,0 +1,38 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 一个元素节点 有两个节点-->
+    <div id="box">
+        <p>Python</p>
+        <p id="box2">JavaScript</p>
+
+    </div>
+
+</body>
+
+<script>
+    // DOM操纵
+    // 1.创建子节点-创建子节点-是在最后追加
+    var div = document.createElement('div');//创建一个空节点
+    div.innerHTML = 'C+++';//赋值
+    console.log(div);
+    //1.添加子节点
+    box.appendChild(div);
+    // 2.删除子节点
+    box.removeChild(box2);//id很重要
+
+    // 3.复制节点
+    // cloneNode()不复制内容
+    // cloneNode(true)复制内容
+    document.body.appendChild(box.cloneNode(true));
+
+
+</script>
+
+</html>

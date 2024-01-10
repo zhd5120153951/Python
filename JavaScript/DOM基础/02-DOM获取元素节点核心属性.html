@@ -1,0 +1,72 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .fool {
+            background-color: orange;
+            width: 200px;
+            height: 100px;
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<!-- <script>
+    // 在body之前用script,必须用window.onload()把页面加载起来
+</script> -->
+
+<body>
+    <div id="box1" class="fool" name="abc">万分教育<b>YYPS</b></div>
+
+    <div id="box2" class="fool" name="abc">Python</div>
+
+    <input id="box3" type="text">
+
+</body>
+
+
+<script>
+    //获取id是box2的元素节点内容--支持HTML解析
+    console.log(box2.innerHTML);
+    //修改内容
+    box2.innerHTML = "JavaScript<b>YYPS</b>";
+    console.log(box2.innerHTML);
+
+    //innerText--不持支HTML<b></b>就不会解析成粗体
+    console.log(box1);
+    box1.innerText = "JavaScript<b>YYPS</b>";
+    console.log(box1.innerText);
+
+    //value输入框内容
+    box3.value = "hello world";
+    console.log(box3.value);
+
+    //JS修改style--改的是内联式最近的样式
+    box2.style.color = "red";
+    box2.style.fontSize = "30px";//可能我涉及的项目用的少
+
+    // JS修改class的值
+    box2.className = "abcdef";
+
+    //父节点和子节点
+
+    // document->body->标签->子标签
+    console.log(box1.parentNode);
+    console.log(document.body);
+
+    console.log(document.body.children);//document所有子节点--body-script
+
+    //获取标签名
+    console.log(box1.tagName);//大写的
+
+    //位置和大小
+
+    // box1.offsetWidth
+    // box1.clientWidth
+
+</script>
+
+</html>

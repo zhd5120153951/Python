@@ -1,0 +1,40 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    var chars = "QAZXSWEDCVFRTGBNHYUJMKIOLP0123456789qwertyuioplkjhgfdsazxcvbnm";
+    var str = "";
+    for (var i = 0; i < 4; i++) {
+        str += chars[parseInt(Math.random() * chars.length)];
+    }
+    console.log(str);
+
+    var date = new Date();
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;//getMonth()从0开始的
+    var d = date.getDate();
+    var h = date.getHours();
+    var min = date.getMinutes();
+    var s = date.getSeconds();
+
+    var str = `${y}年${m}月${d}日${h}时${min}分${s}秒`;
+    console.log(str);
+
+    var d1 = new Date();
+    var d2 = new Date("2015-12-23");
+
+    // var interval=d1-d2;
+    var interval = d1.getTime() - d2.getTime();
+    console.log(parseInt(interval / (1000 * 3600 * 24)));
+
+</script>
+
+</html>
