@@ -1,0 +1,56 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="box" style="background-color: pink;height: 200px;width: 200;">
+        <button id="btn">按钮</button>
+    </div>
+    <hr>
+
+    <img id="img" src="../../HTML-CSS/images/jingxuan_3.jpg" style="position:absolute;left: 30px;top: 300px;">
+</body>
+<script>
+    //事件传递
+    // 1.冒泡事件:子节点向父节点传递(大部分浏览器默认)
+    // 2.事件捕获:父节点向子节点传递
+    document.body.onclick = function () {
+        console.log('body区域');
+    }
+    box.onclick = function () {
+        console.log('div区域');
+    }
+    btn.onclick = function (e) {
+        console.log('btn区域');
+        //但是这里只要点击了,这三个都会执行--此时需要事件冒泡
+        e.stopPropagation();//非IE和高版本IE
+        // e.cancelBubble=true;//低版本IE
+
+    }
+    //浏览器默认行为:form表单自动提交,拖动图片
+    // 1.按下
+    img.onmousedown = function (e) {
+        //组织浏览器默认行为
+        e.preventDefault();//非IE和高版本IE
+        // e.returnValue=false;低版本IE
+        // 2.拖动
+        var x = e.offsetX;
+        var y = e.offsetY;
+        document.onmousemove = function (e) {
+            img.style.left = e.pageX - x + 'px';
+            img.style.top = e.pageY - y + 'px';
+        }
+        // 3.松开
+        document.onmouseup = function (e) {
+            document.onmousemove = null;
+        }
+    }
+
+
+</script>
+
+</html>

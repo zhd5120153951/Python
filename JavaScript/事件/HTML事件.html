@@ -1,0 +1,56 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body style="height: 2000px;">
+    <input type="text" id="box" style="margin-top: 100px;background-color: green;">
+</body>
+
+<script>
+    // 1.改变输入框
+    box.onchange = function () {
+        console.log("改变输入框内容");
+    }
+    // 2.输入框角点
+    box.onfocus = function () {
+        console.log("onfocus角点");
+    }
+    // 3.失去输入框焦点
+    box.onblur = function () {
+        console.log("失去焦点");
+    }
+    // 4.滚动事件******
+    onscroll = function () {
+        //获取当前可视页面的顶部--scrollTop
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        console.log("onscroll:", scrollTop);
+
+
+        //让输入框顶部悬停
+        if (scrollTop >= 100) {
+            box.style.position = 'fixed';//固定位置
+            box.style.left = '8px';
+            box.style.top = '8px';
+            box.style.marginTop = 0;
+
+        }
+        else {
+            box.style.position = 'static';//否则静态定位--没有定位
+            box.style.marginTop = '100px';
+
+        }
+    }
+
+    // 5.浏览器尺寸变化
+    onresize = function () {
+        console.log("浏览器大小发生变化.....");
+    }
+
+
+</script>
+
+</html>

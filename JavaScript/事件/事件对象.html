@@ -1,0 +1,36 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body style="height: 2000px;">
+    <div id="box"
+        style="width: 100px;height: 100px;background-color: orange;position: absolute;left: 100px;top: 100px;">土耳其
+    </div>
+
+</body>
+<script>
+    // 1.事件对象e
+    // 在浏览器内部触发的事件会自动把数据封装成事件对象,并传给开发者
+    // 考虑兼容多个浏览器:e=e||event
+
+    // 2.事件对象的属性:button--表示鼠标哪个键;0-左键;1-滚轮;2-右键
+    document.body.onclick = function (e) {
+        console.log(e.button);
+
+        // 鼠标位置:1.page:相对于页面内容的坐标;2.client:相对于可视区的坐标
+        console.log("pageXY:", e.pageX, e.pageY);//常用
+        console.log("clientXY:", e.clientX, e.clientY);//用的少
+
+    }
+
+
+
+
+
+</script>
+
+</html>

@@ -1,0 +1,42 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 同一个标签可以有多个不同的事件 -->
+    <button id="btn1">onclick</button>
+    <button id="btn2">ondbclick</button>
+    <button id="btn3">onmousedown&onmouseup</button>
+    <button id="btn4">onmouseenter&onmouseleave&onmousemove</button>
+
+</body>
+<script>
+    btn1.onclick = function () {
+        console.log("单机");
+    }
+    btn2.ondbclick = function () {
+        console.log("双击");
+    }
+    btn3.onmousedown = function () {
+        console.log("按下");
+    }
+    btn3.onmouseup = function () {
+        console.log("抬起");
+    }
+    btn4.onmouseenter = function () {
+        console.log("移入");
+
+    }
+    btn4.onmousemove = function () {
+        console.log("移动");
+    }
+    btn4.onmouseleave = function () {
+        console.log("移出");
+    }
+</script>
+
+</html>

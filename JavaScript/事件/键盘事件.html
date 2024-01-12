@@ -1,0 +1,42 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>键盘事件</h2>
+    <h4>键盘输入框的实时检测</h4>
+    用户名:<input type="text" id="username" placeholder="username...">
+
+</body>
+<script>
+
+    // onkeydown:表示任意键按下;字母不区分大小写
+    // document.onkeydown = function () {
+    //     console.log("任意键按下,字母不区分大小写,长安会一直触发此事件");
+    // }
+
+    // onkeypress:针对数字,字母,字符建;区分大小写
+    // document.onkeypress = function () {
+    //     console.log("字母,数字,字符键按下,长按会一直触发");
+    // }
+    // onkeyup:松开按键
+
+    username.onkeyup = function () {
+        console.log(username.value);
+        var val = username.value;
+        if (val.length < 6 || val.length > 10) {
+            username.style.background = 'red';
+        }
+        else {
+            username.style.background = 'white';
+
+        }
+    }
+
+</script>
+
+</html>

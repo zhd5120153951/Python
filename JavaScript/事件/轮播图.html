@@ -1,0 +1,74 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* *针对所有标签 */
+        * {
+            margin: 0;
+            padding: 0;
+            border: none;
+
+        }
+
+        /* 针对特定标签 */
+        ul {
+            list-style: none;
+        }
+
+        /* #针对id .针对class */
+        #box {
+            width: 300px;
+            height: 150px;
+            border: 4px solid black;
+            margin: 100px auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #box ul {
+            width: 1200px;
+            position: absolute;
+            left: -300px;
+            top: 0;
+        }
+
+        #box ul li {
+            float: left;
+            width: 300px;
+            height: 150px;
+            font-size: 50px;
+            text-align: center;
+            line-height: 150px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <ul id="list">
+            <li style="background-color: orange;">1</li>
+            <li style="background-color: red;">2</li>
+            <li style="background-color: blue;">3</li>
+            <li style="background-color: green;">4</li>
+        </ul>
+    </div>
+</body>
+
+<!-- <script src="XX.js"></script>相当于导包 -->
+<script>
+    //轮播切换--轮播切换--定时器
+    var n = 0;
+    setInterval(function () {
+        n++;
+        if (n > 3) {
+            n = 0;
+        }
+        list.style.left = n * -300 + 'px';
+    }, 1000);
+    //轮播图功能详细参考千锋教育77集
+</script>
+
+</html>
