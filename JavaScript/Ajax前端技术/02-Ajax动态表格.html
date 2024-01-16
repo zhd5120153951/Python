@@ -1,0 +1,55 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="btn">点我加载数据</button>
+    <table id="utable" border="1" cellspacing="0" width="300px">
+        <tr>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>性别</th>
+        </tr>
+
+    </table>
+</body>
+<script>
+
+    btn.onclick = function () {
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', '../json/person.json', true);
+        xhr.send();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // console.log(xhr.responseText);//json数据
+                //JSON解析
+                var ret = JSON.parse(xhr.responseText);
+                var data = ret.data;
+                //DOM操作
+                for (var i = 0; i < data.length; i++) {
+                    var name = data[i].name;
+                    var age = data[i].age;
+                    var sex = data[i].sex;
+
+                    //tr
+                    var tr = document.createElement('tr');
+                    utable.appendChild(tr);
+                    tr.innerHTML = `
+                <td>${name}</td>
+                <td>${age}</td>
+                <td>${sex}</td>
+                `;
+                }
+
+            }
+        }
+    }
+
+</script>
+
+</html>

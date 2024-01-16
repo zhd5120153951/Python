@@ -1,0 +1,28 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    //在页面中的任意位置点击--访问服务器的hello服务
+    document.onclick = function () {
+        // ajax访问flask服务器
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', 'http://127.0.0.1:5000/', true);
+        xhr.send();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log(xhr.responseText);
+            }
+        }
+    }
+    //同源策略:浏览器的一种安全策略
+</script>
+
+</html>

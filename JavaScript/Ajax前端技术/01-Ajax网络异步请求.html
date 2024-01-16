@@ -1,0 +1,37 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    // Ajax请求服务器,从服务器获取数据--这里请求本地数据来模拟
+    // Ajax核心:XMLHttpRequest
+    var xhr = new XMLHttpRequest();
+
+    // 第一个参数:http请求方式(get,post)
+    // 第二个参数:服务器url或本地路径
+    // 第三个参数:是否异步(true--异步--强烈使用,false--同步)
+
+    xhr.open('get', '../json/person.json', true);
+    // 发送请求
+    xhr.send();
+
+    //同步接收方式
+    console.log(xhr.responseText);
+    //异步接收******数据请求完成后才执行
+    xhr.onreadystatechange = function () {
+        console.log(xhr.readyState);
+        //接收完成,响应成功
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log(xhr.responseText);
+        }
+    }
+</script>
+
+</html>
