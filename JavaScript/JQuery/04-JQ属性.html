@@ -1,0 +1,61 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- id是选择器,其余是属性 -->
+    <div id="star" class="fool" name="jay">周杰昆得到</div>
+    <input type="text" value="王力宏">
+</body>
+<script src="js/jquery-3.5.1/jquery-3.5.1.js">
+
+</script>
+<script>
+    //JQ实现--看见$()这种写法就是到是JQuery库
+    $(function () {
+
+        //JS获取属性
+        // setAttribute();//设置属性
+        // getAttribute();//得到属性
+        // removeAttribute()//删除属性
+
+        console.log(star.getAttribute('name'));
+
+        //JQ操作
+        $('#star').attr('class');//attr()一个参数表示获取,两个参数是设置
+        $('#star').attr('name', 'daitp');
+        $('#star').attr({ 'abc': 'ABC', 'age': 40 });
+
+
+        // 添加点击事件对象*****************
+        // addClass添加
+        // removeClass删除
+        // toggleClass切换
+        $('#star').mouseenter(function () {
+            console.log(this);//JS对象
+            console.log($(this));//JQ对象
+
+
+            // JQ链式调用--常用
+            $(this).removeClass('fool').addClass('fool2');
+            // $(this).toggleClass('fool2');
+
+
+        })
+        //JQ中的大部分是方法***********
+        // 1.一般方法中没有参数--表示获取
+        // 2.有参数表示设置
+
+        // html()-----innerHTML
+        // text()---innerText
+        // val()---value
+
+    })
+
+</script>
+
+</html>

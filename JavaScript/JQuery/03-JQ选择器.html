@@ -1,0 +1,71 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- //获取元素节点是核心,一切操作的起点是获取元素:可以通过:标签,id,class,name获取 -->
+    <div id="box1" class="qian">前锋1111</div>
+    <div id="box2" class="qian">前锋2222</div>
+    <hr>
+    <input type="text" value="1">
+    <div>
+        <input type="text" value="2">
+    </div>
+    <input type="text" value="3">
+
+    <div id="box3">
+        <!-- div的子元素:div  input -->
+        <div>
+            <!-- 子的子 -->
+            <input type="text" value="4">
+        </div>
+
+        <input type="text" value="5">
+
+    </div>
+    <input type="text" value="6">
+    <div>
+        <input type="text" value="7">
+
+    </div>
+    <input type="text" value="8">
+
+</body>
+<script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+<script>
+    // JQ选择器--基本选择器--重点掌握
+    // 1. css()样式选择
+    $('#box1').css('color', 'red');//设置css样式
+    $('.qian').css({ "background-color": 'pink', color: 'blue' });
+    // $('div').css({ 'border': '1px solid green' });
+    // $('*').css('font-family', '微软雅黑');
+    $('#box2,div:first').css('color', 'orange');
+
+    //2. 后代选择器--重点掌握
+    $('#box3 input').css('background', 'red');
+    // 第二中写法--推荐
+    $('#box3').find('input').css('background', 'red');
+
+    //子元素选择器--重点掌握
+    // $('#box3>input').css('background', 'blue');
+    // 第二种
+    $('#box3').children('input').css('background', 'blue');
+
+
+    // 3.兄弟节点
+    $('#box3').siblings('input').css('background', 'red');//siblings()不给参数就是全部兄弟节点
+
+
+    //搜索时关键词:JQuery中first()函数的使用案例?JQuery中的伪类选择器案例?
+    // first()----重点:first,:hover伪类选择器
+    // last()
+
+
+
+</script>
+
+</html>

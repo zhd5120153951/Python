@@ -1,0 +1,77 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="box">万峰</div>
+    <ul>
+        <li>Python</li>
+        <li>Javascript</li>
+        <li>C++</li>
+    </ul>
+</body>
+<!-- min.js这个是调用在线的js库,没有min是本地js库 -->
+<script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+<script>
+    //JS原生事件--同一事件会被覆盖
+    window.onload = function () {
+        console.log("onload1");
+    }
+    //前一个onload会被后一个覆盖---类比函数指针(事件)
+    window.onload = function () {
+        console.log("on;onload2");
+    }
+
+    //JQuery事件---不会覆盖
+
+    // jquery 3.0以后 .load(), .unload(), .error()方法被移除，直接判断成Ajax的 .load方法，可以用.on(“load”,function(){})来绑定
+    $(window).on("load", function () {
+        console.log("load1");
+
+    })
+    $(window).on("load", function () {
+        console.log("load2");
+    })
+
+    // .ready:等待页面加载完成
+    $(document).ready(function () {
+        console.log("html load ready");
+    })
+
+    //简写ready
+    $(function () {
+        console.log("简写raedy");
+        // 操作页面对比
+        //JS写法
+        var box = document.getElementsByClassName('box')[0];
+        box.innerHTML = "wanfeng";
+
+
+        //JQ:更简洁,可以通过css选择器得到所有节点--强推
+        $('.box').html('WAN FENG');
+
+
+        //给每个li标签添加事件
+        //JS写法
+        var lis = document.getElementsByTagName('li');
+        for (let i = 0; i < lis.length; i++) {
+            lis[i].onclick = function () {
+                // console.log(i, lis[i].innerHTML);
+                console.log(i, this.innerHTML);
+            }
+        }
+
+        //JQ写法--强推
+        $('li').click(function () {
+            console.log(this.innerHTML);
+        })
+
+    })
+
+</script>
+
+</html>

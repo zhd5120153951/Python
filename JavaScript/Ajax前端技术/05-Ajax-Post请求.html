@@ -1,0 +1,39 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    //Ajax-Post请求
+    document.onclick = function () {
+        // ajax访问flask服务器
+        var xhr = new XMLHttpRequest();
+        xhr.open('post', 'http://127.0.0.1:5000/post/', true);//post请求参数不可以写在url中
+
+        //设置请求头,模拟表单进行post提交
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send('username=阿东&password=123456');//必须写在send中
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log(xhr.responseText);
+                // 解析JSON
+                var ret = JSON.parse(xhr.responseText);
+                console.log(ret);//前端获取到了服务器数据
+            }
+        }
+    }
+    //同源策略:浏览器的一种安全策略,要求后台服务代码和请求的HTML要在同一个服务器上
+    // 解决方式:
+    // 1.把前端和后端代码放在同一个服务器上运行(次选)
+    // 2.把后端设置为允许跨域(首选)
+    // 3.绕过同源策略,不适用于Ajax
+
+</script>
+
+</html>

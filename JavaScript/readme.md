@@ -2,19 +2,30 @@
 
 前端语言--{javascript}
 
-js的三大部分:
+1. js的三大部分:
     1. ECMAScript(核心语言基础--类型,语法,关键字,保留字,操作符,对象)
     2. DOM(文档对象模型--操作网页内容)
     3. BOM(浏览器对象模型--和浏览器交互)
 
-js也是脚本语言,写法和html,css一样,可以有:
+2. js也是脚本语言,写法和html,css一样,可以有:
     行内式;内嵌式;外链式
 
-*Ajax技术:Asynchronous Javascript And Xml:异步JavaScript和XML技术:是一种创建交互式网页应用的开发技术--可以访问服务器数据的局部刷新*
+*Ajax技术(前后端交互技术):Asynchronous Javascript And Xml:异步JavaScript和XML技术:是一种创建交互式网页应用的开发技术--可以访问服务器数据的局部刷新*
 
 **Ajax作用:允许客户端发送HTTP请求,去异步请求服务器的数据来动态创建网页----动态网页:和服务器有数据交互;静态网页:没有和服务器数据交互**
 
 ![Alt text](image.png)
+
+3. http协议,get和post区别?
+    3.1 空了详细学习HTTP,TCP,udp
+    3.2 GET和POST都可以获取和提交数据
+        3.2.1 GET提交数据一般不要超过2KB,POST可以提交很大数据一般不要超过4GB
+        3.2.2 GET以获取数据为主,POST以提交数据为主
+    3.3 GET比POST略快,一般能用GET则用GET,但是大文件上传(音视频),密码数据就必须用POST
+    3.4 POST比GET更安全,GET参数放在url中,可以被看到,所以登陆,注册时需要用POST(此时被别人用抓包工具时也是可以知道密码的,所以数据需要加密上传)
+    3.5 传参方式不一样
+        3.5.1 GET参数在url后面
+        3.5.2 POST参数在HTTP请求体中,抓包可以获取到
 
 **心得1:JS的高级特性,多联想Python,C++的类比即可,不对在查资料**
 **2023.11.18 千锋教育-kervin**

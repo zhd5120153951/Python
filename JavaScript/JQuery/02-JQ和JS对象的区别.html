@@ -1,0 +1,29 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="box1">asdsdwe</div>
+    <div id="box2">dwfefefgg阿萨伟大`</div>
+</body>
+<script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+<script>
+    //JS的DOM对象
+    console.log(box1);
+    //JQ对象
+    var jqObj = $('#box1');
+    console.log(jqObj);
+
+    //JS对象和JQ对象的方法和属性是不同的,他们是不同的对象
+
+    //JS to JQ
+    console.log($(box1));//$()包裹
+    //JQ to JS
+    console.log($('div')[1]);//$().get(1)
+</script>
+
+</html>
