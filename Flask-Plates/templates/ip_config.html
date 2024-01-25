@@ -7,8 +7,8 @@
 
     <h1>设备网口IP:{{ ip_addr['local_ip'] }}
     </h1>
-    <h1>设备无线IP:{{ ip_addr['wifi_ip'] }}
-    </h1>
+    <!-- <h1>设备无线IP:{{ ip_addr['wifi_ip'] }}
+    </h1> -->
 
     <form action="{{ url_for('set_ip') }}" method="post">
         <label class="ip" for="new_ip">请输入IP:</label>

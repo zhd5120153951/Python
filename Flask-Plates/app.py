@@ -10,8 +10,6 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
-import logging
-import multiprocessing_logging
 import cv2
 import psutil
 from ipaddress import ip_address, AddressValueError
@@ -24,6 +22,7 @@ import datetime
 import os
 import re
 import time
+import tkinter as tk
 from detect_plate import get_parser, load_model, init_model, detect_Recognition_plate, draw_result
 
 # logging模块不跨进程--单进程或者多线程使用
@@ -38,21 +37,6 @@ from detect_plate import get_parser, load_model, init_model, detect_Recognition_
 # )
 # 创建一个日志记录器
 # logger = logging.getLogger('my_logger')
-
-# multiprocessing_logging多进程日志--不可以传参,全局使用
-# 1.创建日志器
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
-# 2.创建文件处理器
-file_handler = logging.FileHandler('./log.txt')
-file_handler.setLevel(logging.DEBUG)
-
-# 3.设置日志输出格式
-formatter = logging.Formatter(
-    '%(asctime)s - %(processName)s - %(name)s - %(levelname)s - %(message)s')
-file_handler.setFormatter(formatter)
-# 4.把文件处理器添加到根日志器
-logger.addHandler(file_handler)
 
 
 # 创建网页应用对象
@@ -219,8 +203,6 @@ def get_system_usage():
     disk_cap_e = psutil.disk_usage('E:/').total / (1024 ** 3)  # 转换为GB
     disk_cap = round((disk_cap_c+disk_cap_d+disk_cap_e)/3, 2)
 
-    logger.info(cpu_usage)
-
     data = {
         # 'sys': sys_maintain,
         'cpu': cpu_usage,
@@ -238,7 +220,7 @@ def get_system_usage():
 
 
 def get_ip_addr():
-    ip_addr = {"local_ip": "", "wifi_ip": ""}
+    ip_addr = {"local_ip": ""}
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # print(s)
     # 尝试连接非存在地址，来激活网络接口的 IP
@@ -251,10 +233,8 @@ def get_ip_addr():
         # print(s.getsockname()[1])
 
     except:
+        create_notification("获取设备IP失败")
         ip_addr['local_ip'] = 'N/A'
-    # 获取 WiFi IP 地址（这种方式较为复杂，可能需要根据具体操作系统及网络配置而定）
-    # 这里我们假装已经得到了 WiFi IP 地址
-    ip_addr['wifi_ip'] = '192.168.0.10'
     s.close()
     return ip_addr
 # 路由--ip_config
@@ -264,23 +244,6 @@ def get_ip_addr():
 def ip_config():
     ip_addr = get_ip_addr()
     return render_template("ip_config.html", ip_addr=ip_addr)
-    # # 显示当前的端口或者WiFi ip地址
-    # try:
-    #     # 获取本地网络接口列表
-    #     interfaces = [ip_address(i) for i in netifaces.interfaces()]
-    #     # 获取本地ip
-    #     local_ip = interfaces[0].ip
-    #     # 获取WiFi IP地址
-    #     wifi_ip = None
-    #     for i in interfaces:
-    #         if i.is_wireless:
-    #             wifi_ip = i.ip
-    #             break
-    #     # 渲染模板
-    #     return render_template("ip_config.html", local_ip, wifi_ip)
-
-    # except AddressValueError as e:
-    #     return f"Error:{e}"
 
 
 # 设置IP--Port(WiFi一般都是自动分配IP,不需要设置)
@@ -307,7 +270,7 @@ def set_ip():
         if set_ip_addr(interface, new_ip):
             return redirect(url_for("ip_config"))
         else:
-            return "IP设置失败"
+            create_notification("ip设置失败,请检查后重试!")
 # 路由--rtsp_config
 
 
@@ -346,6 +309,25 @@ def Preview(username, password, rtsp_url, index):
     # 释放视频流和关闭窗口
     cap.release()
     cv2.destroyAllWindows()
+
+# 消息弹窗
+
+
+def create_notification(message):
+    root = tk.Tk()
+    root.overrideredirect(True)  # 隐藏标题栏和边框
+    root.attributes("-topmost", True)  # 始终置于顶层
+    root.geometry("300x100+{}+{}".format(
+        root.winfo_screenwidth() - 300, root.winfo_screenheight()-100))  # 设置窗口位置和大小
+    label = tk.Label(root, text=message)
+    label.pack(pady=20)
+
+    def close_notofication():
+        root.destroy()
+    # 设置定时器,3秒后自动关闭
+    root.after(3000, close_notofication)
+
+    root.mainloop()
 
 
 @app.route('/set_rtsp', methods=['GET', 'POST'])
@@ -388,17 +370,12 @@ def set_rtsp():
             isExistId = cursor.fetchone()  # 所以用fetchone()
 
             if isExistId:  # 存在rtsp
-                # print(type(isExistId[0]))
-                logger.info(isExistId[1])
-                logger.info(isExistId[2])
-                logger.info(isExistId[3])
-
                 th_prev = threading.Thread(target=Preview, args=(
                     isExistId[1], isExistId[2], isExistId[3], isExistId[0]))
                 th_prev.start()
 
             else:  # 可以给个弹窗提示
-                logger.info("没有对应的id=1摄像头流")
+                create_notification("没有对应的id=1摄像头流")
 
         if btn_value == "prev_2":  # 用多线程预览--后面在改进--而且这里必须要用多线程或者多进程
             cursor.execute('SELECT * FROM rtsps WHERE id = ?',
@@ -406,15 +383,11 @@ def set_rtsp():
             isExistId = cursor.fetchone()  # 所以用fetchone()
 
             if isExistId:  # 存在rtsp
-                logger.info(isExistId[1])
-                logger.info(isExistId[2])
-                logger.info(isExistId[3])
-
                 th_prev = threading.Thread(target=Preview, args=(
                     isExistId[1], isExistId[2], isExistId[3], isExistId[0]))
                 th_prev.start()
             else:
-                logger.info("没有对应id=2摄像头的流")
+                create_notification("没有对应id=2摄像头的流")
     else:
         # 首次请求或者GET请求时，渲染表单并传入上次输入的值
         form_data_1 = request.args.get('new_rtsp_1', '')
@@ -453,10 +426,6 @@ def set_ai():
 
         global ai_dict
 
-        # 通过路由到其他函数处理
-        # if btn_value == "btn_1":
-        #     return redirect(url_for("rtsp_1"))
-
         # 把rtsp保存到json中存起来,AI设置中的参数,开关也是如此,后面把模型加载时从json中读取
         if btn_value == "btn_ok":
             # 打开json文件
@@ -494,10 +463,9 @@ def is_valid_ip(ip_address):
 
 
 def get_frame(q_img, shared_arr):
-    # print("get_frame process pid:%s" % os.getpid())
-    logger.info("get_frame process pid:%s" % os.getpid())
-
+    print("get_frame process pid:%s" % os.getpid())
     url = None
+    cap_1 = None
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM rtsps WHERE id = ?',
@@ -507,28 +475,25 @@ def get_frame(q_img, shared_arr):
     if isExistId:  # 初始就配好流地址
         if is_valid_ip(isExistId[3]):
             url = f"rtsp://{isExistId[1]}:{isExistId[2]}@{isExistId[3]}:554/Streaming/Channels/101"
-            logger.info(url)
             cap_1 = cv2.VideoCapture(url)
         else:
-            logger.info(isExistId[3])
+            create_notification("初始流地址出错,请检查后再试!")
             cap_1 = cv2.VideoCapture(0)  # 流地址不合规,用本地
     else:
         cap_1 = cv2.VideoCapture(0)  # 本地摄像头
     with open("ai_config.json", mode="r") as f_ai:
         det_gap = json.load(f_ai)["gap_det"]
-        # print(type(det_gap))
         f_ai.close()
 
+    num = 0
     while True:
         if shared_arr[1]:  # 读取ai配置--标志位:在ai配置页面确定后置为真
-            logger.info("读取修改后的ai配置")
             with open("ai_config.json", mode="r") as f_ai:
                 det_gap = json.load(f_ai)["gap_det"]
                 f_ai.close()
             shared_arr[1] = False
 
         if shared_arr[0]:  # 读取rtsp配置
-            logger.info("读取修改后的rtsp配置")
             cap_1.release()
             cursor.execute('SELECT * FROM rtsps WHERE id = ?', ("1",))
             isExistId = cursor.fetchone()
@@ -538,23 +503,24 @@ def get_frame(q_img, shared_arr):
                     url = f"rtsp://{isExistId[1]}:{isExistId[2]}@{isExistId[3]}:554/Streaming/Channels/101"
                     cap_1 = cv2.VideoCapture(url)
                 else:
-                    logger.info(isExistId[3])
+                    create_notification("配置的流地址出错,请重新配置!")
                     cap_1 = cv2.VideoCapture(0)
             else:
                 continue  # 数据库中没找到流地址
         if cap_1.isOpened():
-            ret_1, frame_1 = cap_1.read()
-            if not ret_1:
-                logger.error("cap_1取流的帧出错")
+            if num % 24 != 0:
+                frame = cap_1.read()
+                num += 1
                 continue
-            q_img.put(frame_1)
+
+            # ret_1, frame_1 = cap_1.read()
+            q_img.put(cap_1.read()[1])
+            print("读一帧")
             if q_img.qsize() > 10:
-                logger.info("queue over 10 frames")
                 q_img.get()
-            # 读取流--时间间隔加上
-            else:
-                time.sleep(det_gap/1000)
-                # cv2.waitKey(det_gap)
+            if num % 24 == 0:
+                num = 1
+
         else:
             cap_1.release()
             cap_1 = cv2.VideoCapture(url)
@@ -573,10 +539,9 @@ def img2base64(img):
 
 # def det_rec_model(det_model, q_img, device, rec_model, img_size, is_color):
 def det_rec_model(q_img):
-    logger.info("det_rec_model process pid:%s" % os.getpid())
+    print("det_rec_model process pid:%s" % os.getpid())
     # 参数
     opt = get_parser()
-    logger.info(opt)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # 可以暂时不要--因为会上传到服务端
     if not os.path.exists(opt.output):
@@ -588,17 +553,19 @@ def det_rec_model(q_img):
     # 参数量计算
     total_det = sum(p.numel() for p in det_model.parameters())
     total_rec = sum(p.numel() for p in rec_model.parameters())
-    logger.info("detect model params: %.2fM,rec model params: %.2fM" %
-                (total_det / 1e6, total_rec / 1e6))
+    print("detect model params: %.2fM,rec model params: %.2fM" %
+          (total_det / 1e6, total_rec / 1e6))
 
     cn = 1
     # 隔几秒检测一次,但是这里只推理,隔几秒的图由读图子进程控制
     while True:
         if q_img.qsize() == 0:
-            time.sleep(0.04)  # 等待抓图进程取流
+            # print("inference proc", q_img.qsize())
+            # time.sleep(0.04)  # 等待抓图进程取流
             # cv2.waitKey(500)
             continue
         else:
+            print("推理一帧")
             frame = q_img.get()
             t1 = cv2.getTickCount()  # 推理前时钟频率
             dict_list = detect_Recognition_plate(
@@ -606,7 +573,6 @@ def det_rec_model(q_img):
             t2 = cv2.getTickCount()  # 推理后时钟频率
 
             if len(dict_list) == 0:  # 没检测到车牌--跳过
-                # logger.info("no plate detected...")
                 continue
 
             ori_img = draw_result(frame, dict_list)
@@ -617,40 +583,37 @@ def det_rec_model(q_img):
             cv2.putText(ori_img, str_fps, (20, 20),
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
-            if True:
+            if ori_img:
                 cv2.imwrite(
-                    "E:\\Source\\Github\\Python\\Flask-Python\\"+str(cn)+".jpg", ori_img)
+                    "E:\\Source\\Github\\Python\\Flask-Plates\\"+str(cn)+".jpg", ori_img)
                 cn += 1
 
-            else:
-                # 发送post请求给服务端
-                #  获取当前时间
-                now_time = datetime.datetime.now()
+            # else:
+            #     # 发送post请求给服务端
+            #     #  获取当前时间
+            #     now_time = datetime.datetime.now()
 
-                #  格式化时间
-                formatted_time = now_time.strftime("%Y-%m-%d  %H:%M:%S")
-                encode_img = img2base64(ori_img)
-                data = {
-                    "date": formatted_time,
-                    "encode_img": encode_img
-                }
-                header = {
-                    "Content-Type": "application/json;charset=utf-8"
-                }
-                try:
-                    ret = requests.post(
-                        "http://47.108.165.167/prod-api/system/kaoqin", json.dumps(data), headers=header)
-                    logger.info(ret)
-                except Exception as e:
-                    logger.error(e)
+            #     #  格式化时间
+            #     formatted_time = now_time.strftime("%Y-%m-%d  %H:%M:%S")
+            #     encode_img = img2base64(ori_img)
+            #     data = {
+            #         "date": formatted_time,
+            #         "encode_img": encode_img
+            #     }
+            #     header = {
+            #         "Content-Type": "application/json;charset=utf-8"
+            #     }
+            #     try:
+            #         ret = requests.post(
+            #             "http://47.108.165.167/prod-api/system/kaoqin", json.dumps(data), headers=header)
+            #         print(ret)
+            #     except Exception as e:
+            #         print(e)
 
 
 if __name__ == '__main__':
     # 初始化全局变量
     create_table()
-
-    # 5.启用多进程日志记录
-    multiprocessing_logging.install_mp_handler()
 
     # 多进程部分
     q_img = mp.Queue(maxsize=10)  # 装图像的队列--目前只要一个摄像头
