@@ -347,8 +347,8 @@ def set_rtsp():
 
         # 把rtsp保存到json中存起来,AI设置中的参数,开关也是如此,后面把模型加载时从json中读取
         if btn_value == "btn_1":
-            cursor.execute("UPDATE rtsps SET id=?,username=?,password=?,rtsp_url=?",
-                           ("1", "admin", "jiankong123", form_data_1))
+            cursor.execute("UPDATE rtsps SET id=1,username=?,password=?,rtsp_url=?",
+                           ("admin", "jiankong123", form_data_1))
             conn.commit()
 
             flash("rtsp_1设置成功")
@@ -356,8 +356,8 @@ def set_rtsp():
                 shared_arr[0] = True
 
         if btn_value == "btn_2":
-            cursor.execute("UPDATE rtsps SET id=?,username=?,password=?,rtsp_url=?",
-                           ("2", "admin", "jiankong123", form_data_2))
+            cursor.execute("UPDATE rtsps SET id=2,username=?,password=?,rtsp_url=?",
+                           ("admin", "jiankong123", form_data_2))
             conn.commit()
 
             flash("rtsp_2设置成功")
@@ -484,7 +484,8 @@ def get_frame(q_img, shared_arr):
     with open("ai_config.json", mode="r") as f_ai:
         det_gap = json.load(f_ai)["gap_det"]
         f_ai.close()
-
+    cursor.close()
+    conn.close()
     num = 0
     while True:
         if shared_arr[1]:  # 读取ai配置--标志位:在ai配置页面确定后置为真
@@ -495,6 +496,8 @@ def get_frame(q_img, shared_arr):
 
         if shared_arr[0]:  # 读取rtsp配置
             cap_1.release()
+            conn = sqlite3.connect('users.db')
+            cursor = conn.cursor()
             cursor.execute('SELECT * FROM rtsps WHERE id = ?', ("1",))
             isExistId = cursor.fetchone()
             if isExistId:
@@ -505,7 +508,11 @@ def get_frame(q_img, shared_arr):
                 else:
                     create_notification("配置的流地址出错,请重新配置!")
                     cap_1 = cv2.VideoCapture(0)
+                cursor.close()
+                conn.close()
             else:
+                cursor.close()
+                conn.close()
                 continue  # 数据库中没找到流地址
         if cap_1.isOpened():
             if num % 24 != 0:
