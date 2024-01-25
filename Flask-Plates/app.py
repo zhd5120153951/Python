@@ -1,5 +1,4 @@
 import base64
-from email import message
 import requests
 from multiprocessing import Array, Lock, Manager
 from flask import Flask, render_template, request, redirect, url_for, flash, Response, jsonify
@@ -23,6 +22,7 @@ import multiprocessing as mp  # 推理时用多进程
 import threading  # 预览时用多线程
 import datetime
 import os
+import re
 import time
 from detect_plate import get_parser, load_model, init_model, detect_Recognition_plate, draw_result
 
@@ -41,7 +41,7 @@ from detect_plate import get_parser, load_model, init_model, detect_Recognition_
 
 # multiprocessing_logging多进程日志--不可以传参,全局使用
 # 1.创建日志器
-logger = logging.getLogger('my_logger')
+logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 # 2.创建文件处理器
 file_handler = logging.FileHandler('./log.txt')
@@ -149,9 +149,9 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        print(password)
+        # print(password)
         hashed_password = generate_password_hash(password)
-        print(hashed_password)
+        # print(hashed_password)
         with sqlite3.connect("users.db") as conn:
             cursor = conn.cursor()
             cursor.execute(
@@ -231,7 +231,7 @@ def get_system_usage():
         'disk_cap': disk_cap,
     }
 
-    print(data)
+    # print(data)
     return jsonify(data)
 
 # 获取IP
@@ -240,15 +240,15 @@ def get_system_usage():
 def get_ip_addr():
     ip_addr = {"local_ip": "", "wifi_ip": ""}
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    print(s)
+    # print(s)
     # 尝试连接非存在地址，来激活网络接口的 IP
     try:
         # 这里的地址不需要真实存在
         s.connect(("10.255.255.255", 1))
         ip_addr['local_ip'] = s.getsockname()[0]
 
-        print(ip_addr['local_ip'])
-        print(s.getsockname()[1])
+        # print(ip_addr['local_ip'])
+        # print(s.getsockname()[1])
 
     except:
         ip_addr['local_ip'] = 'N/A'
@@ -303,7 +303,7 @@ def set_ip():
     if request.method == "POST":
         new_ip = request.form.get('new_ip')
         interface = "eth0"  # Linux系统
-        print(new_ip)
+        # print(new_ip)
         if set_ip_addr(interface, new_ip):
             return redirect(url_for("ip_config"))
         else:
@@ -388,7 +388,7 @@ def set_rtsp():
             isExistId = cursor.fetchone()  # 所以用fetchone()
 
             if isExistId:  # 存在rtsp
-                print(type(isExistId[0]))
+                # print(type(isExistId[0]))
                 logger.info(isExistId[1])
                 logger.info(isExistId[2])
                 logger.info(isExistId[3])
@@ -479,6 +479,15 @@ def set_ai():
 
     return render_template("ai_setting.html", gap_det=gap_det)
 
+
+# 判断一个IP地址是否合规
+def is_valid_ip(ip_address):
+    # 使用正则表达式匹配IP地址的格式
+    pattern = '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
+    if re.match(pattern, ip_address):
+        return True
+    else:
+        return False
 # 获取图像函数--有两路摄像头就开两个进程
 # 区域入侵用的是队列--向两个进程传图
 # 这次用Manager
@@ -496,9 +505,13 @@ def get_frame(q_img, shared_arr):
     isExistId = cursor.fetchone()
 
     if isExistId:  # 初始就配好流地址
-        url = f"rtsp://{isExistId[1]}:{isExistId[2]}@{isExistId[3]}:554/Streaming/Channels/101"
-        logger.info(url)
-        cap_1 = cv2.VideoCapture(url)
+        if is_valid_ip(isExistId[3]):
+            url = f"rtsp://{isExistId[1]}:{isExistId[2]}@{isExistId[3]}:554/Streaming/Channels/101"
+            logger.info(url)
+            cap_1 = cv2.VideoCapture(url)
+        else:
+            logger.info(isExistId[3])
+            cap_1 = cv2.VideoCapture(0)  # 流地址不合规,用本地
     else:
         cap_1 = cv2.VideoCapture(0)  # 本地摄像头
     with open("ai_config.json", mode="r") as f_ai:
@@ -515,14 +528,20 @@ def get_frame(q_img, shared_arr):
             shared_arr[1] = False
 
         if shared_arr[0]:  # 读取rtsp配置
-            print("读取修改后的rtsp配置")
+            logger.info("读取修改后的rtsp配置")
             cap_1.release()
             cursor.execute('SELECT * FROM rtsps WHERE id = ?', ("1",))
             isExistId = cursor.fetchone()
             if isExistId:
-                shared_arr[0] = False
-                url = f"rtsp://{isExistId[1]}:{isExistId[2]}@{isExistId[3]}:554/Streaming/Channels/101"
-                cap_1 = cv2.VideoCapture(url)
+                if is_valid_ip(isExistId[3]):
+                    shared_arr[0] = False
+                    url = f"rtsp://{isExistId[1]}:{isExistId[2]}@{isExistId[3]}:554/Streaming/Channels/101"
+                    cap_1 = cv2.VideoCapture(url)
+                else:
+                    logger.info(isExistId[3])
+                    cap_1 = cv2.VideoCapture(0)
+            else:
+                continue  # 数据库中没找到流地址
         if cap_1.isOpened():
             ret_1, frame_1 = cap_1.read()
             if not ret_1:
@@ -600,7 +619,7 @@ def det_rec_model(q_img):
 
             if True:
                 cv2.imwrite(
-                    f"E:\\Source\\Github\\Python\\Flask-Python\\{cn}.jpg", ori_img)
+                    "E:\\Source\\Github\\Python\\Flask-Python\\"+str(cn)+".jpg", ori_img)
                 cn += 1
 
             else:
@@ -654,7 +673,6 @@ if __name__ == '__main__':
     proc_infer.start()
 
     # 设备管理界面的相关参数*******************
-    rtsp_dict = {"key_rtsp_1": None, "key_rtsp_2": None}  # rtsp地址
     ai_dict = {"gap_det": None}  # Ai配置字典--还有scoreThreshold,nmsThreshold
 
     # join()是阻塞:表示让主进程等待子进程结束之后，再执行主进程。

@@ -259,7 +259,7 @@ def draw_result(orgimg, dict_list, is_color=False):  # 车牌结果画出来
                                    (0, 0, 0), 21)
             # orgimg=cv2ImgAddText(orgimg,result_p,rect_area[0]-height_area,rect_area[1]-height_area-10,(0,255,0),height_area)
 
-    print(result_str)
+    # print(result_str)
     return orgimg
 
 
