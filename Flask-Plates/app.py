@@ -3,7 +3,7 @@ from email import message
 import requests
 from multiprocessing import Array, Lock, Manager
 from flask import Flask, render_template, request, redirect, url_for, flash, Response, jsonify
-from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, user_accessed
 from flask_wtf import FlaskForm
 from sqlalchemy import exists
 import torch
@@ -81,18 +81,26 @@ def init_db():
         connection.commit()
         connection.close()
 
-# 创建数据库表
+# 创建数据库users.db;再是用户登陆信息表users;流地址信息表rtsps
 
 
 def create_table():
-    with sqlite3.connect("users.db") as conn:
-        cursor = conn.cursor()
+    with sqlite3.connect("users.db") as conn:  # 这个的本质就是返回一个对象
+        cursor = conn.cursor()  # 获取游标
         cursor.execute(
-            '''CREATE TABLE IF NOT EXISTS users (
+            f'''CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT NOT NULL,
             password TEXT NOT NULL
             );''')
+        cursor.execute(
+            f'''CREATE TABLE IF NOT EXISTS rtsps (
+            id INTEGER PRIMARY KEY,
+            username TEXT NOT NULL,
+            password TEXT NOT NULL,
+            rtsp_url TEXT NOT NULL
+            );''')
+
 
 # 路由--first page
 
@@ -294,7 +302,7 @@ def set_ip_addr(interface="eth0", new_ip=None):
 def set_ip():
     if request.method == "POST":
         new_ip = request.form.get('new_ip')
-        interface = "eth0"
+        interface = "eth0"  # Linux系统
         print(new_ip)
         if set_ip_addr(interface, new_ip):
             return redirect(url_for("ip_config"))
@@ -312,9 +320,10 @@ def rtsp_config():
 # 预览
 
 
-def Preview(rtsp_url, index):
+def Preview(username, password, rtsp_url, index):
+    url = f"rtsp://{username}:{password}@{rtsp_url}:554/Streaming/Channels/101"
     # 使用OpenCV打开视频流
-    cap = cv2.VideoCapture(int(rtsp_url))
+    cap = cv2.VideoCapture(url)
     winname = "preview_" + index
     # 创建一个窗口来显示视频流
     cv2.namedWindow(winname, cv2.WINDOW_NORMAL)
@@ -341,6 +350,8 @@ def Preview(rtsp_url, index):
 
 @app.route('/set_rtsp', methods=['GET', 'POST'])
 def set_rtsp():
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
     if request.method == "POST":
         # btn_value = request.form.get("button","")
         btn_value = request.form.get("button")
@@ -354,61 +365,63 @@ def set_rtsp():
 
         # 把rtsp保存到json中存起来,AI设置中的参数,开关也是如此,后面把模型加载时从json中读取
         if btn_value == "btn_1":
-            # 打开json文件
-            with open("rtsp_urls.json", "w") as file:
-                #  将RTSP地址保存到JSON文件
-                rtsp_dict['key_rtsp_1'] = form_data_1
-                # json.dump(data_1,  file)
-                json.dump(rtsp_dict, file)
-                file.close()
-                flash("rtsp_1设置成功")
+            cursor.execute("UPDATE rtsps SET id=?,username=?,password=?,rtsp_url=?",
+                           ("1", "admin", "jiankong123", form_data_1))
+            conn.commit()
+
+            flash("rtsp_1设置成功")
             with lock:
                 shared_arr[0] = True
 
         if btn_value == "btn_2":
-            # 打开json文件
-            with open("rtsp_urls.json", "w") as file:
-                rtsp_dict['key_rtsp_2'] = form_data_2
-                # json.dump(data_2,  file)
-                json.dump(rtsp_dict, file)
-                file.close()
-                flash("rtsp_2设置成功")
+            cursor.execute("UPDATE rtsps SET id=?,username=?,password=?,rtsp_url=?",
+                           ("2", "admin", "jiankong123", form_data_2))
+            conn.commit()
+
+            flash("rtsp_2设置成功")
             with lock:
                 shared_arr[0] = True
 
         if btn_value == "prev_1":  # 用多线程预览--后面在改进
-            # 从json文件中读取rtsp地址
-            with open("rtsp_urls.json", "r") as file:
-                rtsp_url = json.load(file)["key_rtsp_1"]
+            cursor.execute('SELECT * FROM rtsps WHERE id = ?',
+                           ("1", ))  # 编号为1的只有一个
+            isExistId = cursor.fetchone()  # 所以用fetchone()
 
-                # 预览不用开读和取两个线程
-                # th_read = threading.Thread(
-                #     target=ReadFrame, args=(rtsp_url, cap_1))
-                # th_prev = threading.Thread(target=PrevFrame)
+            if isExistId:  # 存在rtsp
+                print(type(isExistId[0]))
+                logger.info(isExistId[1])
+                logger.info(isExistId[2])
+                logger.info(isExistId[3])
 
-                # th_read.start()
-                # th_prev.start()
-
-                th_prev = threading.Thread(
-                    target=Preview, args=(rtsp_url, "1"))
+                th_prev = threading.Thread(target=Preview, args=(
+                    isExistId[1], isExistId[2], isExistId[3], isExistId[0]))
                 th_prev.start()
 
-                file.close()
+            else:  # 可以给个弹窗提示
+                logger.info("没有对应的id=1摄像头流")
 
         if btn_value == "prev_2":  # 用多线程预览--后面在改进--而且这里必须要用多线程或者多进程
-            # 从json文件中读取rtsp地址
-            with open("rtsp_urls.json", "r") as file:
-                rtsp_url = json.load(file)["key_rtsp_2"]
+            cursor.execute('SELECT * FROM rtsps WHERE id = ?',
+                           ("2", ))  # 编号为1的只有一个
+            isExistId = cursor.fetchone()  # 所以用fetchone()
 
-                th_prev = threading.Thread(
-                    target=Preview, args=(rtsp_url, "2"))
+            if isExistId:  # 存在rtsp
+                logger.info(isExistId[1])
+                logger.info(isExistId[2])
+                logger.info(isExistId[3])
+
+                th_prev = threading.Thread(target=Preview, args=(
+                    isExistId[1], isExistId[2], isExistId[3], isExistId[0]))
                 th_prev.start()
-
-                file.close()
+            else:
+                logger.info("没有对应id=2摄像头的流")
     else:
         # 首次请求或者GET请求时，渲染表单并传入上次输入的值
         form_data_1 = request.args.get('new_rtsp_1', '')
         form_data_2 = request.args.get('new_rtsp_2', '')
+    # 数据库关闭
+    cursor.close()
+    conn.close()
 
     return render_template("rtsp_config.html", new_rtsp_1=form_data_1, new_rtsp_2=form_data_2)
 
@@ -474,21 +487,25 @@ def set_ai():
 def get_frame(q_img, shared_arr):
     # print("get_frame process pid:%s" % os.getpid())
     logger.info("get_frame process pid:%s" % os.getpid())
-    # 读取上一次保存的配置
-    with open("rtsp_urls.json", "r") as f_rtsp:
-        rtsp_url = json.load(f_rtsp)  # 不可以连续load
-        rtsp_url_1 = rtsp_url["key_rtsp_1"]
-        # rtsp_url_2 = rtsp_url["key_rtsp_2"]
-        f_rtsp.close()
+
+    url = None
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM rtsps WHERE id = ?',
+                   ("1", ))
+    isExistId = cursor.fetchone()
+
+    if isExistId:  # 初始就配好流地址
+        url = f"rtsp://{isExistId[1]}:{isExistId[2]}@{isExistId[3]}:554/Streaming/Channels/101"
+        logger.info(url)
+        cap_1 = cv2.VideoCapture(url)
+    else:
+        cap_1 = cv2.VideoCapture(0)  # 本地摄像头
     with open("ai_config.json", mode="r") as f_ai:
         det_gap = json.load(f_ai)["gap_det"]
         # print(type(det_gap))
         f_ai.close()
-    # 配置文件中的流地址
-    logger.info(rtsp_url_1)
-    # cap_1 = cv2.VideoCapture(0+cv2.CAP_DSHOW)  # 交付时要改回str
-    cap_1 = cv2.VideoCapture(rtsp_url_1)
-    # cap_2 = cv2.VideoCapture(int(rtsp_url_2))
+
     while True:
         if shared_arr[1]:  # 读取ai配置--标志位:在ai配置页面确定后置为真
             logger.info("读取修改后的ai配置")
@@ -500,15 +517,12 @@ def get_frame(q_img, shared_arr):
         if shared_arr[0]:  # 读取rtsp配置
             print("读取修改后的rtsp配置")
             cap_1.release()
-            # cap_2.release()
-            with open("rtsp_urls.json", "r") as f_rtsp:
-                rtsp_url = json.load(f_rtsp)  # 不可以连续load
-                rtsp_url_1 = rtsp_url["key_rtsp_1"]
-                # rtsp_url_2 = rtsp_url["key_rtsp_2"]
-                f_rtsp.close()
-            shared_arr[0] = False
-            cap_1 = cv2.VideoCapture(rtsp_url_1)
-            # cap_2 = cv2.VideoCapture(int(rtsp_url_2))
+            cursor.execute('SELECT * FROM rtsps WHERE id = ?', ("1",))
+            isExistId = cursor.fetchone()
+            if isExistId:
+                shared_arr[0] = False
+                url = f"rtsp://{isExistId[1]}:{isExistId[2]}@{isExistId[3]}:554/Streaming/Channels/101"
+                cap_1 = cv2.VideoCapture(url)
         if cap_1.isOpened():
             ret_1, frame_1 = cap_1.read()
             if not ret_1:
@@ -524,7 +538,7 @@ def get_frame(q_img, shared_arr):
                 # cv2.waitKey(det_gap)
         else:
             cap_1.release()
-            cap_1 = cv2.VideoCapture(rtsp_url_1)
+            cap_1 = cv2.VideoCapture(url)
 
 
 # image转base64编码
@@ -558,6 +572,7 @@ def det_rec_model(q_img):
     logger.info("detect model params: %.2fM,rec model params: %.2fM" %
                 (total_det / 1e6, total_rec / 1e6))
 
+    cn = 1
     # 隔几秒检测一次,但是这里只推理,隔几秒的图由读图子进程控制
     while True:
         if q_img.qsize() == 0:
@@ -585,7 +600,8 @@ def det_rec_model(q_img):
 
             if True:
                 cv2.imwrite(
-                    f"E:\\Source\\Github\\Python\\Flask-Python\\1.jpg", ori_img)
+                    f"E:\\Source\\Github\\Python\\Flask-Python\\{cn}.jpg", ori_img)
+                cn += 1
 
             else:
                 # 发送post请求给服务端
@@ -611,10 +627,13 @@ def det_rec_model(q_img):
 
 
 if __name__ == '__main__':
+    # 初始化全局变量
+    create_table()
+
     # 5.启用多进程日志记录
     multiprocessing_logging.install_mp_handler()
 
-    # 多进程
+    # 多进程部分
     q_img = mp.Queue(maxsize=10)  # 装图像的队列--目前只要一个摄像头
     # 共享数组Array--is_rtsp_config,is_ai_config
     shared_arr = Array('b', [False, False])
@@ -622,7 +641,7 @@ if __name__ == '__main__':
     # init
     mp.set_start_method('spawn', force=True)
 
-    # 开启两个子进程--读流和推理
+    # 开启两个子进程--取流和推理
     proc_get = mp.Process(target=get_frame, args=(
         q_img, shared_arr))
     # 参数可以传递进子进程,但是模型需要在里面加载
@@ -637,9 +656,6 @@ if __name__ == '__main__':
     # 设备管理界面的相关参数*******************
     rtsp_dict = {"key_rtsp_1": None, "key_rtsp_2": None}  # rtsp地址
     ai_dict = {"gap_det": None}  # Ai配置字典--还有scoreThreshold,nmsThreshold
-
-    # 初始化全局变量
-    create_table()
 
     # join()是阻塞:表示让主进程等待子进程结束之后，再执行主进程。
 
