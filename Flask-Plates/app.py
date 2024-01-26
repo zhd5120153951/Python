@@ -347,7 +347,7 @@ def set_rtsp():
 
         # 把rtsp保存到json中存起来,AI设置中的参数,开关也是如此,后面把模型加载时从json中读取
         if btn_value == "btn_1":
-            cursor.execute("UPDATE rtsps SET id=1,username=?,password=?,rtsp_url=?",
+            cursor.execute("UPDATE rtsps SET id=1,username=?,password=?,rtsp_url=? WHERE rowid=1",
                            ("admin", "jiankong123", form_data_1))
             conn.commit()
 
@@ -356,7 +356,7 @@ def set_rtsp():
                 shared_arr[0] = True
 
         if btn_value == "btn_2":
-            cursor.execute("UPDATE rtsps SET id=2,username=?,password=?,rtsp_url=?",
+            cursor.execute("UPDATE rtsps SET id=2,username=?,password=?,rtsp_url=? WHERE rowid=2",
                            ("admin", "jiankong123", form_data_2))
             conn.commit()
 
@@ -365,8 +365,7 @@ def set_rtsp():
                 shared_arr[0] = True
 
         if btn_value == "prev_1":  # 用多线程预览--后面在改进
-            cursor.execute('SELECT * FROM rtsps WHERE id = ?',
-                           ("1", ))  # 编号为1的只有一个
+            cursor.execute('SELECT * FROM rtsps WHERE id = 1')  # 编号为1的只有一个
             isExistId = cursor.fetchone()  # 所以用fetchone()
 
             if isExistId:  # 存在rtsp
@@ -378,8 +377,7 @@ def set_rtsp():
                 create_notification("没有对应的id=1摄像头流")
 
         if btn_value == "prev_2":  # 用多线程预览--后面在改进--而且这里必须要用多线程或者多进程
-            cursor.execute('SELECT * FROM rtsps WHERE id = ?',
-                           ("2", ))  # 编号为1的只有一个
+            cursor.execute('SELECT * FROM rtsps WHERE id = 2')  # 编号为1的只有一个
             isExistId = cursor.fetchone()  # 所以用fetchone()
 
             if isExistId:  # 存在rtsp
@@ -468,8 +466,7 @@ def get_frame(q_img, shared_arr):
     cap_1 = None
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM rtsps WHERE id = ?',
-                   ("1", ))
+    cursor.execute('SELECT * FROM rtsps WHERE id = 1')
     isExistId = cursor.fetchone()
 
     if isExistId:  # 初始就配好流地址
@@ -498,7 +495,7 @@ def get_frame(q_img, shared_arr):
             cap_1.release()
             conn = sqlite3.connect('users.db')
             cursor = conn.cursor()
-            cursor.execute('SELECT * FROM rtsps WHERE id = ?', ("1",))
+            cursor.execute('SELECT * FROM rtsps WHERE id = 1')
             isExistId = cursor.fetchone()
             if isExistId:
                 if is_valid_ip(isExistId[3]):
