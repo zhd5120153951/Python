@@ -1,0 +1,44 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        td,
+        img {
+            width: 140px;
+            height: 100px;
+        }
+    </style>
+    <script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+    <script>
+        $(function () {
+            //点击表格中的图片,则显示当前点击的图
+            // attr()
+            $('td img').click(function () {
+                var src = $(this).attr('src');
+                $('#showImg').attr('src', src);//JQ写法
+                // $('#showImg').attr('src', this, src);//JS写法
+            })
+
+        })
+
+    </script>
+</head>
+
+<body>
+    <table border="1">
+        <tr>
+            <td><img src="images/0071.jpg" /></td>
+            <td><img src="images/0074.jpg" /></td>
+            <td><img src="images/0094.jpg" /></td>
+            <td><img src="images/0192.jpg" /></td>
+            <td><img src="images/0196.jpg" /></td>
+        </tr>
+    </table>
+    <img src="images/0071.jpg" id="showImg" />
+</body>
+
+</html>

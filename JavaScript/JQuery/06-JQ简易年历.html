@@ -1,0 +1,131 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        ul,
+        li {
+            list-style: none;
+        }
+
+        #box {
+            width: 220px;
+            height: 350px;
+            background: #ccc;
+        }
+
+        ul {
+            overflow: hidden;
+        }
+
+        li {
+            float: left;
+            width: 58px;
+            height: 53px;
+            border: 1px solid #aaa;
+            background: #444;
+            color: white;
+            margin-left: 10px;
+            margin-top: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        #showInfo {
+            width: 200px;
+            height: 50px;
+            background: #aaa;
+            border: 1px solid white;
+            margin: 10px;
+        }
+
+        .active {
+            color: orange;
+            background: white;
+            border: 1px solid red;
+        }
+    </style>
+    <script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+    <script>
+        $(function () {
+            // addClass()添加一个类
+            // removeClass('active')删除指定类
+            // siblings()兄弟节点
+            $('li').click(function () {
+                $(this).addClass('active').siblings().removeClass('active');
+                // 方式1
+                // var month = $(this).find('h2').html();//找到当前对象的HTML内容
+                // 方式2
+                var month = $(this).index() + 1;//注意下标从0开始的
+                $('#showInfo').html(month + '月份 你好呀!');//替换原表签内容
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <div id="box">
+        <ul>
+            <li class="active">
+                <h2>1</h2>
+                <p>Jan</p>
+            </li>
+            <li>
+                <h2>2</h2>
+                <p>Feb</p>
+            </li>
+            <li>
+                <h2>3</h2>
+                <p>Mar</p>
+            </li>
+            <li>
+                <h2>4</h2>
+                <p>Apr</p>
+            </li>
+            <li>
+                <h2>5</h2>
+                <p>May</p>
+            </li>
+            <li>
+                <h2>6</h2>
+                <p>Jun</p>
+            </li>
+            <li>
+                <h2>7</h2>
+                <p>Jul</p>
+            </li>
+            <li>
+                <h2>8</h2>
+                <p>Aug</p>
+            </li>
+            <li>
+                <h2>9</h2>
+                <p>Sep</p>
+            </li>
+            <li>
+                <h2>10</h2>
+                <p>Oct</p>
+            </li>
+            <li>
+                <h2>11</h2>
+                <p>Nov</p>
+            </li>
+            <li>
+                <h2>12</h2>
+                <p>Dec</p>
+            </li>
+        </ul>
+        <div id="showInfo">1月份 你好呀!</div>
+    </div>
+
+</body>
+
+</html>

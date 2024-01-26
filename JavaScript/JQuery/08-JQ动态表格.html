@@ -1,0 +1,101 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        ID:<input type="text" id="uid"> <br />
+        姓名:<input type="text" id="uname"> <br />
+        电话:<input type="text" id="uphone"> <br />
+        <button id="save">保存</button>
+    </div>
+    <hr>
+    <table border="1" id="utable">
+        <!-- 字段 -->
+        <tr>
+
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>操作</th>
+        </tr>
+        <!-- 内容 --写死的,后面展示用JS动态加入节点-->
+        <!-- <tr>   
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>
+                <a href="#">删除</a>
+            </td>
+        </tr> -->
+    </table>
+
+</body>
+<script>
+    //点击保存按钮
+    save.onclick = function () {
+        //获取输入框内容
+        var id = uid.value;
+        var name = uname.value;
+        var phone = uphone.value;
+        console.log(id, name, phone);
+
+        //DOM操作
+        // 方式一 推荐使用
+        // 1.创建tr父节点
+        var tr = document.createElement('tr');
+        // 加入到utable父节点中
+        utable.appendChild(tr);
+        // 创建td子节点
+        var td1 = document.createElement('td');
+        var td2 = document.createElement('td');
+        var td3 = document.createElement('td');
+        var td4 = document.createElement('td');
+        // 加入到tr父节点中
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        // 2.添加内容
+        td1.innerText = id;
+        td2.innerText = name;
+        td3.innerText = phone;
+        //html页面需要用innerHTML
+        td4.innerHTML = '<a href="#">删除</a>';
+
+        // 2.删除节点
+
+        td4.onclick = function () {
+            utable.removeChild(this.parentNode);
+        }
+
+
+        // 方式二---推荐
+        // 1.创建节点
+        // var tr = document.createElement('tr');
+        // utable.appendChild(tr);
+        // tr.innerHTML = `<tr>
+        //     <td>${id}</td>
+        //     <td>${name}</td>
+        //     <td>${phone}</td>
+        //     <td>
+        //         <a href="#">删除</a>
+        //     </td>
+        //     </tr>`
+
+        // // 2.删除节点
+        // tr.getElementsByTagName('a')[0].onclick = function () {
+        //     console.log('点击了', this.parentNode.parentNode);
+        //     //删除当前行
+        //     utable.removeChild(tr);
+        //     // utable.removeChild(this.parentNode.parentNode);
+        // }
+
+    }
+</script>
+
+</html>

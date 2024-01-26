@@ -1,0 +1,51 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="box">
+        <p>Python</p>
+        <p>Javascript</p>
+
+    </div>
+    <button>按钮</button>
+</body>
+<script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+
+
+<script>
+    $(function () {
+        //JQ文档操作:DOM操作
+        //JS DOM操作:createElement() appendChild() removeChild() cloneNode(true)
+
+        //JQ文档操作
+        // 1.创建节点
+        var div = $('<div><b>Go</b></div>');
+        // 2.添加
+        // append(),appendTo()
+        // $('#box').append(div);
+        div.appendTo('#box');
+
+        // 清空节点 empty()
+        // $('#box').empty();
+
+        // 删除节点 remove()
+        // $('#box').remove();//删除自己
+
+        // 克隆 clone()--不会克隆事件的--除非加上true参数
+        $('button').click(function () {
+            console.log('hello');
+        })
+        $('button').clone().appendTo('body');
+        $('button').clone(true).appendTo('body');
+
+
+    })
+
+</script>
+
+</html>

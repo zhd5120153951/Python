@@ -1,0 +1,49 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+    </ul>
+    <hr>
+    <div class="box">
+        <div>
+            <span>11</span>
+            <a href="#">加入购物车</a>
+        </div>
+        <div>
+            <span>22</span>
+            <a href="#">加入购物车</a>
+        </div>
+        <div>
+            <span>33</span>
+            <a href="#">加入购物车</a>
+        </div>
+        <div>
+            <span>44</span>
+            <a href="#">加入购物车</a>
+        </div>
+    </div>
+</body>
+<script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+<script>
+    $('li').click(function () {
+        // index()按照兄弟节点的个数来排序的--且从0开始
+        console.log($(this).index('li'));//注意我们获取的标签有可能不在第一个噢
+        //但是可以具体到某个标签
+        $('.box div a').click(function () {
+            // 按照指定的选择器的所有标签排序,去下表
+            console.log($(this).index('.box div a'));
+        })
+    })
+</script>
+
+</html>

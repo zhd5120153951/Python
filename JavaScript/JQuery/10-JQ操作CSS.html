@@ -1,0 +1,39 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body style="height: 2000px">
+    <div
+        style="width: 100px;height: 100px;background-color: orange; padding: 10px;border: 10px solid blue;margin: 10px;">
+    </div>
+
+</body>
+<script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+<script>
+    $(function () {
+        // css()样式设计
+        $(document).scroll(function () {
+            //获取scrollTop的值
+            console.log($(window).scrollTop());
+        })
+        $(document).click(function () {
+            // 设置页面滚动的值
+            $(window).scrollTop(100);
+        })
+        // width() height() innerWidth() innerHeight() outerWidth() outerHeight()
+
+        console.log($('div').css('width'));//设置css样式宽度--不推荐
+        console.log($('div').width())//设置css样式宽度
+        console.log($('div').innerWidth());//设置css样式宽度
+        console.log($('div').outerWidth());//设置css样式宽度
+        console.log($('div').outerWidth(true));//设置css样式宽度
+
+    })
+</script>
+
+</html>
