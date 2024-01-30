@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="#">动态添加按钮 </a>
+    <div style="width: 400px;height: 100px;">
+        hello
+        <button>按钮</button>
+    </div>
+</body>
+<script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+<script>
+    $(function(){
+        // JQ事件开头都以on开始,JS不需要写on
+        // $('button').click(function(){
+            // console.log("点击click");
+        // })
+
+        // on()事件--JQ方式
+        // $('button').on('click',function(){
+        //     console.log('click....');
+        // })
+
+        // // 绑定多个事件
+        // $('button').on({
+        //     'mouseenter':function(){
+        //     console.log("移入。。。。。");},
+        //     'mouseleave':function(){
+        //         console.log("移除.....");
+        //     }})
+
+
+        //on用于事件委托---用于动态网页
+        $('div').on('click','button',function(){
+            console.log("委托事件。。。。。button");
+        })
+        //动态添加按钮后，就可以用委托为其添加事件，不用委托就不行--因为没有按钮
+        $('a').click(function(){
+            $('<button>西南流</button>').appendTo('div');
+        })
+
+    })
+</script>
+</html>
