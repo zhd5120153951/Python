@@ -1,0 +1,46 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn">开始动画</button>
+    <div style="width: 100px;height: 100px;background-color: green;"></div>
+    <div style="width: 100px;height: 100px;background-color: red;display: none;"></div>
+    <hr>
+    <button id="btn2">开始动画</button>
+    <button id="btn3">停止</button>
+    <div id="box" style="width: 100px;height: 100px;background-color: red;position: absolute;left: 10px;top: 200px;"></div>
+</body>
+<Script src="js/jquery-3.5.1/jquery-3.5.1.js"></Script>
+<script>
+    $(function(){
+        $('#btn').click(function(){
+            // $('div').show();显示--非动画
+            // $('div').hide();
+            // $('div').slideDown(3000);
+            // $('div').slideUp(5000);
+            // $('div').fadeIn(3000);
+            // $('div').fadeOut(5000);
+
+            $('div').fadeTo(5000,0.5);//时间，透明度
+
+        })
+        $('#btn2').click(function(){
+            $('#box').animate({left:200,top:300},4000,function(){
+                console.log("动画完成");//4秒内完成
+            })
+
+            $('#box').animate({left:200},1000)
+                     .animate({top:300},1000)
+                     .animate({width:200},1000)
+                     .animate({height:50},2000)
+        })
+        $('#btn3').click(function () {
+            $('#box').stop(true);//加true表示停止后再起，会继续执行，不加则不会继续
+            $('#box').finish();//直接停止，并到最后画面
+        })
+    })
+</script>
+</html>
