@@ -1,0 +1,36 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+    <script>
+        $(function () {
+            $('img').mousedown(function (e) {
+                e.preventDefault();
+                var x = e.offsetX;
+                var y = e.offsetY;
+                //在按下后的事件
+                $(document).mousemove(function (e) {
+                    $('img').css({
+                        left: e.pageX - x,
+                        top: e.pageY - y
+                    })
+                })
+                $(document).mouseup(function () {
+                    $(document).off('mousemove mouseup')
+                })
+            })
+
+        })
+    </script>
+
+</head>
+
+<body style="background-color: black;">
+    <img src="images/0196.jpg" width="200" height="200" style="position: absolute;left: 10px;top: 10px;" />
+
+</body>
+
+</html>

@@ -1,1 +1,62 @@
 <!-- Ajax就是用来和后端服务通信的 -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+
+</body>
+<script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+<script>
+    // JS写法
+    // xhr = new XMLHttpRequest()
+    // xhr.open('get', 'json/person.json', true)
+    // xhr.send('name=lisi')
+
+    //Ajax,JQ写法
+    $.ajax({
+        type: 'get',//http请求方式,默认是get
+        url: '../json/person.json',//请求的后端地址,必须提供
+        data: { name: 'lisi' },//参数
+        async: true,//是否异步
+
+        //请求成功--回调处理
+        success: function (ret) {
+            // Jquery经过json解析
+            console.log(ret);
+        },
+        //失败--回调
+        error: function (e) {
+            console.log(e);
+        }
+    })
+    // $.get()--不带参数
+    $.get('../json/person.json', function (ret) {
+        console.log(ret);
+    })
+    //带参数-1
+    $.get('../json/person.json', { name: 'lisi' }, function (ret) {
+        console.log(ret);
+    })
+    //带参数-2
+    $.get('../json/person.json?name=lisi', function (ret) {
+        console.log(ret);
+    })
+
+    // $.post()
+    $.post('http://127.0.0.1:5000/post/', {
+        name: 'lisi', function(ret) {
+            console.log(ret);
+        }
+    })
+
+
+
+</script>
+
+</html>

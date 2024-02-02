@@ -1,0 +1,97 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        ul li {
+            list-style: none;
+        }
+
+        #box {
+            width: 300px;
+            height: 150px;
+            margin: 100px auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #list1 {
+            height: 26px;
+        }
+
+        #list1 li {
+            float: left;
+            width: 300px;
+            height: 26px;
+            background: #ddd;
+            line-height: 26px;
+            padding: 0 10px;
+        }
+
+        #list2 {
+            width: 480px;
+            height: 320px;
+            background: #abcdef;
+            padding: 0;
+            position: relative;
+        }
+
+        #list2 li,
+        #list2 img {
+            width: 480px;
+            height: 320px;
+        }
+
+        #list2 li {
+            position: absolute;
+        }
+
+        #list2 li.hover {
+            position: absolute;
+        }
+
+        #list1 li.hover {
+            background: #ABCDEF;
+            color: white;
+        }
+    </style>
+    <script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+    <script>
+        $(function () {
+            // 默认显示第一个
+            $('#list2').find('li').eq(0).show().siblings().hide();
+            //鼠标移入事件
+            $('list1 li').mouseenter(function () {
+                var index = $(this).index();
+                $('#list2 li').eq(index).show().siblings().hide();
+                $(this).addClass('hover').siblings().removeClass('hover');
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <div id="box">
+        <ul id="list1">
+            <li class="hover">tab1</li>
+            <li>tab2</li>
+            <li>tab3</li>
+        </ul>
+        <ul id="list2">
+            <li><img src="images/0074.jpg" alt=""></li>
+            <li><img src="images/0094.jpg" alt=""></li>
+            <li><img src="images/0196.jpg" alt=""></li>
+        </ul>
+
+    </div>
+</body>
+
+</html>

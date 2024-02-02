@@ -1,0 +1,24 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="box">box</div>
+</body>
+<script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+<script src="js/jquery.demo.js"></script>
+<script>
+    $(function () {
+        console.log($.max(3, 7));
+        console.log($.min(13, 7));
+
+        $('#box').func1();
+        $('box').changeStyle({ color: 'red' });
+    })
+</script>
+
+</html>

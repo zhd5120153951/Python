@@ -1,0 +1,37 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+
+</body>
+<script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+<script>
+    $(function () {
+        // each()遍历数组
+        $.each([10, 3, 56, 77, 34], function (i, n) {
+            console.log(i, n);
+        })
+        // 遍历对象
+        $.each({ name: '张三', age: 33 }, function (key, value) {
+            console.log(key, value);
+        })
+        //常用
+        $('div').each(function (i, div) {
+            // console.log(arguments);
+            // console.log(i, div);
+
+            // console.log(this);//JS对象
+            console.log($(this).html());//JQ对象
+        })
+    })
+</script>
+
+</html>

@@ -1,0 +1,54 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 引入echarts -->
+    <script src="js/dist/echarts.js"></script>
+</head>
+
+<body>
+    <div id="main" style="width: 600px;height: 400px;"></div>
+</body>
+<script>
+    // 文档很详细--细看文档
+    //1.创建ehcarts对象
+    var myCharts = echarts.init(document.getElementById('main'));
+    //2.配置
+    var option = {
+        //标题
+        title: {
+            text: 'echarts入门'
+        },
+        tooltip: {},
+        //图例
+        legend: {
+            data: ['销量', '销量2']
+        },
+        //x轴
+        xAxis: {
+            data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '裤子']
+        },
+        //y轴
+        yAxis: {
+
+        },
+        //系列数据
+        series: [{
+            name: '销量',
+            type: 'bar',
+            data: [5, 20, 36, 10, 10, 20]
+        },
+        {
+            name: '销量2',
+            type: 'bar',
+            data: [7, 34, 22, 4, 56, 13]
+        }
+        ]
+    };
+    // 3.echarts设置配置
+    myCharts.setOption(option);
+</script>
+
+</html>

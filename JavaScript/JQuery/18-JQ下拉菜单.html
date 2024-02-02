@@ -1,0 +1,76 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        ul li {
+            list-style: none;
+        }
+
+        body {
+            background: #ccc;
+        }
+
+        #box {
+            width: 150px;
+            height: 20px;
+            border: 1px solid white;
+            cursor: pointer;
+        }
+
+        #list {
+            width: 100px;
+            height: 150px;
+            background: black;
+            border: 1px solid white;
+            display: none;
+        }
+
+        #list li {
+            color: white;
+            border-bottom: 1px dashed white;
+            height: 29px;
+            line-height: 29px;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+    <script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+    <script>
+        $(function () {
+            $('#box,#list').mouseenter(function () {
+                $('#list').show();
+            })
+            $('#box,#list').mouseleave(function () {
+                $('#list').hide();
+            })
+            $('#list li').mouseenter(function () {
+                $(this).css('background', 'gray').siblings().css('background', 'black');
+            })
+            $('#list li').click(function () {
+                $('#box').html($(this).html());
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <div id="box">请选择游戏名称</div>
+    <ul id="list">
+        <li>狗熊联盟</li>
+        <li>魔兽世界</li>
+        <li>GTA5</li>
+        <li>赛博朋克2077</li>
+        <li>荒野求生</li>
+    </ul>
+</body>
+
+</html>

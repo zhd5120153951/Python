@@ -5,15 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        *{
+        * {
             margin: 0;
             padding: 0;
             border: none;
         }
-        ul{
+
+        ul {
             list-style: none;
         }
-        #box{
+
+        #box {
             width: 300px;
 
             height: 150px;
@@ -21,13 +23,15 @@
             overflow: hidden;
             position: relative;
         }
-        #box #list{
+
+        #box #list {
             width: 1500px;
-            position:absolute;
+            position: absolute;
             left: 0px;
             top: 0;
         }
-        #box #list li{
+
+        #box #list li {
             float: left;
             width: 300px;
             height: 150px;
@@ -35,16 +39,19 @@
             text-align: center;
             line-height: 150px;
         }
-        #box #list li img{
+
+        #box #list li img {
             width: 100%;
             height: 100%;
         }
-        #box #list2{
+
+        #box #list2 {
             position: absolute;
             left: 30%;
             bottom: 10px;
         }
-        #box #list2 li{
+
+        #box #list2 li {
             float: left;
             width: 20px;
             height: 20px;
@@ -56,11 +63,14 @@
             cursor: pointer;
             font-size: 12px;
         }
-        #box #list2 li.active{
+
+        #box #list2 li.active {
             background-color: pink;
             color: white;
         }
-        #prev,#next{
+
+        #prev,
+        #next {
             width: 20px;
             height: 30px;
             position: absolute;
@@ -71,12 +81,14 @@
             line-height: 30px;
             cursor: pointer;
         }
-        #prev{
+
+        #prev {
             left: 0;
         }
-        #next{
+
+        #next {
             right: 0;
-        }        
+        }
     </style>
 </head>
 
@@ -109,32 +121,32 @@
     // var firstLi=lis[0].clpneNode(true);
     // list.appendChild(firstLi);
     // JQ
-    $('#list').append( $('#list li:first').clone(true));
-    
+    $('#list').append($('#list li:first').clone(true));
+
     // list.style.width=lis.length*300+'px';//JS
     var size = $('#list li').length;
     console.log(size);
-    $('#list').css({width: size * 300 });
+    $('#list').css({ width: size * 300 });
 
-    var n=0;
-    var timer=setInterval(function(){
+    var n = 0;
+    var timer = setInterval(function () {
         n++;
         move();
-    },3000);
+    }, 1000);
 
-    function move(){
-        if(n>size-1){
+    function move() {
+        if (n > size - 1) {
             // list.style.left=(lis.length-1)*-300+'px';//JS
-            $('#list').css({left:0});//JQ
-            n=1;
+            $('#list').css({ left: 0 });//JQ
+            n = 1;
         }
-        if(n<0){
+        if (n < 0) {
             // list.style.left=(lis.length-1)*-300+'px';//JS
-            $('#list').css({left:(size-1)*-300});//JQ
-            n=size-2;
+            $('#list').css({ left: (size - 1) * -300 });//JQ
+            n = size - 2;
         }
 
-        $('#list').stop(true).animate({left:n*-300});//JQ写法
+        $('#list').stop(true).animate({ left: n * -300 });//JQ写法
 
         //JS
         // for(var i=0;i<lis2.length;i++){
@@ -143,7 +155,7 @@
         // lis2[lis.length-1].className='active';
 
         // JQ
-        $('#list2 li').eq(n%(size-1)).addClass('active').siblings().removeClass('active');
+        $('#list2 li').eq(n % (size - 1)).addClass('active').siblings().removeClass('active');
     }
 
     //给四个小按钮添加事件
@@ -154,8 +166,8 @@
     //         move();
     //     }
     // }
-    $('#list2 li').mouseenter(function(){
-        n=$(this).index();
+    $('#list2 li').mouseenter(function () {
+        n = $(this).index();
         move();
     })
 
@@ -174,20 +186,20 @@
 
     // JQ
     $('#box').hover(
-    function(){
-        clearInterval(timer);
-    },
-    function() {
-        timer=setInterval(function(){
-            n++;
-            move();
-        },3000);
-    },)
-    $('#next').click(function(){
+        function () {
+            clearInterval(timer);
+        },
+        function () {
+            timer = setInterval(function () {
+                n++;
+                move();
+            }, 1000);
+        },)
+    $('#next').click(function () {
         n++;
         move();
     })
-    $('#prev').click(function(){
+    $('#prev').click(function () {
         n--;
         move();
     })

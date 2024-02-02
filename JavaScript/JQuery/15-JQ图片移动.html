@@ -1,0 +1,27 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/jquery-3.5.1/jquery-3.5.1.js"></script>
+    <script>
+        $(function () {
+            $(document).mousemove(function (e) {
+                $('img').css({
+                    //光标在中心
+                    left: e.pageX - $('img').width() / 2,
+                    top: e.pageY - $('img').height() / 2
+                })
+            })
+        })
+    </script>
+
+</head>
+
+<body style="background-color: black;">
+    <img src="images/0196.jpg" width="200" height="200" style="position: absolute;left: 10px;top: 10px;" />
+
+</body>
+
+</html>
