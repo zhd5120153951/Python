@@ -10,6 +10,8 @@
 ``flask db init ``
 
 ``flask db migrate``
+flask db migrate出现问题的解决方案:
+![alt text](image.png)
 
 ``flask db upgrade``
 

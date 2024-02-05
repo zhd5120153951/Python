@@ -12,7 +12,7 @@ class UserModel(db.Model):
 
 
 class EmailCaptchaModel(db.Model):
-    __tablename__ = "email_captcha"
+    __tablename__ = "email-captcha"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(100), nullable=False)
     captcha = db.Column(db.String(100), nullable=False)
