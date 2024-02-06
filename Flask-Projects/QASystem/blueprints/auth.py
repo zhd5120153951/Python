@@ -1,11 +1,10 @@
 import random
 import string
-import queue
 import threading
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import EmailCaptchaModel, UserModel
 from flask import Blueprint, render_template, jsonify, redirect, url_for, session
-from exts import mail, db, email_queue
+from exts import mail, db
 from flask_mail import Message
 from flask import request
 from .forms import RegisterForm, LoginForm
@@ -13,10 +12,18 @@ from .forms import RegisterForm, LoginForm
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 
-# 如果没有指定methods参数，默认就是get请求
+def async_send_mail(message):
+    from app import app
+    with app.app_context():
+        mail.send(message)
 
 
-@bp.route("/login", methods=['GET', 'POST'])
+def send_mail(message):
+    t = threading.Thread(target=async_send_mail, args=(message,))
+    t.start()
+
+
+@bp.route("/login", methods=['GET', 'POST'])  # 如果没有指定methods参数，默认就是get请求
 def login():
     if request.method == 'GET':
         return render_template("login.html")
@@ -80,7 +87,8 @@ def get_email_captcha():
     # 发邮件属于I/O操作--异步--改进方法:消息队列异步发送
     message = Message(subject="知了传课验证码", recipients=[
                       email], body=f"您的验证码是{captcha}")
-    mail.send(message)
+    # mail.send(message)
+    send_mail(message)  # 多线程异步
 
     # memcached/redis--推荐,难度大
     # 用数据库表的方式存储--不推荐-简单
