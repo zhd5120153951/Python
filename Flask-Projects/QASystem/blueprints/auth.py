@@ -1,9 +1,11 @@
 import random
 import string
+import queue
+import threading
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import EmailCaptchaModel, UserModel
 from flask import Blueprint, render_template, jsonify, redirect, url_for, session
-from exts import mail, db
+from exts import mail, db, email_queue
 from flask_mail import Message
 from flask import request
 from .forms import RegisterForm, LoginForm
@@ -12,6 +14,8 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 
 # 如果没有指定methods参数，默认就是get请求
+
+
 @bp.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -72,12 +76,16 @@ def get_email_captcha():
     captcha = random.sample(source, 4)
     print(captcha)
     captcha = "".join(captcha)  # "-".join(list)
+
+    # 发邮件属于I/O操作--异步--改进方法:消息队列异步发送
     message = Message(subject="知了传课验证码", recipients=[
                       email], body=f"您的验证码是{captcha}")
     mail.send(message)
+
     # memcached/redis--推荐,难度大
     # 用数据库表的方式存储--不推荐-简单
-    email_captcha = EmailCaptchaModel(email, captcha)  # id自增,所以可不传
+    email_captcha = EmailCaptchaModel(
+        email=email, captcha=captcha)  # id自增,所以可不传
     db.session.add(email_captcha)
     db.session.commit()
     # RESTful API
