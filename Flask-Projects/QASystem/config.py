@@ -30,7 +30,7 @@ MAIL_SERVER = "smtp.qq.com"
 MAIL_USE_SSL = True
 MAIL_PORT = 465
 MAIL_USERNAME = "2462491568@qq.com"
-MAIL_PASSWORD = "axsakjxrdgiseaha"  # 授权码唯一的(网页上获取),flask登陆邮箱的必须
+MAIL_PASSWORD = "axsakjxrdgiseaha"  # 授权码唯一的(网页上获取),flask登陆邮箱的必须--可能因过期导致无法发送
 MAIL_DEFAULT_SENDER = "2462491568@qq.com"
 
 SECRET_KEY = os.urandom(24)
