@@ -473,6 +473,7 @@ def get_frame(q_img, shared_arr):
         if is_valid_ip(isExistId[3]):
             url = f"rtsp://{isExistId[1]}:{isExistId[2]}@{isExistId[3]}:554/Streaming/Channels/101"
             cap_1 = cv2.VideoCapture(url)
+            # cap_1 = cv2.VideoCapture("rtsp://127.0.0.1:9554/live/test")#临时测试用
         else:
             create_notification("初始流地址出错,请检查后再试!")
             cap_1 = cv2.VideoCapture(0)  # 流地址不合规,用本地
@@ -586,10 +587,10 @@ def det_rec_model(q_img):
 
             cv2.putText(ori_img, str_fps, (20, 20),
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-
-            if ori_img:
+            # cv2.imwrite("ret.jpg", ori_img)
+            if len(dict_list) != 0:
                 cv2.imwrite(
-                    "E:\\Source\\Github\\Python\\Flask-Plates\\"+str(cn)+".jpg", ori_img)
+                    "E:\\Source\\Web\\"+str(cn)+".jpg", ori_img)
                 cn += 1
 
             # else:
