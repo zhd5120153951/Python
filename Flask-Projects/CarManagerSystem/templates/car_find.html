@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>车辆查询</title>
+</head>
+<body>
+{% extends 'car_port_info.html' %}
+{% block car_paging %}
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                <form action="" method="get">
+                  <input type="text" class="form-control" name="car_id" placeholder="请输入查询的车牌号">
+                  <span class="input-group-btn">
+                    <button class="btn btn-success " type="submit">搜索</button>
+                  </span>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <thead>
+    <tr>
+        <th>车牌号</th>
+        <th>停车位</th>
+        <th>进入时间</th>
+        <th>会员类型</th>
+    </tr>
+    </thead>
+    <tbody>
+    <script>var i = 1;</script>
+    {% for car in all_cars %}
+        <tr>
+            <td>{{ car.carnum }}</td>
+            <td>{{ car.id }}</td>
+            <td>{{ car.begintime|date:"Y-m-d H:i" }}</td>
+            <td>
+                {% if car.genre == 1 %}会员用户
+                {% else %}临时用户
+                {% endif %}
+            </td>
+            <td>{{ car.money }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+{% endblock %}
+</body>
+</html>
