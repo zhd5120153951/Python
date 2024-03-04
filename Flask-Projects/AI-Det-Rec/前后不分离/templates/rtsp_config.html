@@ -3,26 +3,33 @@
 {% block content %}
 <div class="container">
 
-    <form action="{{ url_for('set_ai') }}" method="post">
+    <form>
         <!-- <form method="post"> -->
-        <label class="rtsp" for="gap_det">检测间隔(单位:ms)</label>
+        <label class="rtsp" for="new_rtsp_1">请输入RTSP:</label>
         <!-- required表示form表单不能为空 -->
-        <input class="rtsp" type="text" id="gap_det" name="gap_det" placeholder="检测间隔..." value="{{ gap_det }}">
-        <button class="responsive-btn" type="submit" name="button" value="btn_ok">确定</button>
-
+        <input class="rtsp" type="text" id="new_rtsp_1" name="new_rtsp_1" placeholder="RTSP地址..."
+            value="{{ new_rtsp_1 }}">
         <!-- <input class="ip" type="submit" value="确定"> -->
+
+        <button class="responsive-btn" type="submit" name="button" value="btn_1">确定</button>
+        <button class="rtsp" type="submit" name="button" value="prev_1">预览</button>
+
+        <br>
+
+        <label class="rtsp" for="new_rtsp_2">请输入RTSP:</label>
+        <input class="rtsp" type="text" id="new_rtsp_2" name="new_rtsp_2" placeholder="RTSP地址..."
+            value="{{ new_rtsp_2 }}">
+        <!-- <input class="ip" type="submit" value="确定"> -->
+
+        <button class="responsive-btn" type="submit" name="button" value="btn_2">确定</button>
+        <button class="rtsp" type="submit" name="button" value="prev_2">预览</button>
+
     </form>
 
     <div class="rtsp">
 
         {% with messages = get_flashed_messages() %}
         {% if messages %}
-
-        <!-- <ul>
-            {% for message in messages %}
-            <li style="color: red;">{{ message }}</li>
-            {% endfor %}
-        </ul> -->
 
         {% for message in messages %}
         <p class="rtsp">{{ message }}</p>
