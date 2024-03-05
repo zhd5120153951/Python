@@ -69,7 +69,7 @@ def login():
         if isExistUser and check_password_hash(isExistUser[2], password):
             return jsonify({'success': True, 'redirect': url_for('homepage')})
         else:
-            return jsonify({'success': False, 'message': 'Invalid username or password'})
+            return jsonify({'success': False, 'redirect': url_for('/')})
 
 
 @app.route('/homepage')
@@ -136,6 +136,68 @@ def rtsp_config():
     return render_template('rtsp_config.html')
 
 
+@app.route('/set_rtsp', methods=['GET', 'POST'])
+def setRTSP():
+    data=request.get_json()
+    newRTSP=data.get('newRTSP')
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute("UPDATE rtsps SET id=1,username=?,password=?,rtsp_url=? WHERE rowid=1",
+                    ("admin", "jiankong123", form_data_1))
+    conn.commit()
+
+            flash("rtsp_1设置成功")
+            with lock:
+                shared_arr[0] = True
+
+        if btn_value == "btn_2":
+            cursor.execute("UPDATE rtsps SET id=2,username=?,password=?,rtsp_url=? WHERE rowid=2",
+                           ("admin", "jiankong123", form_data_2))
+            conn.commit()
+
+            flash("rtsp_2设置成功")
+            with lock:
+                shared_arr[0] = True
+
+        if btn_value == "prev_1":  # 用多线程预览--后面在改进
+            cursor.execute('SELECT * FROM rtsps WHERE id = 1')  # 编号为1的只有一个
+            isExistId = cursor.fetchone()  # 所以用fetchone()
+
+            if isExistId:  # 存在rtsp
+                th_prev = threading.Thread(target=Preview, args=(
+                    isExistId[1], isExistId[2], isExistId[3], isExistId[0]))
+                th_prev.start()
+
+            else:  # 可以给个弹窗提示
+                
+
+        if btn_value == "prev_2":  # 用多线程预览--后面在改进--而且这里必须要用多线程或者多进程
+            cursor.execute('SELECT * FROM rtsps WHERE id = 2')  # 编号为1的只有一个
+            isExistId = cursor.fetchone()  # 所以用fetchone()
+
+            if isExistId:  # 存在rtsp
+                th_prev = threading.Thread(target=Preview, args=(
+                    isExistId[1], isExistId[2], isExistId[3], isExistId[0]))
+                th_prev.start()
+            else:
+                
+    else:
+        # 首次请求或者GET请求时，渲染表单并传入上次输入的值
+        form_data_1 = request.args.get('new_rtsp_1', '')
+        form_data_2 = request.args.get('new_rtsp_2', '')
+    # 数据库关闭
+    cursor.close()
+    conn.close()
+@app.route('/preview',methods=['POST'])
+def Preview():
+    pass
+@app.route('/control',methods=['POST'])
+def Control():
+    pass
+@app.route('/cancel',methods=['POST'])
+def Cancel():
+    pass
+
 @app.route('/system_resource')
 def system_resource():
     return render_template('system_resource.html')
@@ -178,9 +240,9 @@ def get_resources_usage():
     return jsonify(data)
 
 
-@app.route('/ai_setting')
+@app.route('/ai_manage')
 def ai_setting():
-    return render_template('ai_setting.html')
+    return render_template('ai_manage.html')
 
 
 if __name__ == '__main__':
