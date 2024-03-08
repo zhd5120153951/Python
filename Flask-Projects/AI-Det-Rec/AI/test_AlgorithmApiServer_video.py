@@ -35,7 +35,7 @@ class test_video():
 
         image_base64 = base64.b64encode(encoded_image_byte)
         image_base64 = image_base64.decode("utf-8")  # str类型
-        # 后端算法服务
+        # AI端算法服务
         res = requests.post(url='%s/image/objectDetect' % random.choice(self.hosts), data={
             "appKey": self.appKey,
             "image_base64": image_base64,

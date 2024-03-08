@@ -29,6 +29,7 @@ app = Flask(__name__)
 
 @app.route("/image/objectDetect", methods=['POST'])
 def imageObjectDetect():
+    print("被调用...")
     data = {
         "code": 0,
         "msg": "unknown error",
@@ -38,35 +39,43 @@ def imageObjectDetect():
     except:
         params = request.form
 
-    # 请求参数
-    algorithm_str = params.get("algorithm")
-    appKey = params.get("appKey")
-    # 接收base64编码的图片并转换成cv2的图片格式
-    image_base64 = params.get("image_base64", None)
+    try:  # 异常捕捉
+        # 请求参数
+        algorithm_str = params.get("algorithm")
+        appKey = params.get("appKey")
+        # 接收base64编码的图片并转换成cv2的图片格式
+        image_base64 = params.get("image_base64", None)
 
-    if image_base64:
-        if algorithm_str in ["openvino_yolov5"]:
+        if image_base64:
+            if algorithm_str in ["openvino_yolov5"]:
 
-            encoded_image_byte = base64.b64decode(image_base64)
-            image_array = np.frombuffer(encoded_image_byte, np.uint8)
-            # image = turboJpeg.decode(image_array)  # turbojpeg 解码
-            image = cv2.imdecode(image_array, cv2.COLOR_RGB2BGR)  # opencv 解码
+                encoded_image_byte = base64.b64decode(image_base64)
+                image_array = np.frombuffer(encoded_image_byte, np.uint8)
+                # image = turboJpeg.decode(image_array)  # turbojpeg 解码
+                image = cv2.imdecode(
+                    image_array, cv2.COLOR_RGB2BGR)  # opencv 解码
 
-            if "openvino_yolov5" == algorithm_str:
-                detect_num, detect_data = openVinoYoloV5Detector.detect(image)
-                data["result"] = {
-                    "detect_num": detect_num,
-                    "detect_data": detect_data,
-                }
+                if "openvino_yolov5" == algorithm_str:
+                    detect_num, detect_data = openVinoYoloV5Detector.detect(
+                        image)
+                    data["result"] = {
+                        "detect_num": detect_num,
+                        "detect_data": detect_data,
+                    }
 
-            data["code"] = 1000
-            data["msg"] = "success"
+                data["code"] = 1000
+                data["msg"] = "success"
+            else:
+                data["msg"] = "algorithm=%s not supported" % algorithm_str
         else:
-            data["msg"] = "algorithm=%s not supported" % algorithm_str
-    else:
-        data["msg"] = "image not uploaded"
+            data["msg"] = "image not uploaded"
 
-    return json.dumps(data, ensure_ascii=False)
+        return json.dumps(data, ensure_ascii=False)
+    except Exception as e:
+        print(f"请i去格式异常....{e}")
+        data["code"] = -1
+        data["msg"] = "请求格式异常,请检查后再试"
+        return json.dumps(data, ensure_ascii=False)
 
 
 if __name__ == "__main__":
