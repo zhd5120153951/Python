@@ -284,7 +284,10 @@ def rtsp_config():
 
 
 def Preview(username, password, rtsp_url, index):
-    url = f"rtsp://{username}:{password}@{rtsp_url}:554/Streaming/Channels/101"
+    # url = f"rtsp://{username}:{password}@{rtsp_url}:554/Streaming/Channels/101"
+    url = f"rtsp://{username}:{password}@{rtsp_url}"
+
+    print(url)
     # 使用OpenCV打开视频流
     cap = cv2.VideoCapture(url)
     winname = "preview_" + index
@@ -348,7 +351,7 @@ def set_rtsp():
         # 把rtsp保存到json中存起来,AI设置中的参数,开关也是如此,后面把模型加载时从json中读取
         if btn_value == "btn_1":
             cursor.execute("UPDATE rtsps SET id=1,username=?,password=?,rtsp_url=? WHERE rowid=1",
-                           ("admin", "jiankong123", form_data_1))
+                           ("admin", "hik123456", form_data_1))
             conn.commit()
 
             flash("rtsp_1设置成功")
@@ -357,7 +360,7 @@ def set_rtsp():
 
         if btn_value == "btn_2":
             cursor.execute("UPDATE rtsps SET id=2,username=?,password=?,rtsp_url=? WHERE rowid=2",
-                           ("admin", "jiankong123", form_data_2))
+                           ("admin", "hik123456", form_data_2))
             conn.commit()
 
             flash("rtsp_2设置成功")
@@ -471,7 +474,10 @@ def get_frame(q_img, shared_arr):
 
     if isExistId:  # 初始就配好流地址
         if is_valid_ip(isExistId[3]):
-            url = f"rtsp://{isExistId[1]}:{isExistId[2]}@{isExistId[3]}:554/Streaming/Channels/101"
+            # url = f"rtsp://{isExistId[1]}:{isExistId[2]}@{isExistId[3]}:554/Streaming/Channels/101"
+            url = f"rtsp://{isExistId[1]}:{isExistId[2]}@{isExistId[3]}"
+
+            print(url)
             cap_1 = cv2.VideoCapture(url)
             # cap_1 = cv2.VideoCapture("rtsp://127.0.0.1:9554/live/test")#临时测试用
         else:
