@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>正心全栈编程</title>
+    <link href="../static/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="layui-container">
+        <!-- 查询表单 -->
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>查询条件</legend>
+        </fieldset>
+        <form action="" class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户名:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">住址:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="address" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="text-align: center;">
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-search"
+                        lay-submit lay-filter="search-form-submit">查询
+                    </button>
+                    <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="layui-container">
+        <!-- 数据表格开始 -->
+        <table class="layui-hide" id="tables" lay-filter="tables"></table>
+    </div>
+
+    <script type="text/html" id="toolbar">
+    <button type="button" class="layui-btn layui-btn-sm" lay-event="toolbar-add">增加</button>
+</script>
+
+    <script type="text/html" id="tools">
+    <a class="layui-btn layui-btn-xs" lay-event="tools-edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="tools-del">删除</a>
+</script>
+
+
+    <!-- 添加和修改的弹出层开始 -->
+    <form style="display: none;width: 400px" class="layui-form" action="" lay-filter="student-form" id="student-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户 ID:</label>
+            <div class="layui-input-block">
+                <input type="text" name="id" lay-verify="required" autocomplete="off" class="layui-input" value="0"
+                    disabled>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名:</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">昵称:</label>
+            <div class="layui-input-block">
+                <input type="text" name="username" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱:</label>
+            <div class="layui-input-block">
+                <input type="text" name="mail" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别:</label>
+            <div class="layui-input-block">
+                <input title="男" type="radio" name="sex" value="F" class="layui-input">
+                <input title="女" type="radio" name="sex" value="M" class="layui-input" checked>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">出生日:</label>
+            <div class="layui-input-block">
+                <input type="text" name="birthdate" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">住址:</label>
+            <div class="layui-input-block">
+                <input type="text" name="address" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release"
+                    lay-filter="form-submit" lay-submit=""> 提交
+                </button>
+                <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh"> 重置
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <script src="../static/layui/layui.js"></script>
+    <script>
+        layui.use(function () {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var form = layui.form;
+            var table = layui.table;
+
+            // 渲染数据表格
+            table.render({
+                elem: '#tables',  //渲染的目标对象
+                id: 'tables'  //渲染的目标对象
+                , url: '/student' //数据接口
+                , title: '用户数据表'//数据导出来的标题
+                , toolbar: '#toolbar'  //表格的工具条
+                , height: 'full-300'
+                , cellMinWidth: 100 //设置列的最小默认宽度
+                , done: function (res, curr, count) {
+                }
+                , page: true //是否启用分页
+                , cols: [
+                    [  //列表数据
+                        { type: 'checkbox' },
+                        { field: 'id', title: 'ID', hide: true },
+                        { field: 'name', title: '用户名' },
+                        { field: 'username', title: '昵称' },
+                        { field: 'sex', title: '性别' },
+                        { field: 'birthdate', title: '出生日' },
+                        { field: 'mail', title: '邮箱' },
+                        { field: 'address', title: '地址' },
+                        { title: '操作', toolbar: '#tools', width: 220 }]],
+            });
+
+
+            // 监听头部工具栏事件
+            table.on('toolbar(tables)', function (obj) {
+                if (obj.event === 'toolbar-add') {
+                    console.log('新增事件被点击')
+                    layer.open({
+                        type: 1,
+                        title: '添加用户',
+                        area: ['800px', '500px'],
+                        content: $('#student-form'),
+                    });
+                }
+            });
+
+            //监听行工具事件
+            table.on('tool(tables)', function (obj) {
+                if (obj.event === 'tools-edit') {
+                    // 设置表格数据
+                    form.val('student-form', obj.data)
+
+                    // 打开修改页面
+                    layer.open({
+                        type: 1,
+                        title: '修改用户',
+                        content: $('#student-form'),
+                        area: ['800px', '500px'],
+                    });
+                } else if (obj.event === 'tools-del') {
+                    // 删除
+                    layer.confirm('真的删除行么', function (index) {
+                        $.ajax({
+                            url: '/student/' + obj.data.id,
+                            type: 'delete',
+                            success: function () {
+                                table.reload('tables');
+                            },
+                        });
+                        layer.close(index);
+                        // 向服务端发送删除指令
+                    });
+                }
+            });
+
+
+            /*添加数据 表单组件，提交按钮之后触发的事件*/
+            form.on('submit(form-submit)', function (data) {
+                if (data.field.id == 0) {
+                    $.ajax({
+                        url: '/student',
+                        data: JSON.stringify(data.field),
+                        contentType: 'application/json',
+                        type: 'post',
+                        success: function (result) {
+                            if (result.code === 0) {
+                                layer.msg(result.message, { icon: 1, time: 1000 }, function () {
+                                    layer.closeAll()
+                                    // 重置表单
+                                    $('#student-form')[0].reset()
+                                    // 重载数据
+                                    table.reload('tables');
+                                });
+                            } else {
+                                layer.msg(result.message, { icon: 2, time: 1000 });
+                            }
+                        },
+                    });
+                } else {
+                    $.ajax({
+                        url: `/student/${data.field.id}`,
+                        data: JSON.stringify(data.field),
+                        contentType: 'application/json',
+                        type: 'put',
+                        success: function (result) {
+                            if (result.code === 0) {
+                                layer.msg(result.message, { icon: 1, time: 1000 }, function () {
+                                    layer.closeAll()
+                                    // 重置表单
+                                    $('#student-form')[0].reset()
+                                    // 重载数据
+                                    table.reload('tables');
+                                });
+                            } else {
+                                layer.msg(result.message, { icon: 2, time: 1000 });
+                            }
+                        },
+                    });
+                }
+                return false;
+            });
+
+            // 监听提交
+            form.on('submit(search-form-submit)', function (data) {
+                table.reload('tables', { where: data.field });
+                return false;
+            });
+        });
+    </script>
+</body>
+
+</html>
