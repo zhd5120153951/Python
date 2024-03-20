@@ -25,9 +25,14 @@ def dash_view():
 
 
 @app.route('/rights')
-@jwt_required()
+@jwt_required()  # 登陆权限检查
 def rights_view():
     return render_template('rights.html')
+
+
+@app.route('/preview')
+def preview():
+    return render_template('preview.html')
 
 
 @app.route('/role')
