@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 原生布局--代码太多 -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box {
+            width: 1200px;
+            margin: 0 auto;
+            height: 350px;
+            /* background-color: pink; */
+            /* div左右合并浮动 */
+            display: flex;
+
+        }
+
+        .box-left {
+            width: 250px;
+            height: 350px;
+            background-color: red;
+        }
+
+        .box-right {
+            width: 950px;
+            height: 350px;
+            background-color: aqua;
+        }
+
+        .box-right-top {
+            height: 45px;
+            background-color: fuchsia;
+        }
+
+        .box-right-bottom {
+            height: 305px;
+            /* background-color: coral; */
+            /* div是块元素,要独占一行,放到一行需要flex */
+            display: flex;
+        }
+
+        .box-right-bottom-left {
+            width: 600px;
+            height: 305px;
+            background-color: darkblue;
+        }
+
+        .box-right-bottom-right {
+            width: 350px;
+            height: 305px;
+            background-color: darkcyan;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 栅格布局--大包小 -->
+    <div class="box">
+        <!-- 左 -->
+        <div class="box-left">
+
+        </div>
+        <!-- 右 -->
+        <div class="box-right">
+            <!-- 上部分 -->
+            <div class="box-right-top">
+
+            </div>
+            <!-- 下部分 -->
+            <div class="box-right-bottom">
+                <div class="box-right-bottom-left"></div>
+                <div class="box-right-bottom-right"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
