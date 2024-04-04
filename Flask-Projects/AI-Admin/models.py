@@ -19,3 +19,9 @@ class User(db.Model):
     username = sa.Column(sa.String(length=20))
     password = sa.Column(sa.String(length=20))
     address = sa.Column(sa.String(length=20))
+
+
+class Camera(db.Model):
+    id = sa.Column(sa.Integer, primary_key=True)
+    name = sa.Column(sa.String(length=20))
+    url = sa.Column(sa.String(length=50))

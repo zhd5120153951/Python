@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>layout 管理界面大布局示例 - Layui</title>
+    <title>Greatech-AI Platform</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,24 +35,33 @@
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
                 <ul class="layui-nav layui-nav-tree" lay-filter="test">
                     <li class="layui-nav-item layui-nav-itemed">
-                        <a class="" href="javascript:;">工作空间</a>
+                        <a class="" href="javascript:;">系统管理</a>
                         <dl class="layui-nav-child">
-                            <dd><a href="/dash" target="fm">后台首页</a></dd>
+                            <dd><a href="/system_manage/backgroud_page" target="fm">后台首页</a></dd>
+                            <dd><a href="/system_manage/manage_center" target="fm">管理中心</a></dd>
+                            <dd><a href="/system_manage/system_setting" target="fm">系统设置</a></dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item">
-                        <a href="javascript:;">系统管理</a>
+                        <a href="javascript:;">设备管理</a>
                         <dl class="layui-nav-child">
-                            <dd><a href="rights" target="fm">权限管理</a></dd>
-                            <dd><a href="role" target="fm">角色管理</a></dd>
-                            <dd><a href="dept" target="fm">部门管理</a></dd>
-                            <dd><a href="user" target="fm">员工管理</a></dd>
+                            <dd><a href="/device_manage/add" target="fm">添加摄像头</a></dd>
+                            <dd><a href="/device_manage/preview" target="fm">查看摄像头</a></dd>
+                            <dd><a href="/device_manage/manage" target="fm">管理摄像头</a></dd>
+                            <dd><a href="/device_manage/control" target="fm">布控摄像头</a></dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">算法管理</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="/algorithm_manage/config" target="fm">算法配置</a></dd>
+                            <dd><a href="/algorithm_manage/check" target="fm">算法查看</a></dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item layui-nav-itemed">
-                        <a class="" href="javascript:;">工作空间</a>
+                        <a class="" href="javascript:;">报警管理</a>
                         <dl class="layui-nav-child">
-                            <dd><a href="student_view" target="fm">学生管理</a></dd>
+                            <dd><a href="/alarm/student_view" target="fm">学生管理</a></dd>
                         </dl>
                     </li>
                 </ul>
@@ -78,7 +87,7 @@
         </div>
         <div class="layui-footer">
             <!-- 底部固定区域 -->
-            底部固定区域
+            成都格里特电子技术有限公司
         </div>
     </div>
 

@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, make_response, redirect
 from extensions import register_extensions, db
 from config import Config
 from flask_jwt_extended import create_access_token, jwt_required, set_access_cookies, get_current_user, unset_jwt_cookies
-from models import User, Student
+from models import User, Student, Camera
 from datetime import datetime
 
 app = Flask(__name__)
@@ -18,98 +18,97 @@ def index():
     return render_template('index.html', current_user=current_user)
 
 
-@app.route('/dash')
+'''系统管理功能'''
+
+
+@app.route('/system_manage/backgroud_page')
 @jwt_required()
-def dash_view():
-    return render_template('dash.html')
+def backgroud_page_view():
+    return render_template('system_manage/backgroud_page.html')
 
 
-@app.route('/rights')
+@app.route('/system_manage/manage_center')
+@jwt_required()
+def manage_center_view():
+    return render_template('system_manage/manage_center.html')
+
+
+@app.route('/system_manage/system_setting')
+@jwt_required()
+def system_setting_view():
+    return render_template('system_manage/system_setting.html')
+
+
+'''设备管理功能'''
+
+
+# @app.route('/device_manage/add')
+@app.get('/device_manage/add')
+@jwt_required()
+def add_view():
+    return render_template('device_manage/add.html')
+
+
+@app.post('/addcamera')  # 处理添加摄像头
+def add_camera():
+    print("add camera")
+    data = request.get_json()
+    camera = Camera()
+    camera.name = data['cameraname']
+    camera.url = data['rtspurl']
+    db.session.add(camera)
+    db.session.commit()
+    return {
+        'code': 0,
+        'msg': '添加成功'
+    }
+
+
+@app.route('/device_manage/preview')
 @jwt_required()  # 登陆权限检查
-def rights_view():
-    return render_template('rights.html')
+def preview_view():
+    return render_template('device_manage/preview.html')
+
+
+@app.route('/device_manage/manage')
+@jwt_required()  # 登陆权限检查
+def manage_view():
+    return render_template('device_manage/manage.html')
+
+
+@app.route('/device_manage/control')
+@jwt_required()  # 登陆权限检查
+def control_view():
+    return render_template('device_manage/control.html')
+
+
+'''算法管理功能'''
+
+
+@app.route('/algorithm_manage/config')
+@jwt_required()
+def config_view():
+    return render_template('algorithm_manage/config.html')
+
+
+@app.route('/algorithm_manage/check')
+@jwt_required()
+def check_view():
+    return render_template('algorithm_manage/check.html')
+
+
+'''报警管理功能'''
+
+
+@app.get('/alarm/student_view')  # 相当于一点击就要发送请求渲染表格--从服务器获取数据
+@jwt_required()
+def student_view():
+    return render_template('alarm/student_view.html')
 
 
 @app.route('/preview')
 def preview():
     return render_template('preview.html')
-
-
-@app.route('/role')
-@jwt_required()
-def role_view():
-    return render_template('role.html')
-
-
-@app.route('/dept')
-@jwt_required()
-def dept_view():
-    return render_template('dept.html')
-
-
-@app.route('/user')
-@jwt_required()
-def user_view():
-    return render_template('user.html')
-
-
-@app.get('/register')
-def register_view():
-    return render_template('register.html')
-
-
-@app.post('/register')
-def register_post():
-    data = request.get_json()
-    user = User()
-    user.name = data['username']
-    user.username = data['username']
-    user.password = data['password']
-    db.session.add(user)
-    db.session.commit()
-    return {
-        'code': 0,
-        'msg': '注册成功'
-    }
-
-
-@app.get('/login')
-def login_view():
-    return render_template('login.html')
-
-
-@app.post('/login')
-def login_post():
-    data = request.get_json()
-    username = data['username']
-    print(username)
-    # password = data['password']
-    q = db.select(User).where(User.username == username)
-    user = db.session.execute(q).scalar()
-    print(user)
-    if not user:
-        return {
-            'code': -1,
-            'msg': '该用户不存在'
-        }
-    if user.password != data['password']:
-        return {
-            'code': -1,
-            'msg': '密码错误'
-        }
-    access_token = create_access_token(user)
-    response = make_response({
-        'code': 0,
-        'msg': '登陆成功',
-        'access_token': access_token
-    })
-    set_access_cookies(response, access_token)
-    return response
-
-
-@app.get('/student_view')  # 相当于一点击就要发送请求渲染表格
-def student_view():
-    return render_template('student_view.html')
 
 
 @app.get('/student')
@@ -198,6 +197,60 @@ def delete_student(sid):
         'code': 0,
         'message': '删除数据成功'
     }
+
+
+@app.get('/register')
+def register_view():
+    return render_template('register.html')
+
+
+@app.post('/register')
+def register_post():
+    data = request.get_json()
+    user = User()
+    user.name = data['username']
+    user.username = data['username']
+    user.password = data['password']
+    db.session.add(user)
+    db.session.commit()
+    return {
+        'code': 0,
+        'msg': '注册成功'
+    }
+
+
+@app.get('/login')
+def login_view():
+    return render_template('login.html')
+
+
+@app.post('/login')
+def login_post():
+    data = request.get_json()
+    username = data['username']
+    # password = data['password']
+    q = db.select(User).where(User.username == username)
+    user = db.session.execute(q).scalar()
+    if not user:
+        return {
+            'code': -1,
+            'msg': '该用户不存在'
+        }
+    if user.password != data['password']:
+        return {
+            'code': -1,
+            'msg': '密码错误'
+        }
+    # 对当前用户的访问加密
+    access_token = create_access_token(user)
+    response = make_response({
+        'code': 0,
+        'msg': '登陆成功',
+        'access_token': access_token
+    })
+    set_access_cookies(response, access_token)
+    # print(response)  # 结果：<Response 398 bytes [200 OK]>
+    return response
 
 
 @app.cli.command()
