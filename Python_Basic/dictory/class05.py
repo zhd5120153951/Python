@@ -12,7 +12,8 @@
 
 
 class Enemy:
-    def __init__(self, name, hp, atk, defense) -> None:  # __方法名__表示这是系统内置函数且该类函数为纯虚函数(Python中纯虚函数为可重写函数)
+    # __方法名__表示这是系统内置函数且该类函数为纯虚函数(Python中纯虚函数为可重写函数)
+    def __init__(self, name, hp, atk, defense) -> None:
         self.name = name
         self.hp = hp
         self.atk = atk
@@ -24,9 +25,10 @@ class Enemy:
     def __move__(self):
         print(self.name + "打不过，我先溜了")
 
-
     # def __repr__(self) -> str:符合解释器语法逻辑的可重写函数
     #     pass
+
+
 class USA(Enemy):
     def __init__(self, name, hp, atk, defense) -> None:
         super().__init__(name, hp, atk, defense)

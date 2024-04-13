@@ -10,6 +10,8 @@
 @Email      :2462491568@qq.com
 '''
 
+# 可迭代类
+
 
 class IterableObject():
     def __init__(self) -> None:
@@ -17,6 +19,8 @@ class IterableObject():
 
     def __iter__(self):
         return IteratorObject()
+
+# 迭代器类
 
 
 class IteratorObject():
