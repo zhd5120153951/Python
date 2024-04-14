@@ -16,10 +16,12 @@ class Person:
     实例方法
     默认公有实例变量——加了property后就变为私有实例变量
     '''
+
     def __init__(self, name, age, score):  # 没有init()则表示没有构造函数，实例化对象时可以不加()
-        self.name = name
+        self.name = name  # 把self.name封装
         self.age = age
         self.score = score
+    # 把self.name封装
 
     @property
     def name(self):

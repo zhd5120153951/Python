@@ -9,14 +9,14 @@
 @version    :1.0
 @Email      :2462491568@qq.com
 '''
-from Python_Basic.dictory.类01 import Person
-import Python_Basic.dictory.类02 as 类02
-import Python_Basic.dictory.类04 as cl04
-from Python_Basic.dictory.类05 import Enemy, USA
-from Python_Basic.dictory.类05 import *
+from Python_Basic.dictory.类01_封装 import Person
+import Python_Basic.dictory.类02_变量封装 as 类02_变量封装
+import Python_Basic.dictory.类04_继承 as cl04
+from Python_Basic.dictory.类05_多态 import Enemy, USA
+from Python_Basic.dictory.类05_多态 import *
 
 cir = cl04.Circle(12)
-c = 类02.Car()
+c = 类02_变量封装.Car()
 
 p = Person("死亡", 123, 12, "男")
 print(p.name, p.age, p.score, p.gender)

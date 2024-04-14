@@ -10,10 +10,11 @@
 @Email      :2462491568@qq.com
 '''
 import sys
-from dictory import 类01, 类02
+from Python_Basic.dictory import 类01_封装
+from Python_Basic.dictory import 类02_变量封装
 '''
 导入时，优先同级目录，其次是上一级的包，最后是环境下的包
 '''
 print(sys.path)
-pp = 类02.p1
+pp = 类02_变量封装.p1
 print(pp)

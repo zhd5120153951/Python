@@ -10,7 +10,7 @@ tp1 = (x * x for x in range(1, 10, 1) if x % 2 != 0)
 print(*tp1)
 
 
-class Person:
+class Person(object):  # 默认继承object
     # 这是实例方法——这是在建立类对象时才使用
     def __init__(self, name, age, score, gender):  # 这是实例变量
         self.name = name
@@ -20,13 +20,19 @@ class Person:
 
     # 这也是实例方法
     def say_hi(self):
-        print("Hello, my name is", self.name, self.age, self.score, self.gender)
+        print("Hello, my name is", self.name,
+              self.age, self.score, self.gender)
+    # 静态方法，类名.方法名 or 对象.方法名--不用到类对象的方法时，就定义为静态
 
-    # 这是类变量——一般用于共享数据会使用
+    @staticmethod
+    def staicFunc(param):
+        pass
+
+    # 这是类变量——一般用于共享数据会使用,任意对象都可以调用
     name = ""
     age = 0
     score = 0
-    # 这是类方法——共享方法会使用
+    # 这是类方法——共享方法会使用，必须要有cls参数，类参数---不需要对象时就用类
 
     @classmethod
     def __initial__(cls):
