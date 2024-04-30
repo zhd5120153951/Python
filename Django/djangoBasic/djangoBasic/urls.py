@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from Greatech.views import login
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', login),
+    path('admin/', admin.site.urls),  # 官方路由实
 ]
