@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from Greatech.views import login
+from Greatech import views
 
 urlpatterns = [
-    path('', login),
-    path('admin/', admin.site.urls),  # 官方路由实
+    # path('admin/', admin.site.urls),  # 官方路由实
+    path('login/', views.login),
+    path('index/', views.index),
+    path('phone/list', views.phone_list),
 ]

@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+{#	<link rel="stylesheet" href="/bootstrap-4.6.2-dist/css/bootstrap.min.css">#}
+	<link rel="stylesheet" href="{% static 'bootstrap-4.6.2-dist/css/bootstrap.min.css' %}">
+</head>
+<body>
+<div class="container">
+{#<img src="../static/images/favicon.ico" alt="">#}
+<h1>动态web的表格</h1>
+<table class="table table-bordered">
+<thead>
+	<tr>
+		<th>ID</th>
+		<th>手机号</th>
+		<th>归属地</th>
+	</tr>
+</thead>
+<tbody>
+{% for row in queryset %}
+	<tr>
+	<td>{{ row.id }}</td>
+	<td>{{ row.phone }}</td>
+	<td>{{ row.city }}</td>
+	
+	</tr>
+{% endfor %}
+
+</tbody>
+</table>
+</div>
+</body>
+{#<script src="/jquery-3.5.1/jquery-3.5.1.min.js"></script>#}
+{#<script src="/bootstrap-4.6.2-dist/js/bootstrap.min.js"></script>#}
+<script src="{% static 'bootstrap-4.6.2-dist/js/bootstrap.min.js' %}"></script>
+</html>

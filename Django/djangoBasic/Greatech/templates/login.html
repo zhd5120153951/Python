@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<link rel="stylesheet" href="{% static '/bootstrap-4.6.2-dist/css/bootstrap.min.css' %}">
+</head>
+<body>
+	<h1>Django模版语法1:传递一个参数</h1>
+	<h1>{{ message }}</h1>
+	<h1>Django模板语法2:传递列表参数</h1>
+	<ul>
+		{% for data in data_list %}
+			<li>{{ data }}</li>
+		{% endfor %}
+	</ul>
+	<a href="#">{{ data_list.2 }}</a>
+	<a href="#">{{ data_list.1 }}</a>
+	<a href="#">{{ data_list.0 }}</a>
+	<h1>Django模板语法3:传递字典参数</h1>
+	<ul>
+		{% for key in mapping.keys %}
+			<li>{{ key }}</li>
+		{% endfor %}
+		
+	</ul>
+	<ul>
+		{% for val in mapping.values %}
+			<li>{{ val }}</li>
+		{% endfor %}
+		
+	</ul>
+	<ul>
+		{% for k,v in mapping.items %}
+			<li>{{ k }}:{{ v }}</li>
+		{% empty %}
+			
+		{% endfor %}
+		
+	</ul>
+
+	<div class="login-box">
+		<h2>用户登录</h2>
+		<form action="/login/" method="post">
+			{% csrf_token %}
+			<div class="form-group">
+				<label>用户名</label>
+				<input type="text" class="form-control" placeholder="请输入用户名" name="user">
+			</div>
+			<div class="form-group">
+				<label>密码</label>
+				<input type="password" class="form-control" placeholder="请输入密码" name="pwd">
+			</div>
+			<button type="submit" class="btn btn-primary">登录</button>
+			<span style="color: red">{{ error }}</span>
+		</form>
+	</div>
+	
+</body>
+</html>
