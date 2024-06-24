@@ -1,0 +1,21 @@
+ #配置中心接口
+config:
+  web_url: http:xxxxf
+  serctkey:
+
+#报警队列
+alarm:
+  rabbitMq:
+
+rabbitMQ:
+  username: 'admin'
+  password: 'greatech'
+  host: 192.168.20.5
+  port: 5672
+
+
+#文件存储
+
+#加载模型
+
+model:
