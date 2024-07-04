@@ -1,0 +1,134 @@
+{% extends 'myadmin/base.html' %}
+{% block myadmin_collapse %} in {% endblock %}
+{% block myadmin_pingjia %} active {% endblock %}
+
+{% block myadmin_base %}
+    <h2 class="glyphicon glyphicon-stats">&nbsp;查看教师评价成绩</h2>
+    <div style="opacity: 0.8;padding: 0px;background-color: white;margin: 1px 1px 30px 1px">
+        <div class="bg-primary" style="padding: 10px;border-radius: 10px;margin-bottom: 10px">
+            <p>教工号：{{ teacher_id }}</p>
+            <p>教师名字：{{ teacher.name }}</p>
+            <p>教师手机号：{{ teacher.phone }}</p>
+            <p>教师邮箱：{{ teacher.email }}</p>
+            <p>教师图片：{{ teacher.photo }}</p>
+            <p>学生数量：{{ stu_sum }}</p>
+            <p>完成评价学生数量：{{ pingjia_sum }}</p>
+        </div>
+        <label for="" style="color: red">学生评价率：</label>
+        <div class="progress" style="margin-bottom: 30px">
+
+            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="0"
+                 aria-valuemin="0"
+                 aria-valuemax="100" style="min-width: {{ PJL }}%;">
+                {{ PJL }}%
+            </div>
+        </div>
+
+
+        {#显示评价数据表#}
+
+        {% for i in tiku %}
+
+
+            <label for="">{{ forloop.counter }}.{{ i.timu }}</label>
+            <div class="progress" style="margin-bottom: 30px">
+
+                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="min-width: {% cycle avg1 avg2 avg3 avg4 avg5 avg6 avg7 avg8 avg9 avg10 %}%;">
+                    {% cycle avg1 avg2 avg3 avg4 avg5 avg6 avg7 avg8 avg9 avg10 %}%
+                </div>
+            </div>
+
+
+
+
+
+
+        {% endfor %}
+        {#                显示评论#}
+
+
+        <label for="" style="color: red">综合评价：</label>
+        <div class="progress" style="margin-bottom: 30px">
+
+            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="0"
+                 aria-valuemin="0"
+                 aria-valuemax="100" style="min-width: {{ s_avg }}%;">
+                {{ s_avg }}%
+            </div>
+        </div>
+        <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+        {% load static %}
+        <script src="{% static 'echarts/echarts.js' %}"></script>
+        <div class="" id="main"
+             style="height:300px;border: black solid 1px;margin: 20px 0px 10px 0px;padding: 10px 10px 10px 10px;"></div>
+        <script type="text/javascript">
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: '评价柱状图'
+                },
+                tooltip: {},
+                legend: {
+                    data: ['成绩']
+                },
+                xAxis: {
+                    name: '题目序号',
+                    data: [
+                        {% for i in tiku %}
+                            '{{ forloop.counter }}',
+                        {% endfor %}
+
+
+                    ]
+                },
+                yAxis: {},
+                series: [
+                    {
+                        name: '百分之（%）',
+                        type: 'bar',
+                        data: [
+                            {% for foo in tiku %}
+
+
+
+                                {% cycle avg1 avg2 avg3 avg4 avg5 avg6 avg7 avg8 avg9 avg10 %},
+                            {% endfor %}
+                        ]
+                    }
+                ]
+            };
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        </script>
+
+
+        <h3 for="" style="margin-top: 50px;margin-left: 35px;margin-bottom: 20px">学生留言 </h3>
+        <ul class="list-group">
+            {% for i in pingjiabaio %}
+                {#                            {{ i.s_liuyan|length }}#}
+                {#                            {% if i.s_liuyan|length >= 5 %}#}
+                {% if i.s_liuyan %}
+
+                    <li class="list-group-item list-group-item-success">{{ i.s_liuyan }}</li>
+                {% endif %}
+
+
+
+
+
+
+
+            {% endfor %}
+        </ul>
+
+    </div>
+
+
+
+{% endblock %}

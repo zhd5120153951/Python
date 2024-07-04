@@ -8,7 +8,8 @@ def login(request):
 	data_list = ["贺东", "邓凯", "叶婷"]
 	mapping = {"name": "贺东", "age": 29, "gemal": "male"}
 	if request.method == "GET":
-		return render(request, "login.html", {'message': message, 'data_list': data_list, 'mapping': mapping})
+		print("get login 进来...")
+		return render(request, "login.html")
 	else:
 		print(request.POST.get("user"))
 		print(request.POST.get("pwd"))
@@ -19,8 +20,11 @@ def login(request):
 
 
 def index(request):
-	return render(request, "index.html")
-
+	if request.method == "GET":
+		print("进入index。。。。。。")
+		return render(request, "index.html")
+	else:
+		print("POST http")
 
 def phone_list(request):
 	# 1.获取数据

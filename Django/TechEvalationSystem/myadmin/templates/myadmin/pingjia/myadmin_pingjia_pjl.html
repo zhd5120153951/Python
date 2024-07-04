@@ -1,0 +1,68 @@
+{% extends 'myadmin/base.html' %}
+{% block myadmin_collapse %} in {% endblock %}
+{% block myadmin_pingjia_pjl %} active {% endblock %}
+
+{% block myadmin_base %}
+
+
+    <h2 class=" glyphicon glyphicon-stats">&nbsp;班级评价率</h2>
+
+    {#    <div class="row ">#}
+    {#        <div class="col-lg-8">#}
+    {#            <div>#}
+    {#                <a href="/myadmin/stu_add/" class="btn btn-primary btn-sm glyphicon glyphicon-plus">添加学生</a>#}
+    {#                <a href="/myadmin/stu_upload/" class="btn btn-primary btn-sm glyphicon glyphicon-folder-open">上传表格</a>#}
+    {#            </div>#}
+    {#        </div>#}
+    {##}
+    {##}
+    {#        <div class="col-lg-4 ">#}
+    {#            <form action="/myadmin/stu/1" method="get">#}
+    {#                <div class="input-group">#}
+    {##}
+    {#                    <input type="text" class="form-control " name="keyword" placeholder="学号/姓名">#}
+    {#                    <span class="input-group-btn">#}
+    {#                            <button class="btn btn-default glyphicon glyphicon-search" type="submit">  </button>#}
+    {#                        </span>#}
+    {##}
+    {#                </div><!-- /input-group -->#}
+    {#            </form>#}
+    {#        </div><!-- /.col-lg-6 -->#}
+
+
+    {#    </div><!-- /.row -->#}
+
+    <div class="table-responsive">
+        <table class="table table-striped ">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>班级</th>
+                <th>学生数</th>
+                <th>已评价</th>
+                <th>未评价</th>
+                <th>评价率</th>
+
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for row in data_list %}
+                <tr>
+                <td>{{ forloop.counter }}</td>
+                    {% for cell in row %}
+                        <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+
+
+            </tbody>
+
+        </table>
+
+
+    </div>
+
+
+{% endblock %}

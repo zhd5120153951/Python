@@ -1,0 +1,61 @@
+{% extends 'myadmin/base.html' %}
+{% block myadmin_tiku %} active {% endblock %}
+{% block myadmin_base %}
+    <h2 class="">评价题管理</h2>
+
+    <div class="row ">
+        <div class="col-lg-8">
+            <div>
+
+                <a href="/myadmin/tiku_add/" class="btn btn-primary btn-sm glyphicon glyphicon-plus">添加评价题</a>
+
+            </div>
+        </div>
+
+
+    </div><!-- /.row -->
+
+    <div class="table-responsive">
+        <table class="table table-striped ">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>评价问题</th>
+
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in tiku_list %}
+
+
+
+                <tr>
+                    <td>&nbsp;{{ forloop.counter }}</td>
+                    <td>{{ i.timu }}</td>
+
+                    <td>
+
+                        <a href="/myadmin/tiku_edit/{{ i.id }}"
+                           class="btn btn-primary glyphicon glyphicon-pencil btn-xs">编辑</a>
+                        <a onclick="if(confirm('确定删除吗？')==false)return false;location.href=('{% url 'myadmin_tiku_del' i.id %}')"
+                           class="btn btn-danger glyphicon glyphicon-remove btn-xs">删除
+                        </a>
+
+
+                    </td>
+                </tr>
+            {% endfor %}
+
+
+            </tbody>
+
+        </table>
+        <hr>
+
+    </div>
+
+
+
+
+{% endblock %}

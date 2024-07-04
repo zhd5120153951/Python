@@ -1,0 +1,173 @@
+{% extends 'myadmin/base.html' %}
+{% block myadmin_index %} active {% endblock %}
+{% block myadmin_base %}
+    {% load static %}
+    <script src="{% static 'echarts/echarts.js' %}"></script>
+    <br>
+    <div class="row">
+
+        <a class="col-sm-6 col-md-4" href="/myadmin/stu/1">
+            <div class="thumbnail" style="background-color: #14b56f">
+
+                <div class="caption">
+                    <div class="row">
+                        <div class="col-md-9 col-xs-9">
+                            <h3 class="glyphicon glyphicon-user">&nbsp;学生数量</h3>
+                        </div>
+                        <div class="col-md-3 col-xs-3">
+                            <p>
+                            <h3 class="text-right">{{ students }}</h3></p>
+                        </div>
+                    </div>
+
+                    <p style="height: 20px"></p>
+                </div>
+            </div>
+        </a>
+        <a class="col-sm-6 col-md-4" href="/myadmin/teachers/1">
+            <div class="thumbnail" style="background-color: #FCB41B">
+
+                <div class="caption">
+                    <div class="row">
+                        <div class="col-md-9 col-xs-9">
+                            <h3 class="glyphicon glyphicon-lock">&nbsp;教师数量</h3>
+                        </div>
+                        <div class="col-md-3 col-xs-3">
+                            <p>
+                            <h3 class="text-right">{{ teachers }}</h3></p>
+                        </div>
+                    </div>
+
+                    <p style="height: 20px"></p>
+
+                </div>
+            </div>
+        </a>
+        <a class="col-sm-6 col-md-4" href="/myadmin/kecheng/1">
+            <div class="thumbnail" style="background-color: #B65EC2">
+                <div class="caption">
+                    <div class="row">
+                        <div class="col-md-9 col-xs-9">
+                            <h3 class="glyphicon glyphicon-book">&nbsp;课程数量</h3>
+                        </div>
+                        <div class="col-md-3 col-xs-3">
+                            <p>
+                            <h3 class="text-right">{{ kecheng }}</h3></p>
+                        </div>
+                    </div>
+                    <p style="height: 20px"></p>
+                </div>
+            </div>
+        </a>
+        <a class="col-sm-6 col-md-4" href="/myadmin/tiku/">
+            <div class="thumbnail" style="background-color: #C25E5E">
+                <div class="caption">
+                    <div class="row">
+                        <div class="col-md-9 col-xs-9">
+                            <h3 class="glyphicon glyphicon-font">&nbsp;评价题数量</h3>
+
+                        </div>
+                        <div class="col-md-3 col-xs-3">
+                            <p>
+                            <h3 class="text-right">{{ tiku }}</h3></p>
+                        </div>
+                    </div>
+                    <p style="height: 20px"></p>
+                </div>
+            </div>
+        </a>
+        <a class="col-sm-6 col-md-4" href="/myadmin/pingjia/">
+            <div class="thumbnail" style="background-color: #5EBBC2">
+                <div class="caption">
+                    <div class="row">
+                        <div class="col-md-9 col-xs-9">
+                            <h3 class="glyphicon glyphicon-check">&nbsp;评价数量</h3>
+                        </div>
+                        <div class="col-md-3 col-xs-3">
+                            <p>
+                            <h3 class="text-right">{{ pingjia }}</h3></p>
+                        </div>
+                    </div>
+                    <p style="height: 20px"></p>
+                </div>
+            </div>
+        </a>
+        <a class="col-sm-6 col-md-4" href="/myadmin/admin/">
+            <div class="thumbnail"
+                 style=" background-color: #858600">
+                <div class="caption">
+                    <div class="row">
+                        <div class="col-md-9 col-xs-9">
+                            <h3><span class="glyphicon glyphicon-cog"></span>&emsp;管理员</h3>
+                        </div>
+                        <div class="col-md-3 col-xs-3">
+                            <p>
+                            <h3 class="text-right">{{ admin }}</h3></p>
+                        </div>
+                    </div>
+                    <p style="height: 20px"></p>
+                </div>
+            </div>
+        </a>
+        <div class="col-md-12">
+            <hr>
+            <h3>站内数据信息</h3>
+        </div>
+        <div class="col-sm-6 col-md-4"
+             style="height: 230px;">
+            <div style="border: black solid 1px;height: 230px" id="root">
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('root'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '数据数量柱状图'
+            },
+            tooltip: {},
+            legend: {
+                data: ['数量']
+            },
+            xAxis: {
+                type: 'category',
+                data: ['学生', '教师', '课程', '题', '评价', '管理员']
+
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: '',
+                    type: 'bar',
+                    data: [{{ students }}, {{ teachers }}, {{ kecheng }}, {{ tiku }}, {{ pingjia }}, {{ admin }}],
+                    showBackground: true,
+                    backgroundStyle: {
+                        color: 'rgba(180, 180, 180, 0.2)'
+                    }
+                }
+            ]
+        };
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+
+
+
+
+
+
+{% endblock %}

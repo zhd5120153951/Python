@@ -1,0 +1,84 @@
+{% extends 'students/base.html' %}
+{% block YiPingJia %}
+active
+{% endblock %}
+{% block index %}
+{% load static %}
+
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column" style="margin-top: 60px;align-content: center">
+            <div class="row clearfix">
+                <div class="col-md-3 column">
+                </div>
+                <div class="col-md-6 column"
+                     style="margin: 10px 10px 50px 10px;border-radius: 2%;
+                     background-color: white;opacity: 0.9;
+                     padding: 10px;border-radius: 20px;">
+                    <div style="text-align: center;margin-bottom: 40px"><h3>课程名：{{ kecheng.get.kecheng }}</h3></div>
+                    {% for i in kecheng %}
+
+
+                        <div style="margin-bottom: 20px;margin-left: 25px" class="col-md-12">
+                            <img style="width: 60px;height: 60px" class="img-rounded"
+                                 src="{% static 'img/user.jpg' %}" alt=""><br>
+                            <label for="">&nbsp;{{ i.teacher_id__name }}</label>
+
+                        </div>
+                        <div style="margin-left: 0px;font-size: 15px" class="col-md-12">
+                            <li>课程编号：{{ i.id }}</li>
+                            <li>课程名称：{{ i.kecheng }}</li>
+                            <li>教师名字：{{ i.teacher_id__name }}</li>
+                            <li style="color: red">平均得分： {{ pj.s_avg }}</li>
+                            <hr>
+
+                        </div>
+
+
+
+
+
+
+                    {% endfor %}
+
+
+                    {% for i in tiku %}
+                        <div class="form-group" style="margin-top: 30px">
+                            <label for="exampleInputEmail1"><span class="badge " style="background-color: #0FB25F">{{ forloop.counter }}</span>&emsp;{{ i.timu }}</label>
+                            <div class="form-group">
+
+                                <div class="radio" style="font-size: 12pt">
+                                    <div style="color: brown;margin-top: 15px">
+
+
+                                        <input class="form-control" type="text"
+                                               value="
+{% cycle pj.s_daan1 pj.s_daan2 pj.s_daan3 pj.s_daan4 pj.s_daan5 pj.s_daan6 pj.s_daan7 pj.s_daan8 pj.s_daan9 pj.s_daan10 %}
+                                                " readonly>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+
+                    <hr>
+
+                    <label for="">留言</label><br>
+                    <textarea class="form-control" name="liuyan" id="" cols="38" rows="6"
+                              disabled="disabled">{{ pj.s_liuyan }}</textarea>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

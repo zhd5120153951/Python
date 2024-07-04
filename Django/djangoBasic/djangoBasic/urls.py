@@ -19,6 +19,7 @@ from Greatech import views
 
 urlpatterns = [
     # path('admin/', admin.site.urls),  # 官方路由实
+    path('', views.login),
     path('login/', views.login),
     path('index/', views.index),
     path('phone/list', views.phone_list),

@@ -1,0 +1,75 @@
+{% extends 'myadmin/base.html' %}
+
+{% block myadmin_admin %} active {% endblock %}
+
+{% block myadmin_base %}
+
+    <h2 class=" ">&nbsp;管理员</h2>
+    <div class="row ">
+        <div class="col-lg-8">
+            <div>
+                <a href="/myadmin/admin_add/" class="btn btn-primary btn-sm glyphicon glyphicon-plus">添加管理员</a>
+
+            </div>
+        </div>
+
+
+        <div class="col-lg-4 ">
+            <form action="/myadmin/stu/1" method="get">
+                <div class="input-group">
+
+                    <input type="text" class="form-control " name="keyword" placeholder="姓名">
+                    <span class="input-group-btn">
+                            <button class="btn btn-default glyphicon glyphicon-search" type="submit">  </button>
+                        </span>
+
+                </div><!-- /input-group -->
+            </form>
+        </div><!-- /.col-lg-6 -->
+
+
+    </div><!-- /.row -->
+
+
+    <div class="table-responsive">
+
+        <table class="table table-striped ">
+            <thead>
+            <th>#</th>
+            <th>姓名</th>
+            <th>手机号</th>
+            <th>邮箱</th>
+            <th>职务</th>
+            <th>操作</th>
+
+
+            </thead>
+            <tbody>
+
+            {% for row in data_list %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.phone }}</td>
+                    <td>{{ row.email }}</td>
+                    <td>{{ row.zhiwu }}</td>
+                    <td>
+                        <a href="/myadmin/admin_edit/{{ row.name }}"
+                           class="btn btn-primary glyphicon glyphicon-pencil btn-xs">编辑</a>
+                        <a onclick="if(confirm('确定删除吗？')==false)return false;location.href=('/myadmin/admin_del/{{ row.name }}')"
+                           class="btn btn-danger glyphicon glyphicon-remove btn-xs">删除
+                        </a>
+                    </td>
+                </tr>
+
+
+            {% endfor %}
+
+
+            </tbody>
+
+        </table>
+    </div>
+
+
+{% endblock %}

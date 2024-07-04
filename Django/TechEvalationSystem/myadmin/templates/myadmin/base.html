@@ -1,0 +1,195 @@
+<!doctype html>
+{% load static %}
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{% static 'img/logo.png' %}">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>后台管理</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{% static 'bootstrap3/css/bootstrap.min.css' %}"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+    <!--[if lt IE 9]>
+{#    <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>#}
+{#    <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>#}
+    <![endif]-->
+
+
+    <style>
+        .footer {
+            background-color: #333;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 50px;
+            bottom: 0;
+            left: 0;
+            z-index: 1000;
+            display: block;
+            padding: 0px;
+            overflow-x: hidden;
+            overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+            background-color: #f5f5f5;
+            border-right: 1px solid #eee;
+        }
+
+        .main {
+            margin: 0px 0px 40px 0px;
+            background-color: white;
+            padding: 0px 1px 0px 0px;
+
+
+        }
+
+        .list-group-item {
+
+            margin: 0px;
+            border-radius: 0px;
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+            border-bottom-right-radius: 0px;
+            border-bottom-left-radius: 0px;
+        }
+
+    </style>
+</head>
+<body
+        {#        background="{% static 'img/img.png' %}" #}
+        {#        style=" background-repeat:no-repeat ;background-size:100% 100%;background-attachment: fixed;"#}
+>
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" style="padding: 3px 0px 3px 3px;margin: 0px">
+                <img alt="Brand" width="45px" height="45px" src="{% static 'img/logo.png' %}">
+            </a>
+            <b><a class="navbar-brand" style="font-size: 15px">教师教学质量评价系统的设计</a></b>
+
+        </div>
+
+        <div id="navbar" class="navbar-collapse collapse">
+            {#                    <ul class="nav navbar-nav navbar-right">#}
+            {#                        <li><a>欢迎您：{{ request.session.name }}</a></li>#}
+            {#                        <li><a href="{% url 'myadmin_pswd_update' %}">修改密码</a></li>#}
+            {#                        <li><a href="/logout/">退出</a></li>#}
+            {##}
+            {#                    </ul>#}
+            <ul class="nav navbar-nav navbar-right" style="margin-right: 20px">
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">欢迎您：{{ request.session.name }} <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'myadmin_pswd_update' %}">修改密码</a></li>
+                        <li><a href="/logout/">退出登录</a></li>
+
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<div class="col-xs-4 col-md-2 sidebar">
+    <div class="list-group" style="font-size: 13pt;padding: 0px;margin: 0px">
+        <a class="list-group-item glyphicon glyphicon-home {% block myadmin_index %}{% endblock %}"
+           href="/myadmin/" style="border-radius: 0px"><b>&nbsp;首页</b></a>
+
+
+        <a class="list-group-item glyphicon glyphicon-user {% block myadmin_stu %}{% endblock %} "
+           href="/myadmin/stu/1"
+           target="leftnav">&nbsp;学生管理</a>
+
+
+        <a class="list-group-item glyphicon glyphicon glyphicon-briefcase
+                    {% block myadmin_teachers %}{% endblock %}"
+           href="/myadmin/teachers/1"
+           target="leftnav">&nbsp;教师管理</a>
+
+
+        <a class="list-group-item glyphicon glyphicon-book {% block myadmin_class %}{% endblock %}"
+           href="/myadmin/kecheng/1" target="leftnav">&nbsp;课程管理</a>
+
+
+        <a class="list-group-item glyphicon glyphicon-text-background {% block myadmin_tiku %}{% endblock %}"
+           href="/myadmin/tiku/"
+           target="leftnav">&nbsp;评价题</a>
+
+
+        <a class="list-group-item glyphicon glyphicon-stats " data-toggle="collapse" data-parent="#accordion"
+           href="#collapseOne2">&nbsp;评价成绩</a>
+
+        <div style="font-size: 14px ;" id="collapseOne2"
+             class="panel-collapse collapse {% block myadmin_collapse %}{% endblock %} ">
+
+
+            <a class="list-group-item glyphicon glyphicon-menu-right  {% block myadmin_pingjia %}{% endblock %} "
+               href="{% url 'myadmin_pingjia' %}" style="border-radius: 0px">&nbsp;评价成绩</a>
+            <a class="list-group-item glyphicon glyphicon-menu-right {% block myadmin_pingjia_pjl %}{% endblock %}"
+               href="{% url 'myadmin_pingjia_pjl' %}" style="border-radius: 0px">&nbsp;班级评价率</a>
+            <a class="list-group-item glyphicon glyphicon-menu-right {% block myadmin_pingjia_not %}{% endblock %}"
+               href="{% url 'myadmin_pingjia_not' %}" style="border-radius: 0px">&nbsp;未评价</a>
+
+        </div>
+
+
+
+
+        <a class="list-group-item glyphicon glyphicon-cog {% block myadmin_admin %}{% endblock %}"
+           href="{% url 'myadmin_admin' %}"
+           target="leftnav" style="border-radius: 0px">&nbsp;管理员</a>
+
+    </div>
+
+
+</div>
+<div class="container-fluid" style="margin-top: 50px;background-color: white">
+    <div class="row">
+{#        <div class="col-md-2 col-xs-4"></div>#}
+        <div class="col-md-10 col-xs-8 col-md-offset-2 col-xs-offset-4" style="background-color: white">
+            <div class="row main" style="">
+                {% block myadmin_base %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<footer class="footer navbar-fixed-bottom ">
+    <div class="container ">
+        <h5 class="text-muted">© 2022 教师教学质量评价系统的设计与实现</h5>
+    </div>
+</footer>
+
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="{% static 'js/jquery.min.js' %}"
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+        crossorigin="anonymous"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="{% static 'bootstrap3/js/bootstrap.min.js' %}"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+        crossorigin="anonymous"></script>
+</body>
+</html>

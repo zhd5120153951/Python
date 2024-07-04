@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="dad49d58-8531-4443-9cd9-736b6fb65aa0" name="教学评价系统" url="http://101.35.18.145:81">
+        <fileTransfer rootFolder="/www/django" accessType="SFTP" host="101.35.18.145" port="22" sshConfigId="caa44050-2407-497f-99ba-89028ddb6f1f" sshConfig="root@101.35.18.145:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
