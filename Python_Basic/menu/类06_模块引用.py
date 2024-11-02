@@ -9,11 +9,11 @@
 @version    :1.0
 @Email      :2462491568@qq.com
 '''
-from Python_Basic.dictory.类01_封装 import Person
-import Python_Basic.dictory.类02_变量封装 as 类02_变量封装
-import Python_Basic.dictory.类04_继承 as cl04
-from Python_Basic.dictory.类05_多态 import Enemy, USA
-from Python_Basic.dictory.类05_多态 import *
+from Python_Basic.menu.类01_封装 import Person
+import Python_Basic.menu.类02_变量封装 as 类02_变量封装
+import Python_Basic.menu.类04_继承 as cl04
+from Python_Basic.menu.类05_多态 import Enemy, USA
+from Python_Basic.menu.类05_多态 import *
 
 cir = cl04.Circle(12)
 c = 类02_变量封装.Car()

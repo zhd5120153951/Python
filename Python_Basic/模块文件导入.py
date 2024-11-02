@@ -10,8 +10,8 @@
 @Email      :2462491568@qq.com
 '''
 import sys
-from Python_Basic.dictory import 类01_封装
-from Python_Basic.dictory import 类02_变量封装
+from Python_Basic.menu import 类01_封装
+from Python_Basic.menu import 类02_变量封装
 '''
 导入时，优先同级目录，其次是上一级的包，最后是环境下的包
 '''
