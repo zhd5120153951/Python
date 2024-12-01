@@ -30,7 +30,7 @@
 *.exe
 *.out
 *.app
-
+*.sln
 .idea/
 __pycache__/
 .vscode/

@@ -1,0 +1,14 @@
+h1 {
+    color: red;
+    font-family: 'consolas';
+}
+
+h2 {
+    color: blue;
+    font-size: 36;
+}
+
+h3 {
+    color: yellow;
+    font-style: normal;
+}
